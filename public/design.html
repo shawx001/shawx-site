@@ -26,7 +26,7 @@
   .nav-inner { display: flex; justify-content: space-between; align-items: center; height: 56px; }
   .brand { font-family: var(--serif); font-size: 18px; }
   .brand b { color: var(--accent); font-weight: 500; }
-  .links { display: flex; gap: 22px; font-size: 14px; color: var(--ink2); }
+  .links { display: flex; gap: 22px; font-size: 14px; color: var(--ink2); align-items: center; }
   .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; padding-top: 56px; }
   .hero-name { display: flex; align-items: center; gap: clamp(8px, 1.6vw, 20px); width: max-content; }
   .hero-title { font-family: var(--serif); font-weight: 500; font-size: clamp(56px, 11vw, 130px); line-height: 1.05; margin: 0; letter-spacing: -0.02em; }
@@ -37,23 +37,52 @@
   .scroll-hint { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); font-size: 12px; letter-spacing: .14em; color: var(--ink2); }
   .label { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); }
   .label i { color: var(--accent); font-style: normal; }
-  .work { padding-top: 90px; }
-  #gal { position: relative; height: clamp(440px, 56vw, 620px); }
-  #rings { position: absolute; inset: 0; width: 100%; height: calc(100% - 92px); }
-  #stage { position: absolute; left: 50%; top: calc((100% - 92px)/2); transform: translate(-50%,-50%); width: min(58%, 560px); aspect-ratio: 1200/630; z-index: 50; }
-  .cov { position: absolute; inset: 0; border-radius: 18px; overflow: hidden; opacity: 0; transition: opacity .5s; box-shadow: 0 30px 70px -30px rgba(44,36,24,.5); }
+
+  .space { position: relative; margin-top: 100px; overflow: hidden;
+    background: radial-gradient(1100px 600px at 72% 6%, #221840 0%, #14102A 45%, #0C0918 100%); }
+  #stars { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .neb { position: absolute; border-radius: 50%; filter: blur(70px); pointer-events: none; }
+  .n1 { width: 480px; height: 320px; left: -8%; top: 8%; background: radial-gradient(closest-side, rgba(142,100,216,.34), transparent); }
+  .n2 { width: 560px; height: 360px; right: -10%; bottom: 4%; background: radial-gradient(closest-side, rgba(71,150,227,.26), transparent); }
+  .n3 { width: 360px; height: 260px; right: 18%; top: -6%; background: radial-gradient(closest-side, rgba(216,90,138,.2), transparent); }
+  .space .inner { position: relative; padding: 56px 0 40px; }
+  .label.light { color: #9D92BE; }
+  .label.light i { color: #E886AC; }
+  #gal { position: relative; height: clamp(460px, 56vw, 640px); }
+  #rings { position: absolute; inset: 0; width: 100%; height: calc(100% - 96px); }
+  #stage { position: absolute; left: 50%; top: calc((100% - 96px)/2); transform: translate(-50%,-50%); width: min(58%, 560px); aspect-ratio: 1200/630; z-index: 50; }
+  .cov { position: absolute; inset: 0; border-radius: 18px; overflow: hidden; opacity: 0; transition: opacity .5s;
+    border: 1px solid rgba(245,239,228,.14); box-shadow: 0 30px 80px -28px rgba(0,0,0,.8); }
   .cov.on { opacity: 1; }
-  .pl { position: absolute; left: 0; top: 0; background: none; border: 0; padding: 6px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 7px; will-change: transform; }
-  .orb { width: var(--orbSize, 17px); height: var(--orbSize, 17px); border-radius: 50%; }
-  .plb { font-family: var(--mono); font-size: 11px; color: var(--ink2); opacity: 0; transition: opacity .3s; white-space: nowrap; }
+
+  .pl { position: absolute; left: 0; top: 0; background: none; border: 0; padding: 8px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 10px; will-change: transform; }
+  .pw { position: relative; display: block; width: var(--ps, 48px); height: var(--ps, 48px); }
+  .pcore { position: absolute; inset: 0; border-radius: 50%; z-index: 2;
+    background: radial-gradient(circle at 31% 27%, var(--hl) 0%, var(--c1) 36%, var(--c2) 74%, #060410 100%);
+    box-shadow: inset calc(var(--ps) * -0.13) calc(var(--ps) * -0.17) calc(var(--ps) * 0.3) rgba(4,3,10,.65),
+                0 0 calc(var(--ps) * 0.6 * var(--glow, 1)) calc(var(--ps) * 0.13 * var(--glow, 1)) var(--ga); }
+  .ring1 { position: absolute; left: 50%; top: 50%; width: 190%; height: 190%; border-radius: 50%; z-index: 1;
+    border: 1.5px solid var(--rc); transform: translate(-50%,-50%) rotateX(74deg) rotateZ(-14deg); opacity: .9; }
+  .ring2 { position: absolute; left: 50%; top: 50%; width: 235%; height: 235%; border-radius: 50%; z-index: 1;
+    border: 1px dashed var(--rc); transform: translate(-50%,-50%) rotateX(74deg) rotateZ(-14deg); opacity: .45; }
+  .sat { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px; border-radius: 50%;
+    background: #F5EFE4; box-shadow: 0 0 8px 2px rgba(245,239,228,.7); z-index: 3;
+    animation: orbit 5.5s linear infinite; }
+  @keyframes orbit {
+    from { transform: rotate(0deg) translateX(calc(var(--ps) * 0.95)) scale(1); }
+    to { transform: rotate(360deg) translateX(calc(var(--ps) * 0.95)) scale(1); }
+  }
+  .plb { font-family: var(--mono); font-size: 11px; color: #B4A8D6; opacity: 0; transition: opacity .3s; white-space: nowrap; }
   .pl.on .plb, .pl:hover .plb { opacity: 1; }
-  .caps { position: absolute; left: 0; right: 0; bottom: 0; height: 92px; display: grid; place-items: center; }
+  .caps { position: absolute; left: 0; right: 0; bottom: 0; height: 96px; display: grid; place-items: center; }
   .cap { grid-area: 1/1; display: flex; align-items: center; gap: 16px; opacity: 0; transform: translateY(8px); transition: .45s; }
   .cap.on { opacity: 1; transform: none; }
-  .cap h3 { font-family: var(--serif); font-weight: 500; font-size: clamp(22px, 2.6vw, 30px); margin: 0; }
-  .chip { font-family: var(--mono); font-size: 12px; color: var(--ink2); border: 1px solid var(--hair); border-radius: 999px; padding: 5px 14px; text-decoration: none; }
-  .chip.live { color: var(--accent); border-color: var(--accent); }
-  .highlight { margin-top: 120px; background: var(--card); padding: 110px 24px; text-align: center; }
+  .cap h3 { font-family: var(--serif); font-weight: 500; font-size: clamp(22px, 2.6vw, 30px); margin: 0; color: #F5EFE4; }
+  .chip { font-family: var(--mono); font-size: 12px; color: #B4A8D6; border: 1px solid #4A3F6E; border-radius: 999px; padding: 5px 14px; text-decoration: none; }
+  .chip.live { color: #F0937A; border-color: #F0937A; }
+
+  .highlight { background: var(--card); padding: 110px 24px; text-align: center; }
   .highlight .label { color: #9C8F7D; letter-spacing: .2em; }
   .bignum { margin: 8px 0 4px; font-family: var(--serif); font-weight: 500; font-size: clamp(72px, 13vw, 140px); line-height: 1.1;
     background: linear-gradient(92deg, #7FB4F0, #A98BE8 45%, #E886AC 75%, #F0937A); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -63,10 +92,11 @@
   .cta { display: inline-block; margin-top: 28px; font-family: var(--mono); font-size: 14px; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 12px 28px; text-decoration: none; }
   footer { border-top: 1px solid var(--hair); padding: 22px 0; }
   footer .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-family: var(--mono); font-size: 12px; color: var(--ink2); }
+
   #panel { position: fixed; right: 18px; top: 76px; z-index: 99; width: 252px; background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
     border: 1px solid var(--hair); border-radius: 14px; padding: 14px 16px; box-shadow: 0 18px 50px -20px rgba(44,36,24,.35); font-size: 12px; }
   #panel h4 { margin: 0 0 10px; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: var(--ink2); display: flex; justify-content: space-between; align-items: center; }
-  #panel .row { margin-bottom: 10px; }
+  #panel .row { margin-bottom: 9px; }
   #panel .row label { display: flex; justify-content: space-between; color: var(--ink2); margin-bottom: 2px; }
   #panel input[type=range] { width: 100%; accent-color: #8E64D8; }
   #panel .pals { display: flex; gap: 6px; }
@@ -92,42 +122,61 @@
     <h1 class="hero-title">Shaw</h1>
     <canvas id="px"></canvas>
   </div>
-  <p class="tagline" id="tag">code × design × art</p>
+  <p class="tagline">code × design × art</p>
   <p class="intro">I build AI products end to end — and treat beauty as a feature. Taste trained by art, discipline trained by shipping.</p>
 </div>
 <p class="scroll-hint mono">scroll ↓</p>
 </section>
 
-<section class="work container">
-  <p class="label">Selected work <i>/01</i></p>
-  <div id="gal">
-    <svg id="rings" viewBox="0 0 1000 460" preserveAspectRatio="none" aria-hidden="true">
-      <ellipse cx="500" cy="230" rx="480" ry="170" fill="none" stroke="#B9A28C" stroke-width="1" opacity="0.5"></ellipse>
-      <ellipse cx="500" cy="230" rx="400" ry="140" fill="none" stroke="#B9A28C" stroke-width="1" opacity="0.22"></ellipse>
-    </svg>
-    <div id="stage">
-      <div class="cov on" id="cov0" style="background:#1E1813;">
-        <div style="position:absolute; left:-6%; right:-6%; top:46%; height:15%; background:linear-gradient(90deg,#4796E3,#8E64D8,#D85A8A); border-radius:50%; filter:blur(18px); opacity:.8; transform:rotate(-7deg);"></div>
-        <div style="position:absolute; left:-4%; right:40%; top:28%; height:8%; background:linear-gradient(90deg,#E0705A,#8E64D8); border-radius:50%; filter:blur(13px); opacity:.55; transform:rotate(-5deg);"></div>
-        <div style="position:absolute; right:4%; top:-16%; width:36%; aspect-ratio:1; background:radial-gradient(circle,#8E64D8,transparent 70%); opacity:.5;"></div>
-        <div style="position:absolute; left:6%; bottom:9%; width:22%; border-top:1.5px solid rgba(245,239,228,.85);"></div>
+<section class="space">
+  <canvas id="stars"></canvas>
+  <div class="neb n1"></div><div class="neb n2"></div><div class="neb n3"></div>
+  <div class="container inner">
+    <p class="label light">Selected work <i>/01</i></p>
+    <div id="gal">
+      <svg id="rings" viewBox="0 0 1000 460" preserveAspectRatio="none" aria-hidden="true">
+        <ellipse cx="500" cy="230" rx="480" ry="170" fill="none" stroke="#8E7FBC" stroke-width="1" opacity="0.4"></ellipse>
+        <ellipse cx="500" cy="230" rx="400" ry="140" fill="none" stroke="#8E7FBC" stroke-width="1" opacity="0.18"></ellipse>
+      </svg>
+      <div id="stage">
+        <div class="cov on" id="cov0" style="background:#1E1813;">
+          <div style="position:absolute; left:-6%; right:-6%; top:46%; height:15%; background:linear-gradient(90deg,#4796E3,#8E64D8,#D85A8A); border-radius:50%; filter:blur(18px); opacity:.8; transform:rotate(-7deg);"></div>
+          <div style="position:absolute; left:-4%; right:40%; top:28%; height:8%; background:linear-gradient(90deg,#E0705A,#8E64D8); border-radius:50%; filter:blur(13px); opacity:.55; transform:rotate(-5deg);"></div>
+          <div style="position:absolute; right:4%; top:-16%; width:36%; aspect-ratio:1; background:radial-gradient(circle,#8E64D8,transparent 70%); opacity:.5;"></div>
+          <div style="position:absolute; left:6%; bottom:9%; width:22%; border-top:1.5px solid rgba(245,239,228,.85);"></div>
+        </div>
+        <div class="cov" id="cov1" style="background:#171420;">
+          <div style="position:absolute; left:12%; top:22%; width:28%; aspect-ratio:1; border-radius:50%; background:linear-gradient(135deg,#4796E3,#8E64D8 50%,#E0705A);"></div>
+          <div style="position:absolute; left:4%; top:38%; width:48%; height:26%; border:1px solid #5A5070; border-radius:50%; transform:rotate(-16deg); opacity:.7;"></div>
+          <span style="position:absolute; right:9%; top:18%; font-family:var(--serif); font-size:clamp(48px,9vw,110px); color:#F5EFE4;">#2</span>
+        </div>
+        <div class="cov" id="cov2" style="background:#13101F; border:1.5px dashed #4A3F6E; display:flex; align-items:center; justify-content:center;">
+          <span class="mono" style="font-size:13px; color:#9D92BE;">your next ship →</span>
+        </div>
       </div>
-      <div class="cov" id="cov1" style="background:#171420;">
-        <div style="position:absolute; left:12%; top:22%; width:28%; aspect-ratio:1; border-radius:50%; background:linear-gradient(135deg,#4796E3,#8E64D8 50%,#E0705A);"></div>
-        <div style="position:absolute; left:4%; top:38%; width:48%; height:26%; border:1px solid #5A5070; border-radius:50%; transform:rotate(-16deg); opacity:.7;"></div>
-        <span style="position:absolute; right:9%; top:18%; font-family:var(--serif); font-size:clamp(48px,9vw,110px); color:#F5EFE4;">#2</span>
+      <button class="pl on" data-i="0">
+        <span class="pw" style="--hl:#BFE3FF; --c1:#4796E3; --c2:#16336E; --ga:rgba(71,150,227,.55); --rc:rgba(159,208,255,.8);">
+          <span class="ring1"></span><span class="pcore"></span>
+        </span>
+        <span class="plb">TaxGlobal AI</span>
+      </button>
+      <button class="pl" data-i="1">
+        <span class="pw" style="--hl:#E2CDFF; --c1:#8E64D8; --c2:#37206B; --ga:rgba(142,100,216,.55); --rc:rgba(196,164,255,.7);">
+          <span class="ring2"></span><span class="pcore"></span><span class="sat"></span>
+        </span>
+        <span class="plb">Mithra CRM Quest</span>
+      </button>
+      <button class="pl" data-i="2">
+        <span class="pw" style="--hl:#FFD3E2; --c1:#D85A8A; --c2:#6E2342; --ga:rgba(216,90,138,.55); --rc:rgba(255,170,200,.6);">
+          <span class="ring1" style="border-style:dashed; opacity:.6;"></span><span class="pcore"></span>
+        </span>
+        <span class="plb">Next project</span>
+      </button>
+      <div class="caps">
+        <div class="cap on" id="cap0"><h3>TaxGlobal AI</h3><span class="chip">live soon</span></div>
+        <div class="cap" id="cap1"><h3>Mithra CRM Quest</h3><span class="chip">live soon</span></div>
+        <div class="cap" id="cap2"><h3>Next project</h3><span class="chip live">visit ↗</span></div>
       </div>
-      <div class="cov" id="cov2" style="background:#FAF6EE; border:1.5px dashed #C9B79F; display:flex; align-items:center; justify-content:center;">
-        <span class="mono" style="font-size:13px; color:#8A7E6C;">your next ship →</span>
-      </div>
-    </div>
-    <button class="pl on" data-i="0"><span class="orb" data-c="#4796E3"></span><span class="plb">TaxGlobal AI</span></button>
-    <button class="pl" data-i="1"><span class="orb" data-c="#8E64D8"></span><span class="plb">Mithra CRM Quest</span></button>
-    <button class="pl" data-i="2"><span class="orb" data-c="#D85A8A"></span><span class="plb">Next project</span></button>
-    <div class="caps">
-      <div class="cap on" id="cap0"><h3>TaxGlobal AI</h3><span class="chip">live soon</span></div>
-      <div class="cap" id="cap1"><h3>Mithra CRM Quest</h3><span class="chip">live soon</span></div>
-      <div class="cap" id="cap2"><h3>Next project</h3><span class="chip live">visit ↗</span></div>
     </div>
   </div>
 </section>
@@ -146,11 +195,12 @@
   <div class="row"><label>背景渐变浓度 <span id="vGrad">60%</span></label><input type="range" id="cGrad" min="0" max="100" value="60"></div>
   <div class="row"><label>粒子密度 <span id="vDen">240</span></label><input type="range" id="cDen" min="80" max="420" step="10" value="240"></div>
   <div class="row"><label>粒子光晕 <span id="vGlow">100%</span></label><input type="range" id="cGlow" min="50" max="180" value="100"></div>
-  <div class="row"><label>星球大小 <span id="vOrb">17px</span></label><input type="range" id="cOrb" min="10" max="30" value="17"></div>
+  <div class="row"><label>星球大小 <span id="vOrb">48px</span></label><input type="range" id="cOrb" min="28" max="72" value="48"></div>
+  <div class="row"><label>星空密度 <span id="vStar">220</span></label><input type="range" id="cStar" min="60" max="500" step="20" value="220"></div>
   <div class="row"><label>色谱</label>
     <div class="pals"><button id="pal0" class="on">Gemini冷</button><button id="pal1">冷暖混</button><button id="pal2">紫罗兰</button></div>
   </div>
-  <div id="readout">渐变60% 粒子240 光晕100% 星球17px Gemini冷</div>
+  <div id="readout"></div>
   <button id="copyBtn">复制参数给 Claude</button>
 </aside>
 
@@ -162,7 +212,7 @@ const PALS = {
   violet: ['#6E5AE0', '#7E64DC', '#8E64D8', '#A06CD0', '#B65CC9'],
 };
 const PALN = { gemini: 'Gemini冷', mix: '冷暖混', violet: '紫罗兰' };
-const state = { grad: 0.6, den: 240, glow: 1, orb: 17, pal: 'gemini' };
+const state = { grad: 0.6, den: 240, glow: 1, orb: 48, stars: 220, pal: 'gemini' };
 
 function applyBg() {
   const k = state.grad;
@@ -173,17 +223,14 @@ function applyBg() {
     'radial-gradient(700px 480px at 30% 75%, rgba(216,90,138,' + 0.17 * k + '), transparent 60%),' +
     'linear-gradient(180deg,#FBF7EF,#F5EDE2)';
 }
-function applyOrbs() {
-  document.querySelectorAll('.orb').forEach((o) => {
-    const c = o.dataset.c;
-    o.style.width = state.orb + 'px';
-    o.style.height = state.orb + 'px';
-    o.style.background = 'radial-gradient(circle at 32% 28%, rgba(255,255,255,.92), ' + c + ' 55%, ' + c + ')';
-    o.style.boxShadow = '0 0 ' + 16 * state.glow + 'px ' + 3 * state.glow + 'px ' + c + '88';
+function applyPlanets() {
+  document.querySelectorAll('.pw').forEach((w) => {
+    w.style.setProperty('--ps', state.orb + 'px');
+    w.style.setProperty('--glow', state.glow);
   });
 }
 function readout() {
-  $('readout').textContent = '渐变' + Math.round(state.grad * 100) + '% 粒子' + state.den + ' 光晕' + Math.round(state.glow * 100) + '% 星球' + state.orb + 'px ' + PALN[state.pal];
+  $('readout').textContent = '渐变' + Math.round(state.grad * 100) + '% 粒子' + state.den + ' 光晕' + Math.round(state.glow * 100) + '% 星球' + state.orb + 'px 星空' + state.stars + ' ' + PALN[state.pal];
 }
 
 const cv = $('px');
@@ -210,7 +257,7 @@ function sprite(col) {
 }
 const lerp = (a, b, t) => a + (b - a) * t;
 const ez = (t) => { t = Math.max(0, Math.min(1, t)); return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; };
-let parts = [], sprites = [], t0 = performance.now(), scatter = 0;
+let parts = [], sprites = [], t0 = performance.now();
 function build() {
   sizeCanvas();
   sprites = PALS[state.pal].map(sprite);
@@ -241,11 +288,11 @@ cv.addEventListener('pointerleave', () => { mouse.x = -9999; mouse.y = -9999; })
 function pframe(now) {
   requestAnimationFrame(pframe);
   ctx.clearRect(0, 0, S, S);
-  scatter = Math.min(Math.max(scrollY / (innerHeight * 0.8), 0), 1);
-  if (scatter >= 1) return;
+  const sc = Math.min(Math.max(scrollY / (innerHeight * 0.8), 0), 1);
+  if (sc >= 1) return;
   const el = (now - t0) / 1000;
-  const fade = 1 - scatter * 0.9;
-  const se = ez(scatter);
+  const fade = 1 - sc * 0.9;
+  const se = ez(sc);
   for (const p of parts) {
     const af = ez((el - p.dl) / 1.4);
     const dx = Math.sin(el * 0.42 + p.ph) * S * 0.022 + Math.cos(el * (0.5 + p.tw * 0.1) + p.ph) * p.sw;
@@ -261,6 +308,42 @@ function pframe(now) {
     ctx.drawImage(sprites[p.sp], p.x - d / 2, p.y - d / 2, d, d);
   }
   ctx.globalAlpha = 1;
+}
+
+const sv = $('stars');
+const sctx = sv.getContext('2d');
+let SW = 0, SH = 0, stars = [];
+const STAR_COLS = ['#EDE9F7', '#EDE9F7', '#EDE9F7', '#9FD0FF', '#E2CDFF', '#FFD3E2'];
+function buildStars() {
+  const band = sv.parentElement;
+  SW = band.clientWidth; SH = band.clientHeight;
+  sv.width = SW * DPR; sv.height = SH * DPR;
+  sctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  stars = [];
+  for (let i = 0; i < state.stars; i++) {
+    stars.push({
+      x: Math.random() * SW, y: Math.random() * SH,
+      r: Math.random() < 0.06 ? 1.4 + Math.random() * 0.9 : 0.4 + Math.random() * 0.8,
+      c: STAR_COLS[Math.floor(Math.random() * STAR_COLS.length)],
+      tw: 0.4 + Math.random() * 1.8, ph: Math.random() * 6.283,
+      dr: Math.random() * 0.014 + 0.003,
+    });
+  }
+}
+function sframe(now) {
+  requestAnimationFrame(sframe);
+  sctx.clearRect(0, 0, SW, SH);
+  const t = now / 1000;
+  for (const s of stars) {
+    s.x += s.dr; if (s.x > SW + 2) s.x = -2;
+    const a = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * s.tw + s.ph));
+    sctx.globalAlpha = a;
+    sctx.fillStyle = s.c;
+    sctx.beginPath();
+    sctx.arc(s.x, s.y, s.r, 0, 6.2832);
+    sctx.fill();
+  }
+  sctx.globalAlpha = 1;
 }
 
 const pls = [...document.querySelectorAll('.pl')];
@@ -279,7 +362,7 @@ function sel(i) {
 pls.forEach((p, i) => p.addEventListener('click', () => sel(i)));
 function gframe(now) {
   requestAnimationFrame(gframe);
-  const g = $('gal'), w = g.clientWidth, h = g.clientHeight - 92, cx = w / 2, cy = h / 2, rx = w * 0.48, ry = h * 0.37;
+  const g = $('gal'), w = g.clientWidth, h = g.clientHeight - 96, cx = w / 2, cy = h / 2, rx = w * 0.48, ry = h * 0.37;
   rot += (tgt - rot) * 0.07;
   const ts = now / 1000;
   pls.forEach((p, i) => {
@@ -293,8 +376,9 @@ function gframe(now) {
 
 $('cGrad').addEventListener('input', (e) => { state.grad = e.target.value / 100; $('vGrad').textContent = e.target.value + '%'; applyBg(); readout(); });
 $('cDen').addEventListener('input', (e) => { state.den = Number(e.target.value); $('vDen').textContent = e.target.value; build(); readout(); });
-$('cGlow').addEventListener('input', (e) => { state.glow = e.target.value / 100; $('vGlow').textContent = e.target.value + '%'; applyOrbs(); readout(); });
-$('cOrb').addEventListener('input', (e) => { state.orb = Number(e.target.value); $('vOrb').textContent = e.target.value + 'px'; applyOrbs(); readout(); });
+$('cGlow').addEventListener('input', (e) => { state.glow = e.target.value / 100; $('vGlow').textContent = e.target.value + '%'; applyPlanets(); readout(); });
+$('cOrb').addEventListener('input', (e) => { state.orb = Number(e.target.value); $('vOrb').textContent = e.target.value + 'px'; applyPlanets(); readout(); });
+$('cStar').addEventListener('input', (e) => { state.stars = Number(e.target.value); $('vStar').textContent = e.target.value; buildStars(); readout(); });
 ['gemini', 'mix', 'violet'].forEach((p, i) => $('pal' + i).addEventListener('click', () => {
   state.pal = p;
   build();
@@ -308,10 +392,11 @@ $('copyBtn').addEventListener('click', () => {
   });
 });
 $('toggle').addEventListener('click', () => $('panel').classList.toggle('min'));
-window.addEventListener('resize', () => { build(); });
+window.addEventListener('resize', () => { build(); buildStars(); });
 
-applyBg(); applyOrbs(); build(); sel(0); readout();
+applyBg(); applyPlanets(); build(); buildStars(); sel(0); readout();
 requestAnimationFrame(pframe);
+requestAnimationFrame(sframe);
 requestAnimationFrame(gframe);
 </script>
 </body>
