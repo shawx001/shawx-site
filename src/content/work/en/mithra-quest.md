@@ -4,6 +4,7 @@ summary: "World #2 on a timed AI build challenge — deterministic numbers, gate
 role: Solo builder
 stack: [LLM orchestration, Incremental cache, Validators]
 year: 2026
+cover: /covers/mithra.svg
 order: 2
 ---
 

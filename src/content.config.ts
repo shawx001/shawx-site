@@ -10,6 +10,7 @@ const work = defineCollection({
     stack: z.array(z.string()),
     year: z.number(),
     cover: z.string().optional(),
+    link: z.string().url().optional(),
     featured: z.boolean().default(true),
     order: z.number().default(99),
   }),

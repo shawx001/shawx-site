@@ -16,7 +16,7 @@ const { lang } = Astro.props;
         <img class="x-fallback" src="/favicon.svg" alt="" aria-hidden="true" />
       </div>
     </div>
-    <p class="tagline mono" data-hero-sub>{t(lang, 'hero.tagline')}</p>
+    <p class="tagline grad-text" data-hero-sub>{t(lang, 'hero.tagline')}</p>
     <p class="intro" data-hero-sub>{t(lang, 'hero.intro')}</p>
   </div>
   <p class="scroll-hint mono" data-hero-sub>{t(lang, 'hero.scroll')} ↓</p>
@@ -43,7 +43,7 @@ const { lang } = Astro.props;
   }
   .x-wrap {
     position: relative;
-    width: clamp(110px, 14vw, 190px);
+    width: clamp(120px, 16vw, 220px);
     aspect-ratio: 1;
   }
   .x-canvas {
@@ -60,9 +60,12 @@ const { lang } = Astro.props;
   }
   .x-fallback.show { display: block; }
   .tagline {
-    margin: 18px 0 0;
-    font-size: clamp(13px, 1.6vw, 16px);
-    color: var(--accent);
+    margin: 22px 0 0;
+    font-family: var(--serif);
+    font-size: clamp(26px, 3.4vw, 44px);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    width: max-content;
   }
   .intro {
     margin: 14px 0 0;

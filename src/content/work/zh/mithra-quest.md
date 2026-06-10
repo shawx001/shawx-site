@@ -4,6 +4,7 @@ summary: "限时 AI 构建挑战全球第 2 —— 确定性数字、门禁式 L
 role: 独立完成
 stack: [LLM 编排, 增量缓存, 验证器]
 year: 2026
+cover: /covers/mithra.svg
 order: 2
 ---
 

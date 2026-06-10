@@ -4,6 +4,7 @@ summary: 分位精确的 AI 报税助手 —— 规则引擎是唯一真相,LLM 
 role: 创始人 —— 架构、产品、审查门禁
 stack: [Python, FastAPI, LangChain, 规则引擎]
 year: 2026
+cover: /covers/taxglobal.svg
 order: 1
 ---
 

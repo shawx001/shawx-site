@@ -1,6 +1,6 @@
 /**
- * 粒子 X 字标引擎(spec §6)。
- * 生命周期:进站错落聚合(~1.2s)→ 星云常态(噪声漂移 + 近邻连线 + 鼠标拨弄)
+ * 粒子 X 字标引擎 v2 — Gemini 风格:彩色渐变光点、柔光晕、流动漂移、闪烁。
+ * 生命周期:进站错落聚合(~1.4s)→ 星云常态(缓慢流动 + 微轨道 + 鼠标拨弄)
  * → setProgress(p) 由滚动驱动径向散开。
  * 降级:prefers-reduced-motion / 无 2d context → 显示静态 .x-fallback。
  */
@@ -16,12 +16,17 @@ interface Particle {
   ox: number; oy: number; // 散开目标(径向外)
   x: number; y: number;   // 当前位置
   r: number;
-  accent: boolean;
+  sprite: number;
   phase: number;
+  swirl: number;          // 微轨道半径
+  twinkle: number;        // 闪烁速度
   delay: number;
 }
 
 const noop: ParticleX = { setProgress() {}, destroy() {} };
+
+// Gemini 式光谱:蓝 → 靛 → 紫 → 玫 → 珊瑚(与暖底色衔接)
+const PALETTE = ['#4796E3', '#5F7FE8', '#8E64D8', '#B65CC9', '#D85A8A', '#E0705A'];
 
 function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
@@ -30,6 +35,20 @@ function lerp(a: number, b: number, t: number): number {
 function ease(t: number): number {
   const c = Math.min(Math.max(t, 0), 1);
   return c < 0.5 ? 2 * c * c : 1 - Math.pow(-2 * c + 2, 2) / 2;
+}
+
+function makeSprite(color: string): HTMLCanvasElement {
+  const s = document.createElement('canvas');
+  s.width = 64;
+  s.height = 64;
+  const c = s.getContext('2d')!;
+  const g = c.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, color);
+  g.addColorStop(0.3, color + 'B3');
+  g.addColorStop(1, color + '00');
+  c.fillStyle = g;
+  c.fillRect(0, 0, 64, 64);
+  return s;
 }
 
 export function initParticleX(canvas: HTMLCanvasElement): ParticleX {
@@ -41,31 +60,33 @@ export function initParticleX(canvas: HTMLCanvasElement): ParticleX {
     return noop;
   }
 
-  const INK = '#2C2418';
-  const ACCENT = '#D85A30';
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const size = canvas.clientWidth || 200;
   canvas.width = size * dpr;
   canvas.height = size * dpr;
   ctx.scale(dpr, dpr);
 
+  const sprites = PALETTE.map(makeSprite);
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
-  let count = isMobile ? 120 : 280;
+  let count = isMobile ? 110 : 240;
 
   function makeParticles(n: number): Particle[] {
     const arr: Particle[] = [];
-    const m = size * 0.21; // X 形在画布内的边距
+    const m = size * 0.21;
     for (let i = 0; i < n; i++) {
       const diag = Math.random() < 0.5;
       const t = Math.random();
-      const jx = (Math.random() - 0.5) * size * 0.09;
-      const jy = (Math.random() - 0.5) * size * 0.09;
+      const jx = (Math.random() - 0.5) * size * 0.085;
+      const jy = (Math.random() - 0.5) * size * 0.085;
       const hx = (diag ? lerp(m, size - m, t) : lerp(size - m, m, t)) + jx;
       const hy = lerp(m, size - m, t) + jy;
       const ang = Math.random() * Math.PI * 2;
       const rad = size * (0.75 + Math.random() * 0.5);
       const oang = Math.atan2(hy - size / 2, hx - size / 2) + (Math.random() - 0.5) * 0.9;
       const orad = size * (0.7 + Math.random() * 0.7);
+      // 偏蓝紫取色,少量珊瑚;8% 是大光斑
+      const ci = Math.floor(Math.pow(Math.random(), 1.3) * PALETTE.length);
+      const big = Math.random() < 0.08;
       arr.push({
         hx, hy,
         sx: size / 2 + Math.cos(ang) * rad,
@@ -74,10 +95,12 @@ export function initParticleX(canvas: HTMLCanvasElement): ParticleX {
         oy: size / 2 + Math.sin(oang) * orad,
         x: size / 2 + Math.cos(ang) * rad,
         y: size / 2 + Math.sin(ang) * rad,
-        r: 1.1 + Math.random() * 1.5,
-        accent: Math.random() < 0.15,
+        r: big ? 3.2 + Math.random() * 1.8 : 1.1 + Math.random() * 1.7,
+        sprite: ci,
         phase: Math.random() * Math.PI * 2,
-        delay: (i % 20) * 0.02,
+        swirl: 1.5 + Math.random() * 3.5,
+        twinkle: 0.8 + Math.random() * 2.2,
+        delay: (i % 24) * 0.022,
       });
     }
     return arr;
@@ -101,13 +124,9 @@ export function initParticleX(canvas: HTMLCanvasElement): ParticleX {
   canvas.addEventListener('pointermove', onMove);
   canvas.addEventListener('pointerleave', onLeave);
 
-  // fps 守护:持续慢帧则粒子数减半(只降一次)
   let lastT = 0;
   let slowFrames = 0;
   let degraded = false;
-
-  const LINK = size * 0.1;
-  const LINK2 = LINK * LINK;
   const REPEL = size * 0.15;
 
   function tick(now: number) {
@@ -135,13 +154,14 @@ export function initParticleX(canvas: HTMLCanvasElement): ParticleX {
     const sEase = ease(scatter);
 
     for (const p of particles) {
-      const af = ease((elapsed - p.delay) / 1.2);
+      const af = ease((elapsed - p.delay) / 1.4);
+      // 缓慢流动 + 微轨道(Gemini 式漂浮)
       const dx =
-        Math.sin(elapsed * 0.9 + p.phase) * size * 0.018 +
-        Math.cos(elapsed * 0.6 + p.phase * 2) * size * 0.012;
+        Math.sin(elapsed * 0.42 + p.phase) * size * 0.022 +
+        Math.cos(elapsed * (0.5 + p.twinkle * 0.1) + p.phase) * p.swirl;
       const dy =
-        Math.cos(elapsed * 0.8 + p.phase) * size * 0.018 +
-        Math.sin(elapsed * 0.5 + p.phase * 1.7) * size * 0.012;
+        Math.cos(elapsed * 0.38 + p.phase * 1.3) * size * 0.022 +
+        Math.sin(elapsed * (0.46 + p.twinkle * 0.08) + p.phase) * p.swirl;
       let tx = lerp(p.sx, p.hx + dx * af, af);
       let ty = lerp(p.sy, p.hy + dy * af, af);
       tx = lerp(tx, p.ox, sEase);
@@ -157,39 +177,14 @@ export function initParticleX(canvas: HTMLCanvasElement): ParticleX {
         ty += (mdy / md) * f;
       }
 
-      p.x += (tx - p.x) * 0.14;
-      p.y += (ty - p.y) * 0.14;
-    }
+      p.x += (tx - p.x) * 0.12;
+      p.y += (ty - p.y) * 0.12;
 
-    if (elapsed > 1.4 && scatter < 0.3) {
-      ctx!.lineWidth = 0.5;
-      for (let i = 0; i < particles.length; i++) {
-        const a = particles[i];
-        let links = 0;
-        for (let j = i + 1; j < particles.length; j++) {
-          const b = particles[j];
-          const ddx = a.x - b.x;
-          const ddy = a.y - b.y;
-          const d2 = ddx * ddx + ddy * ddy;
-          if (d2 < LINK2) {
-            ctx!.globalAlpha = (1 - d2 / LINK2) * 0.18 * globalFade;
-            ctx!.strokeStyle = INK;
-            ctx!.beginPath();
-            ctx!.moveTo(a.x, a.y);
-            ctx!.lineTo(b.x, b.y);
-            ctx!.stroke();
-            if (++links >= 3) break;
-          }
-        }
-      }
-    }
-
-    for (const p of particles) {
-      ctx!.globalAlpha = 0.92 * globalFade;
-      ctx!.fillStyle = p.accent ? ACCENT : INK;
-      ctx!.beginPath();
-      ctx!.arc(p.x, p.y, p.r, 0, 6.2832);
-      ctx!.fill();
+      // 柔光 sprite + 闪烁
+      const tw = 0.72 + 0.28 * Math.sin(elapsed * p.twinkle + p.phase * 2);
+      const d = p.r * 4.4;
+      ctx!.globalAlpha = 0.9 * tw * globalFade * Math.min(af + 0.15, 1);
+      ctx!.drawImage(sprites[p.sprite], p.x - d / 2, p.y - d / 2, d, d);
     }
     ctx!.globalAlpha = 1;
   }

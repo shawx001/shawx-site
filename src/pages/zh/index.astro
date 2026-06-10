@@ -2,10 +2,10 @@
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import Hero from '../../components/Hero.astro';
-import WorkCard from '../../components/WorkCard.astro';
+import Galaxy from '../../components/Galaxy.astro';
 import Highlight from '../../components/Highlight.astro';
 import Footer from '../../components/Footer.astro';
-import { getWork, slugOf } from '../../lib/work';
+import { getWork } from '../../lib/work';
 import { t } from '../../i18n/ui';
 
 const lang = 'zh' as const;
@@ -17,20 +17,14 @@ const work = await getWork(lang);
   <Hero lang={lang} />
   <section id="work" class="container work-section">
     <p class="section-label">{t(lang, 'work.label')} <span class="idx">/01</span></p>
-    <div class="work-grid">
-      {
-        work.map((e, i) => (
-          <WorkCard
-            title={e.data.title}
-            summary={e.data.summary}
-            stack={e.data.stack}
-            href={`/zh/work/${slugOf(e)}/`}
-            index={i + 1}
-            lang={lang}
-          />
-        ))
-      }
-    </div>
+    <Galaxy
+      lang={lang}
+      items={work.map((e) => ({
+        title: e.data.title,
+        cover: e.data.cover ?? '/covers/taxglobal.svg',
+        link: e.data.link,
+      }))}
+    />
   </section>
   <Highlight lang={lang} />
   <Footer lang={lang} />
@@ -42,10 +36,4 @@ const work = await getWork(lang);
 
 <style>
   .work-section { padding-top: 90px; }
-  .work-grid {
-    margin-top: 26px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 20px;
-  }
 </style>

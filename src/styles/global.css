@@ -11,6 +11,11 @@
   --serif: 'Fraunces', Georgia, 'Songti SC', serif;
   --sans: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+  --g-blue: #4796E3;
+  --g-violet: #8E64D8;
+  --g-rose: #D85A8A;
+  --g-coral: #E0705A;
+  --grad: linear-gradient(92deg, var(--g-blue) 0%, var(--g-violet) 45%, var(--g-rose) 75%, var(--g-coral) 100%);
 }
 
 * { box-sizing: border-box; }
@@ -26,6 +31,28 @@ body {
   font-size: 16px;
   line-height: 1.7;
   overflow-x: hidden;
+  background: #FAF6EE;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(1000px 660px at 88% -12%, rgba(142, 100, 216, 0.26), transparent 62%),
+    radial-gradient(900px 580px at -12% 30%, rgba(71, 150, 227, 0.2), transparent 60%),
+    radial-gradient(820px 560px at 80% 98%, rgba(224, 112, 90, 0.18), transparent 62%),
+    radial-gradient(700px 480px at 30% 75%, rgba(216, 90, 138, 0.1), transparent 60%),
+    linear-gradient(180deg, #FBF7EF 0%, #F5EDE2 100%);
+}
+
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 h1, h2, h3 { font-family: var(--serif); font-weight: 500; line-height: 1.15; margin: 0; }
