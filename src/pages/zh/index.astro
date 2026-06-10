@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import Hero from '../../components/Hero.astro';
-import Galaxy from '../../components/Galaxy.astro';
+import WorkList from '../../components/WorkList.astro';
 import Highlight from '../../components/Highlight.astro';
 import Footer from '../../components/Footer.astro';
 import { getWork } from '../../lib/work';
@@ -17,10 +17,11 @@ const work = await getWork(lang);
   <Hero lang={lang} />
   <section id="work" class="container work-section">
     <p class="section-label">{t(lang, 'work.label')} <span class="idx">/01</span></p>
-    <Galaxy
+    <WorkList
       lang={lang}
       items={work.map((e) => ({
         title: e.data.title,
+        summary: e.data.summary,
         cover: e.data.cover ?? '/covers/taxglobal.svg',
         link: e.data.link,
       }))}
