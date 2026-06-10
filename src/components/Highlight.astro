@@ -1,0 +1,49 @@
+---
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<section class="highlight" id="highlight">
+  <p class="label mono">{t(lang, 'highlight.label')}</p>
+  <p class="big-num" aria-label="World rank 2">
+    <span data-counter data-from="60" data-to="2">#2</span>
+  </p>
+  <p class="sub mono">{t(lang, 'highlight.sub')}</p>
+</section>
+
+<style>
+  .highlight {
+    background: var(--card);
+    margin-top: 120px;
+    padding: 110px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+  }
+  .label {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--card-ink-2);
+  }
+  .big-num {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(72px, 13vw, 140px);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--card-ink);
+  }
+  .sub {
+    margin: 0;
+    font-size: 13px;
+    color: var(--accent);
+  }
+</style>

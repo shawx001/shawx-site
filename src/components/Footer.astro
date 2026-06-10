@@ -1,0 +1,60 @@
+---
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<section class="contact" id="contact">
+  <div class="contact-inner container">
+    <h2 class="title">{t(lang, 'contact.title')}</h2>
+    {/* TODO(验收后): 换成 Shaw 的真实邮箱 */}
+    <a class="cta mono" href="mailto:hello@shawx.dev">{t(lang, 'contact.cta')} →</a>
+  </div>
+</section>
+<footer class="footer">
+  <div class="container footer-inner">
+    <span class="mono note">{t(lang, 'footer.note')}</span>
+    <span class="mono copy">© 2026 Shaw X</span>
+  </div>
+</footer>
+
+<style>
+  .contact {
+    padding: 140px 0 120px;
+    text-align: center;
+  }
+  .title {
+    font-size: clamp(34px, 5vw, 56px);
+  }
+  .cta {
+    display: inline-block;
+    margin-top: 28px;
+    font-size: 14px;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 12px 28px;
+    transition: background 0.3s, color 0.3s;
+  }
+  .cta:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .footer {
+    border-top: 1px solid var(--hairline);
+    padding: 22px 0;
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .note, .copy {
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+</style>

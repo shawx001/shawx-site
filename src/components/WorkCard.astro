@@ -1,0 +1,77 @@
+---
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  title: string;
+  summary: string;
+  stack: string[];
+  href: string;
+  index: number;
+  lang: Lang;
+}
+const { title, summary, stack, href, index, lang } = Astro.props;
+const idx = String(index).padStart(2, '0');
+---
+
+<a class="work-card" href={href} data-reveal>
+  <div class="top">
+    <h3 class="title">{title}</h3>
+    <span class="idx mono">{idx}</span>
+  </div>
+  <p class="summary mono">&gt; {summary}</p>
+  <div class="tags">
+    {stack.map((s) => <span class="tag mono">{s}</span>)}
+  </div>
+  <span class="cta mono">{t(lang, 'work.view')} →</span>
+</a>
+
+<style>
+  .work-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: var(--card);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 26px 28px;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s;
+  }
+  .work-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+  }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .title {
+    font-size: 26px;
+    color: var(--card-ink);
+  }
+  .idx {
+    font-size: 30px;
+    color: var(--card-line);
+    line-height: 1;
+  }
+  .summary {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--card-ink-2);
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-size: 11.5px;
+    color: var(--card-ink-2);
+    border: 1px solid var(--card-line);
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+  .cta {
+    margin-top: auto;
+    font-size: 12px;
+    color: var(--accent);
+  }
+</style>
