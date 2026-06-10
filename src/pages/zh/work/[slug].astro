@@ -1,0 +1,67 @@
+---
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+import { getWork, slugOf, type WorkEntry } from '../../../lib/work';
+import { t, homeOf } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const entries = await getWork('zh');
+  return entries.map((e) => ({ params: { slug: slugOf(e) }, props: { entry: e } }));
+}
+
+const lang = 'zh' as const;
+const { entry } = Astro.props as { entry: WorkEntry };
+const { Content } = await render(entry);
+---
+
+<Base lang={lang} title={`${entry.data.title} — Shaw X`} description={entry.data.summary}>
+  <Nav lang={lang} />
+  <main class="container case">
+    <a class="back mono" href={`${homeOf(lang)}#work`}>{t(lang, 'case.back')}</a>
+    <h1 class="case-title">{entry.data.title}</h1>
+    <p class="case-summary mono">{entry.data.summary}</p>
+    <dl class="case-meta">
+      <div><dt class="mono">{t(lang, 'case.role')}</dt><dd>{entry.data.role}</dd></div>
+      <div><dt class="mono">{t(lang, 'case.stack')}</dt><dd>{entry.data.stack.join(' · ')}</dd></div>
+      <div><dt class="mono">{t(lang, 'case.year')}</dt><dd>{entry.data.year}</dd></div>
+    </dl>
+    <article class="prose"><Content /></article>
+  </main>
+  <Footer lang={lang} />
+</Base>
+
+<style>
+  .case { padding: 130px 24px 60px; max-width: 800px; }
+  .back { font-size: 12px; color: var(--ink-2); }
+  .back:hover { color: var(--accent); }
+  .case-title { margin-top: 18px; font-size: clamp(40px, 7vw, 72px); }
+  .case-summary { margin: 14px 0 0; font-size: 14px; color: var(--accent); }
+  .case-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin: 36px 0 0;
+    border-top: 1px solid var(--hairline);
+    padding-top: 20px;
+  }
+  .case-meta dt {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .case-meta dd { margin: 4px 0 0; font-size: 14px; }
+  .prose { margin-top: 24px; }
+  .prose :global(h2) {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 44px 0 10px;
+  }
+  .prose :global(p) { margin: 0 0 14px; }
+</style>

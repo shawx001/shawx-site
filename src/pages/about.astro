@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { t } from '../i18n/ui';
+
+const lang = 'en' as const;
+const skills = ['AI agents', 'LLM orchestration', 'Python', 'TypeScript', 'Product design', 'Review gates'];
+---
+
+<Base lang={lang} title="About — Shaw X" description="Independent engineer with taste and product sense.">
+  <Nav lang={lang} />
+  <main class="container about">
+    <p class="section-label">{t(lang, 'about.title')} <span class="idx">/02</span></p>
+    <div class="grid">
+      <div class="photo" aria-hidden="true">
+        {/* TODO(验收后): 换成 Shaw 的照片 */}
+        <img src="/favicon.svg" alt="" width="64" height="64" />
+        <span class="mono">photo soon</span>
+      </div>
+      <div class="bio">
+        <h1>Shaw X</h1>
+        <p>
+          I'm Shaw — an independent engineer who cares as much about how a product feels as whether
+          its numbers are right. I build AI products end to end: the architecture, the product
+          decisions, the pixels, and the review gates that keep everything honest.
+        </p>
+        <p>
+          Right now I'm building TaxGlobal AI, a tax assistant where the rules engine is the single
+          source of truth and the LLM never gets to guess. In 2026 I ranked #2 in the world on
+          Mithra's timed CRM build challenge.
+        </p>
+        <h2 class="sub mono">Skills</h2>
+        <div class="tags">
+          {skills.map((s) => <span class="tag mono">{s}</span>)}
+        </div>
+      </div>
+    </div>
+  </main>
+  <Footer lang={lang} />
+</Base>
+
+<style>
+  .about { padding: 130px 24px 40px; }
+  .grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 48px;
+    margin-top: 30px;
+  }
+  @media (max-width: 768px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+  .photo {
+    background: var(--card);
+    border-radius: 12px;
+    aspect-ratio: 4 / 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+  .photo span { font-size: 11px; color: var(--card-ink-2); letter-spacing: 0.14em; }
+  .bio h1 { font-size: clamp(40px, 6vw, 64px); }
+  .bio p { color: var(--ink); max-width: 560px; }
+  .sub {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 36px;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .tag {
+    font-size: 12px;
+    color: var(--ink-2);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 4px 12px;
+  }
+</style>
