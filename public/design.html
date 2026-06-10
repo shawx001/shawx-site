@@ -45,40 +45,59 @@
   .n1 { width: 480px; height: 320px; left: -8%; top: 8%; background: radial-gradient(closest-side, rgba(142,100,216,.34), transparent); }
   .n2 { width: 560px; height: 360px; right: -10%; bottom: 4%; background: radial-gradient(closest-side, rgba(71,150,227,.26), transparent); }
   .n3 { width: 360px; height: 260px; right: 18%; top: -6%; background: radial-gradient(closest-side, rgba(216,90,138,.2), transparent); }
-  .space .inner { position: relative; padding: 56px 0 40px; }
+  .space .inner { position: relative; padding: 56px 0 36px; }
   .label.light { color: #9D92BE; }
   .label.light i { color: #E886AC; }
-  #gal { position: relative; height: clamp(460px, 56vw, 640px); }
-  #rings { position: absolute; inset: 0; width: 100%; height: calc(100% - 96px); }
-  #stage { position: absolute; left: 50%; top: calc((100% - 96px)/2); transform: translate(-50%,-50%); width: min(58%, 560px); aspect-ratio: 1200/630; z-index: 50; }
-  .cov { position: absolute; inset: 0; border-radius: 18px; overflow: hidden; opacity: 0; transition: opacity .5s;
-    border: 1px solid rgba(245,239,228,.14); box-shadow: 0 30px 80px -28px rgba(0,0,0,.8); }
-  .cov.on { opacity: 1; }
+  #gal { position: relative; height: clamp(520px, 60vw, 700px); }
+  #rings { position: absolute; inset: 0; width: 100%; height: calc(100% - 110px); }
+
+  #bigp { position: absolute; left: 50%; top: calc((100% - 110px) / 2); transform: translate(-50%, -50%);
+    width: var(--bps, 210px); height: var(--bps, 210px); z-index: 50; }
+  .bring { position: absolute; left: 50%; top: 50%; border-radius: 50%; }
+  .b1 { width: 162%; height: 162%; border: 2.5px solid rgba(186,205,255,.5); transform: translate(-50%,-50%) rotateX(76deg) rotateZ(-14deg);
+    box-shadow: 0 0 18px rgba(150,170,255,.3); z-index: 1; }
+  .b2 { width: 182%; height: 182%; border: 1px dashed rgba(186,205,255,.28); transform: translate(-50%,-50%) rotateX(76deg) rotateZ(-14deg); z-index: 1; }
+  .bcore { position: absolute; inset: 0; border-radius: 50%; z-index: 2; overflow: hidden;
+    background: radial-gradient(circle at 31% 26%, rgba(255,255,255,.95) 0%, #BFD8FF 7%, #6FA8EC 28%, #8E64D8 58%, #3A2470 80%, #120B2E 100%);
+    box-shadow: inset calc(var(--bps) * -0.12) calc(var(--bps) * -0.16) calc(var(--bps) * 0.3) rgba(6,4,18,.72),
+                0 0 calc(var(--bps) * 0.42 * var(--glow, 1)) calc(var(--bps) * 0.09 * var(--glow, 1)) rgba(120,130,255,.4),
+                0 0 calc(var(--bps) * 0.9 * var(--glow, 1)) calc(var(--bps) * 0.28 * var(--glow, 1)) rgba(142,100,216,.16); }
+  .bcore::before { content: ''; position: absolute; inset: -22%; border-radius: 50%;
+    background: repeating-linear-gradient(98deg, transparent 0 16px, rgba(255,255,255,.055) 16px 26px, transparent 26px 46px, rgba(18,10,58,.22) 46px 60px);
+    animation: bands 22s ease-in-out infinite alternate; }
+  @keyframes bands { from { transform: translateX(-5%) rotate(0.001deg); } to { transform: translateX(5%) rotate(0.001deg); } }
+  .bcore::after { content: ''; position: absolute; inset: 0; border-radius: 50%;
+    background: radial-gradient(circle at 72% 78%, rgba(224,112,90,.28), transparent 46%); }
+  .bmoon { position: absolute; left: 50%; top: 50%; width: 9px; height: 9px; margin: -4.5px; border-radius: 50%;
+    background: #F5EFE4; box-shadow: 0 0 10px 3px rgba(245,239,228,.55); z-index: 3;
+    animation: bmorbit 13s linear infinite; }
+  @keyframes bmorbit { from { transform: rotate(0deg) translateX(calc(var(--bps) * 0.62)); } to { transform: rotate(360deg) translateX(calc(var(--bps) * 0.62)); } }
 
   .pl { position: absolute; left: 0; top: 0; background: none; border: 0; padding: 8px; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center; gap: 10px; will-change: transform; }
-  .pw { position: relative; display: block; width: var(--ps, 48px); height: var(--ps, 48px); }
+    display: flex; flex-direction: column; align-items: center; gap: 9px; will-change: transform; }
+  .pw { position: relative; display: block; width: var(--ps, 32px); height: var(--ps, 32px); }
   .pcore { position: absolute; inset: 0; border-radius: 50%; z-index: 2;
     background: radial-gradient(circle at 31% 27%, var(--hl) 0%, var(--c1) 36%, var(--c2) 74%, #060410 100%);
     box-shadow: inset calc(var(--ps) * -0.13) calc(var(--ps) * -0.17) calc(var(--ps) * 0.3) rgba(4,3,10,.65),
                 0 0 calc(var(--ps) * 0.6 * var(--glow, 1)) calc(var(--ps) * 0.13 * var(--glow, 1)) var(--ga); }
+  .pl.on .pcore { box-shadow: inset calc(var(--ps) * -0.13) calc(var(--ps) * -0.17) calc(var(--ps) * 0.3) rgba(4,3,10,.65),
+                0 0 calc(var(--ps) * 1.0 * var(--glow, 1)) calc(var(--ps) * 0.24 * var(--glow, 1)) var(--ga); }
   .ring1 { position: absolute; left: 50%; top: 50%; width: 190%; height: 190%; border-radius: 50%; z-index: 1;
     border: 1.5px solid var(--rc); transform: translate(-50%,-50%) rotateX(74deg) rotateZ(-14deg); opacity: .9; }
-  .ring2 { position: absolute; left: 50%; top: 50%; width: 235%; height: 235%; border-radius: 50%; z-index: 1;
-    border: 1px dashed var(--rc); transform: translate(-50%,-50%) rotateX(74deg) rotateZ(-14deg); opacity: .45; }
-  .sat { position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px; border-radius: 50%;
-    background: #F5EFE4; box-shadow: 0 0 8px 2px rgba(245,239,228,.7); z-index: 3;
+  .sat { position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px; border-radius: 50%;
+    background: #F5EFE4; box-shadow: 0 0 7px 2px rgba(245,239,228,.7); z-index: 3;
     animation: orbit 5.5s linear infinite; }
-  @keyframes orbit {
-    from { transform: rotate(0deg) translateX(calc(var(--ps) * 0.95)) scale(1); }
-    to { transform: rotate(360deg) translateX(calc(var(--ps) * 0.95)) scale(1); }
-  }
+  @keyframes orbit { from { transform: rotate(0deg) translateX(calc(var(--ps) * 0.95)); } to { transform: rotate(360deg) translateX(calc(var(--ps) * 0.95)); } }
   .plb { font-family: var(--mono); font-size: 11px; color: #B4A8D6; opacity: 0; transition: opacity .3s; white-space: nowrap; }
   .pl.on .plb, .pl:hover .plb { opacity: 1; }
-  .caps { position: absolute; left: 0; right: 0; bottom: 0; height: 96px; display: grid; place-items: center; }
-  .cap { grid-area: 1/1; display: flex; align-items: center; gap: 16px; opacity: 0; transform: translateY(8px); transition: .45s; }
+
+  .caps { position: absolute; left: 0; right: 0; bottom: 0; height: 110px; display: grid; place-items: center; }
+  .cap { grid-area: 1/1; display: flex; align-items: center; gap: 18px; opacity: 0; transform: translateY(8px); transition: .45s; }
   .cap.on { opacity: 1; transform: none; }
-  .cap h3 { font-family: var(--serif); font-weight: 500; font-size: clamp(22px, 2.6vw, 30px); margin: 0; color: #F5EFE4; }
+  .thumb { width: 150px; aspect-ratio: 1200/630; border-radius: 9px; object-fit: cover; border: 1px solid rgba(245,239,228,.18); display: block; }
+  .thumb.ph { display: flex; align-items: center; justify-content: center; background: #13101F; border: 1.5px dashed #4A3F6E;
+    font-family: var(--mono); font-size: 11px; color: #9D92BE; }
+  .cap h3 { font-family: var(--serif); font-weight: 500; font-size: clamp(20px, 2.4vw, 28px); margin: 0; color: #F5EFE4; }
   .chip { font-family: var(--mono); font-size: 12px; color: #B4A8D6; border: 1px solid #4A3F6E; border-radius: 999px; padding: 5px 14px; text-decoration: none; }
   .chip.live { color: #F0937A; border-color: #F0937A; }
 
@@ -93,11 +112,11 @@
   footer { border-top: 1px solid var(--hair); padding: 22px 0; }
   footer .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-family: var(--mono); font-size: 12px; color: var(--ink2); }
 
-  #panel { position: fixed; right: 18px; top: 76px; z-index: 99; width: 252px; background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
-    border: 1px solid var(--hair); border-radius: 14px; padding: 14px 16px; box-shadow: 0 18px 50px -20px rgba(44,36,24,.35); font-size: 12px; }
-  #panel h4 { margin: 0 0 10px; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: var(--ink2); display: flex; justify-content: space-between; align-items: center; }
-  #panel .row { margin-bottom: 9px; }
-  #panel .row label { display: flex; justify-content: space-between; color: var(--ink2); margin-bottom: 2px; }
+  #panel { position: fixed; right: 18px; top: 70px; z-index: 99; width: 252px; background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
+    border: 1px solid var(--hair); border-radius: 14px; padding: 13px 16px; box-shadow: 0 18px 50px -20px rgba(44,36,24,.35); font-size: 12px; }
+  #panel h4 { margin: 0 0 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: var(--ink2); display: flex; justify-content: space-between; align-items: center; }
+  #panel .row { margin-bottom: 7px; }
+  #panel .row label { display: flex; justify-content: space-between; color: var(--ink2); margin-bottom: 1px; }
   #panel input[type=range] { width: 100%; accent-color: #8E64D8; }
   #panel .pals { display: flex; gap: 6px; }
   #panel .pals button { flex: 1; font-family: var(--mono); font-size: 11px; padding: 4px 0; background: none; border: 1px solid var(--hair); border-radius: 8px; cursor: pointer; color: var(--ink2); }
@@ -136,46 +155,39 @@
     <div id="gal">
       <svg id="rings" viewBox="0 0 1000 460" preserveAspectRatio="none" aria-hidden="true">
         <ellipse cx="500" cy="230" rx="480" ry="170" fill="none" stroke="#8E7FBC" stroke-width="1" opacity="0.4"></ellipse>
-        <ellipse cx="500" cy="230" rx="400" ry="140" fill="none" stroke="#8E7FBC" stroke-width="1" opacity="0.18"></ellipse>
+        <ellipse cx="500" cy="230" rx="400" ry="140" fill="none" stroke="#8E7FBC" stroke-width="1" opacity="0.16"></ellipse>
       </svg>
-      <div id="stage">
-        <div class="cov on" id="cov0" style="background:#1E1813;">
-          <div style="position:absolute; left:-6%; right:-6%; top:46%; height:15%; background:linear-gradient(90deg,#4796E3,#8E64D8,#D85A8A); border-radius:50%; filter:blur(18px); opacity:.8; transform:rotate(-7deg);"></div>
-          <div style="position:absolute; left:-4%; right:40%; top:28%; height:8%; background:linear-gradient(90deg,#E0705A,#8E64D8); border-radius:50%; filter:blur(13px); opacity:.55; transform:rotate(-5deg);"></div>
-          <div style="position:absolute; right:4%; top:-16%; width:36%; aspect-ratio:1; background:radial-gradient(circle,#8E64D8,transparent 70%); opacity:.5;"></div>
-          <div style="position:absolute; left:6%; bottom:9%; width:22%; border-top:1.5px solid rgba(245,239,228,.85);"></div>
-        </div>
-        <div class="cov" id="cov1" style="background:#171420;">
-          <div style="position:absolute; left:12%; top:22%; width:28%; aspect-ratio:1; border-radius:50%; background:linear-gradient(135deg,#4796E3,#8E64D8 50%,#E0705A);"></div>
-          <div style="position:absolute; left:4%; top:38%; width:48%; height:26%; border:1px solid #5A5070; border-radius:50%; transform:rotate(-16deg); opacity:.7;"></div>
-          <span style="position:absolute; right:9%; top:18%; font-family:var(--serif); font-size:clamp(48px,9vw,110px); color:#F5EFE4;">#2</span>
-        </div>
-        <div class="cov" id="cov2" style="background:#13101F; border:1.5px dashed #4A3F6E; display:flex; align-items:center; justify-content:center;">
-          <span class="mono" style="font-size:13px; color:#9D92BE;">your next ship →</span>
-        </div>
+
+      <div id="bigp">
+        <span class="bring b2"></span>
+        <span class="bring b1"></span>
+        <span class="bcore"></span>
+        <span class="bmoon"></span>
       </div>
+
       <button class="pl on" data-i="0">
-        <span class="pw" style="--hl:#BFE3FF; --c1:#4796E3; --c2:#16336E; --ga:rgba(71,150,227,.55); --rc:rgba(159,208,255,.8);">
+        <span class="pw" style="--hl:#BFE3FF; --c1:#4796E3; --c2:#16336E; --ga:rgba(71,150,227,.6); --rc:rgba(159,208,255,.8);">
           <span class="ring1"></span><span class="pcore"></span>
         </span>
         <span class="plb">TaxGlobal AI</span>
       </button>
       <button class="pl" data-i="1">
-        <span class="pw" style="--hl:#E2CDFF; --c1:#8E64D8; --c2:#37206B; --ga:rgba(142,100,216,.55); --rc:rgba(196,164,255,.7);">
-          <span class="ring2"></span><span class="pcore"></span><span class="sat"></span>
+        <span class="pw" style="--hl:#E2CDFF; --c1:#B65CC9; --c2:#4A1E5E; --ga:rgba(182,92,201,.6); --rc:rgba(220,170,255,.7);">
+          <span class="pcore"></span><span class="sat"></span>
         </span>
         <span class="plb">Mithra CRM Quest</span>
       </button>
       <button class="pl" data-i="2">
-        <span class="pw" style="--hl:#FFD3E2; --c1:#D85A8A; --c2:#6E2342; --ga:rgba(216,90,138,.55); --rc:rgba(255,170,200,.6);">
+        <span class="pw" style="--hl:#FFD9C2; --c1:#E0705A; --c2:#6E2D1B; --ga:rgba(224,112,90,.6); --rc:rgba(255,190,160,.6);">
           <span class="ring1" style="border-style:dashed; opacity:.6;"></span><span class="pcore"></span>
         </span>
         <span class="plb">Next project</span>
       </button>
+
       <div class="caps">
-        <div class="cap on" id="cap0"><h3>TaxGlobal AI</h3><span class="chip">live soon</span></div>
-        <div class="cap" id="cap1"><h3>Mithra CRM Quest</h3><span class="chip">live soon</span></div>
-        <div class="cap" id="cap2"><h3>Next project</h3><span class="chip live">visit ↗</span></div>
+        <div class="cap on" id="cap0"><img class="thumb" src="/covers/taxglobal.svg" alt=""><h3>TaxGlobal AI</h3><span class="chip">live soon</span></div>
+        <div class="cap" id="cap1"><img class="thumb" src="/covers/mithra.svg" alt=""><h3>Mithra CRM Quest</h3><span class="chip">live soon</span></div>
+        <div class="cap" id="cap2"><span class="thumb ph">your next ship →</span><h3>Next project</h3><span class="chip live">visit ↗</span></div>
       </div>
     </div>
   </div>
@@ -194,8 +206,10 @@
   <h4>DESIGN CONTROLS <button id="toggle" aria-label="折叠">—</button></h4>
   <div class="row"><label>背景渐变浓度 <span id="vGrad">60%</span></label><input type="range" id="cGrad" min="0" max="100" value="60"></div>
   <div class="row"><label>粒子密度 <span id="vDen">240</span></label><input type="range" id="cDen" min="80" max="420" step="10" value="240"></div>
-  <div class="row"><label>粒子光晕 <span id="vGlow">100%</span></label><input type="range" id="cGlow" min="50" max="180" value="100"></div>
-  <div class="row"><label>星球大小 <span id="vOrb">48px</span></label><input type="range" id="cOrb" min="28" max="72" value="48"></div>
+  <div class="row"><label>光晕强度 <span id="vGlow">100%</span></label><input type="range" id="cGlow" min="50" max="180" value="100"></div>
+  <div class="row"><label>大星球 <span id="vBig">210px</span></label><input type="range" id="cBig" min="140" max="300" step="10" value="210"></div>
+  <div class="row"><label>小星球 <span id="vOrb">32px</span></label><input type="range" id="cOrb" min="20" max="52" value="32"></div>
+  <div class="row"><label>公转一圈 <span id="vSpd">26s</span></label><input type="range" id="cSpd" min="8" max="60" step="2" value="26"></div>
   <div class="row"><label>星空密度 <span id="vStar">220</span></label><input type="range" id="cStar" min="60" max="500" step="20" value="220"></div>
   <div class="row"><label>色谱</label>
     <div class="pals"><button id="pal0" class="on">Gemini冷</button><button id="pal1">冷暖混</button><button id="pal2">紫罗兰</button></div>
@@ -212,7 +226,7 @@ const PALS = {
   violet: ['#6E5AE0', '#7E64DC', '#8E64D8', '#A06CD0', '#B65CC9'],
 };
 const PALN = { gemini: 'Gemini冷', mix: '冷暖混', violet: '紫罗兰' };
-const state = { grad: 0.6, den: 240, glow: 1, orb: 48, stars: 220, pal: 'gemini' };
+const state = { grad: 0.6, den: 240, glow: 1, big: 210, orb: 32, period: 26, stars: 220, pal: 'gemini' };
 
 function applyBg() {
   const k = state.grad;
@@ -228,9 +242,12 @@ function applyPlanets() {
     w.style.setProperty('--ps', state.orb + 'px');
     w.style.setProperty('--glow', state.glow);
   });
+  const bp = $('bigp');
+  bp.style.setProperty('--bps', state.big + 'px');
+  bp.style.setProperty('--glow', state.glow);
 }
 function readout() {
-  $('readout').textContent = '渐变' + Math.round(state.grad * 100) + '% 粒子' + state.den + ' 光晕' + Math.round(state.glow * 100) + '% 星球' + state.orb + 'px 星空' + state.stars + ' ' + PALN[state.pal];
+  $('readout').textContent = '渐变' + Math.round(state.grad * 100) + '% 粒子' + state.den + ' 光晕' + Math.round(state.glow * 100) + '% 大星球' + state.big + ' 小星球' + state.orb + ' 公转' + state.period + 's 星空' + state.stars + ' ' + PALN[state.pal];
 }
 
 const cv = $('px');
@@ -347,37 +364,47 @@ function sframe(now) {
 }
 
 const pls = [...document.querySelectorAll('.pl')];
-const TAU = Math.PI * 2, FR = Math.PI / 2, N = pls.length, STEP = TAU / N;
-let rot = FR, tgt = FR;
+const TAU = Math.PI * 2, N = pls.length, STEP = TAU / N;
+let rot = Math.PI / 2;
+let speedCur = 0;
+let hovering = false;
+let lastTs = null;
 function sel(i) {
-  let d = (FR - i * STEP) - tgt;
-  d = ((((d + Math.PI) % TAU) + TAU) % TAU) - Math.PI;
-  tgt += d;
   for (let j = 0; j < N; j++) {
-    $('cov' + j).classList.toggle('on', j === i);
     $('cap' + j).classList.toggle('on', j === i);
     pls[j].classList.toggle('on', j === i);
   }
 }
-pls.forEach((p, i) => p.addEventListener('click', () => sel(i)));
+pls.forEach((p, i) => {
+  p.addEventListener('click', () => sel(i));
+  p.addEventListener('pointerenter', () => { hovering = true; });
+  p.addEventListener('pointerleave', () => { hovering = false; });
+});
 function gframe(now) {
   requestAnimationFrame(gframe);
-  const g = $('gal'), w = g.clientWidth, h = g.clientHeight - 96, cx = w / 2, cy = h / 2, rx = w * 0.48, ry = h * 0.37;
-  rot += (tgt - rot) * 0.07;
+  if (lastTs === null) lastTs = now;
+  const dt = Math.min((now - lastTs) / 1000, 0.1);
+  lastTs = now;
+  const speedBase = TAU / state.period;
+  speedCur += ((hovering ? 0 : speedBase) - speedCur) * 0.06;
+  rot += speedCur * dt;
+  const g = $('gal'), w = g.clientWidth, h = g.clientHeight - 110, cx = w / 2, cy = h / 2, rx = w * 0.48, ry = h * 0.37;
   const ts = now / 1000;
   pls.forEach((p, i) => {
-    const a = i * STEP + rot, bob = Math.sin(ts * 1.3 + i * 2.1) * 4;
-    const dep = (Math.sin(a) + 1) / 2, sc = 0.62 + dep * 0.58;
+    const a = i * STEP + rot, bob = Math.sin(ts * 1.1 + i * 2.1) * 3;
+    const dep = (Math.sin(a) + 1) / 2, sc = 0.6 + dep * 0.6;
     p.style.transform = 'translate(' + (cx + Math.cos(a) * rx) + 'px,' + (cy + Math.sin(a) * ry + bob) + 'px) translate(-50%,-50%) scale(' + sc + ')';
     p.style.zIndex = String(Math.round(dep * 100));
-    p.style.opacity = String(0.45 + dep * 0.55);
+    p.style.opacity = String(0.5 + dep * 0.5);
   });
 }
 
 $('cGrad').addEventListener('input', (e) => { state.grad = e.target.value / 100; $('vGrad').textContent = e.target.value + '%'; applyBg(); readout(); });
 $('cDen').addEventListener('input', (e) => { state.den = Number(e.target.value); $('vDen').textContent = e.target.value; build(); readout(); });
 $('cGlow').addEventListener('input', (e) => { state.glow = e.target.value / 100; $('vGlow').textContent = e.target.value + '%'; applyPlanets(); readout(); });
+$('cBig').addEventListener('input', (e) => { state.big = Number(e.target.value); $('vBig').textContent = e.target.value + 'px'; applyPlanets(); readout(); });
 $('cOrb').addEventListener('input', (e) => { state.orb = Number(e.target.value); $('vOrb').textContent = e.target.value + 'px'; applyPlanets(); readout(); });
+$('cSpd').addEventListener('input', (e) => { state.period = Number(e.target.value); $('vSpd').textContent = e.target.value + 's'; readout(); });
 $('cStar').addEventListener('input', (e) => { state.stars = Number(e.target.value); $('vStar').textContent = e.target.value; buildStars(); readout(); });
 ['gemini', 'mix', 'violet'].forEach((p, i) => $('pal' + i).addEventListener('click', () => {
   state.pal = p;
