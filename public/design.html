@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shaw X — Design Playground</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500&family=Inter:wght@400;500&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAF6EE; --ink: #2C2418; --ink2: #6F6353; --accent: #D85A30;
+    --card: #241E17; --hair: #E5DCCB;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --mono: 'JetBrains Mono', Consolas, monospace;
+    --grad: linear-gradient(92deg, #4796E3, #8E64D8 45%, #D85A8A 75%, #E0705A);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--sans); color: var(--ink); background: var(--bg); overflow-x: hidden; line-height: 1.7; }
+  #bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  .mono { font-family: var(--mono); }
+  .nav { position: fixed; inset: 0 0 auto; z-index: 20; background: rgba(250,246,238,.85); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hair); }
+  .nav-inner { display: flex; justify-content: space-between; align-items: center; height: 56px; }
+  .brand { font-family: var(--serif); font-size: 18px; }
+  .brand b { color: var(--accent); font-weight: 500; }
+  .links { display: flex; gap: 22px; font-size: 14px; color: var(--ink2); }
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; padding-top: 56px; }
+  .hero-name { display: flex; align-items: center; gap: clamp(8px, 1.6vw, 20px); width: max-content; }
+  .hero-title { font-family: var(--serif); font-weight: 500; font-size: clamp(56px, 11vw, 130px); line-height: 1.05; margin: 0; letter-spacing: -0.02em; }
+  #px { width: clamp(120px, 16vw, 220px); aspect-ratio: 1; touch-action: none; }
+  .tagline { margin: 22px 0 0; font-family: var(--serif); font-weight: 500; font-size: clamp(26px, 3.4vw, 44px); width: max-content;
+    background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .intro { margin: 14px 0 0; max-width: 520px; color: var(--ink2); }
+  .scroll-hint { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); font-size: 12px; letter-spacing: .14em; color: var(--ink2); }
+  .label { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); }
+  .label i { color: var(--accent); font-style: normal; }
+  .work { padding-top: 90px; }
+  #gal { position: relative; height: clamp(440px, 56vw, 620px); }
+  #rings { position: absolute; inset: 0; width: 100%; height: calc(100% - 92px); }
+  #stage { position: absolute; left: 50%; top: calc((100% - 92px)/2); transform: translate(-50%,-50%); width: min(58%, 560px); aspect-ratio: 1200/630; z-index: 50; }
+  .cov { position: absolute; inset: 0; border-radius: 18px; overflow: hidden; opacity: 0; transition: opacity .5s; box-shadow: 0 30px 70px -30px rgba(44,36,24,.5); }
+  .cov.on { opacity: 1; }
+  .pl { position: absolute; left: 0; top: 0; background: none; border: 0; padding: 6px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 7px; will-change: transform; }
+  .orb { width: var(--orbSize, 17px); height: var(--orbSize, 17px); border-radius: 50%; }
+  .plb { font-family: var(--mono); font-size: 11px; color: var(--ink2); opacity: 0; transition: opacity .3s; white-space: nowrap; }
+  .pl.on .plb, .pl:hover .plb { opacity: 1; }
+  .caps { position: absolute; left: 0; right: 0; bottom: 0; height: 92px; display: grid; place-items: center; }
+  .cap { grid-area: 1/1; display: flex; align-items: center; gap: 16px; opacity: 0; transform: translateY(8px); transition: .45s; }
+  .cap.on { opacity: 1; transform: none; }
+  .cap h3 { font-family: var(--serif); font-weight: 500; font-size: clamp(22px, 2.6vw, 30px); margin: 0; }
+  .chip { font-family: var(--mono); font-size: 12px; color: var(--ink2); border: 1px solid var(--hair); border-radius: 999px; padding: 5px 14px; text-decoration: none; }
+  .chip.live { color: var(--accent); border-color: var(--accent); }
+  .highlight { margin-top: 120px; background: var(--card); padding: 110px 24px; text-align: center; }
+  .highlight .label { color: #9C8F7D; letter-spacing: .2em; }
+  .bignum { margin: 8px 0 4px; font-family: var(--serif); font-weight: 500; font-size: clamp(72px, 13vw, 140px); line-height: 1.1;
+    background: linear-gradient(92deg, #7FB4F0, #A98BE8 45%, #E886AC 75%, #F0937A); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .sub { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+  .contact { padding: 140px 0 120px; text-align: center; }
+  .contact h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(34px, 5vw, 56px); margin: 0; }
+  .cta { display: inline-block; margin-top: 28px; font-family: var(--mono); font-size: 14px; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 12px 28px; text-decoration: none; }
+  footer { border-top: 1px solid var(--hair); padding: 22px 0; }
+  footer .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-family: var(--mono); font-size: 12px; color: var(--ink2); }
+  #panel { position: fixed; right: 18px; top: 76px; z-index: 99; width: 252px; background: rgba(255,255,255,.92); backdrop-filter: blur(10px);
+    border: 1px solid var(--hair); border-radius: 14px; padding: 14px 16px; box-shadow: 0 18px 50px -20px rgba(44,36,24,.35); font-size: 12px; }
+  #panel h4 { margin: 0 0 10px; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: var(--ink2); display: flex; justify-content: space-between; align-items: center; }
+  #panel .row { margin-bottom: 10px; }
+  #panel .row label { display: flex; justify-content: space-between; color: var(--ink2); margin-bottom: 2px; }
+  #panel input[type=range] { width: 100%; accent-color: #8E64D8; }
+  #panel .pals { display: flex; gap: 6px; }
+  #panel .pals button { flex: 1; font-family: var(--mono); font-size: 11px; padding: 4px 0; background: none; border: 1px solid var(--hair); border-radius: 8px; cursor: pointer; color: var(--ink2); }
+  #panel .pals button.on { border-color: #8E64D8; color: #8E64D8; }
+  #readout { font-family: var(--mono); font-size: 11px; color: var(--ink); background: var(--bg); border: 1px solid var(--hair); border-radius: 8px; padding: 7px 9px; margin-top: 4px; user-select: all; }
+  #copyBtn { margin-top: 8px; width: 100%; font-family: var(--mono); font-size: 11px; padding: 6px 0; background: none; border: 1px solid var(--accent); color: var(--accent); border-radius: 8px; cursor: pointer; }
+  #toggle { background: none; border: 0; cursor: pointer; color: var(--ink2); font-size: 14px; }
+  #panel.min .row, #panel.min #readout, #panel.min #copyBtn { display: none; }
+  @media (max-width: 700px) { #panel { width: 210px; right: 10px; } }
+</style>
+</head>
+<body>
+<div id="bg"></div>
+
+<header class="nav"><div class="container nav-inner">
+  <span class="brand">Shaw <b>✕</b></span>
+  <nav class="links"><span>Work</span><span>About</span><span class="mono" style="font-size:12px; border:1px solid var(--hair); border-radius:999px; padding:2px 10px;">中</span></nav>
+</div></header>
+
+<section class="hero"><div class="container">
+  <div class="hero-name">
+    <h1 class="hero-title">Shaw</h1>
+    <canvas id="px"></canvas>
+  </div>
+  <p class="tagline" id="tag">code × design × art</p>
+  <p class="intro">I build AI products end to end — and treat beauty as a feature. Taste trained by art, discipline trained by shipping.</p>
+</div>
+<p class="scroll-hint mono">scroll ↓</p>
+</section>
+
+<section class="work container">
+  <p class="label">Selected work <i>/01</i></p>
+  <div id="gal">
+    <svg id="rings" viewBox="0 0 1000 460" preserveAspectRatio="none" aria-hidden="true">
+      <ellipse cx="500" cy="230" rx="480" ry="170" fill="none" stroke="#B9A28C" stroke-width="1" opacity="0.5"></ellipse>
+      <ellipse cx="500" cy="230" rx="400" ry="140" fill="none" stroke="#B9A28C" stroke-width="1" opacity="0.22"></ellipse>
+    </svg>
+    <div id="stage">
+      <div class="cov on" id="cov0" style="background:#1E1813;">
+        <div style="position:absolute; left:-6%; right:-6%; top:46%; height:15%; background:linear-gradient(90deg,#4796E3,#8E64D8,#D85A8A); border-radius:50%; filter:blur(18px); opacity:.8; transform:rotate(-7deg);"></div>
+        <div style="position:absolute; left:-4%; right:40%; top:28%; height:8%; background:linear-gradient(90deg,#E0705A,#8E64D8); border-radius:50%; filter:blur(13px); opacity:.55; transform:rotate(-5deg);"></div>
+        <div style="position:absolute; right:4%; top:-16%; width:36%; aspect-ratio:1; background:radial-gradient(circle,#8E64D8,transparent 70%); opacity:.5;"></div>
+        <div style="position:absolute; left:6%; bottom:9%; width:22%; border-top:1.5px solid rgba(245,239,228,.85);"></div>
+      </div>
+      <div class="cov" id="cov1" style="background:#171420;">
+        <div style="position:absolute; left:12%; top:22%; width:28%; aspect-ratio:1; border-radius:50%; background:linear-gradient(135deg,#4796E3,#8E64D8 50%,#E0705A);"></div>
+        <div style="position:absolute; left:4%; top:38%; width:48%; height:26%; border:1px solid #5A5070; border-radius:50%; transform:rotate(-16deg); opacity:.7;"></div>
+        <span style="position:absolute; right:9%; top:18%; font-family:var(--serif); font-size:clamp(48px,9vw,110px); color:#F5EFE4;">#2</span>
+      </div>
+      <div class="cov" id="cov2" style="background:#FAF6EE; border:1.5px dashed #C9B79F; display:flex; align-items:center; justify-content:center;">
+        <span class="mono" style="font-size:13px; color:#8A7E6C;">your next ship →</span>
+      </div>
+    </div>
+    <button class="pl on" data-i="0"><span class="orb" data-c="#4796E3"></span><span class="plb">TaxGlobal AI</span></button>
+    <button class="pl" data-i="1"><span class="orb" data-c="#8E64D8"></span><span class="plb">Mithra CRM Quest</span></button>
+    <button class="pl" data-i="2"><span class="orb" data-c="#D85A8A"></span><span class="plb">Next project</span></button>
+    <div class="caps">
+      <div class="cap on" id="cap0"><h3>TaxGlobal AI</h3><span class="chip">live soon</span></div>
+      <div class="cap" id="cap1"><h3>Mithra CRM Quest</h3><span class="chip">live soon</span></div>
+      <div class="cap" id="cap2"><h3>Next project</h3><span class="chip live">visit ↗</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="highlight">
+  <p class="label">Mithra CRM Quest</p>
+  <p class="bignum">#2</p>
+  <p class="sub">world rank · 2026</p>
+</section>
+
+<section class="contact"><h2>Let's build something.</h2><a class="cta" href="#">Say hello →</a></section>
+<footer><div class="container"><span>Built from scratch with Astro, GSAP and a few hundred particles.</span><span>© 2026 Shaw X</span></div></footer>
+
+<aside id="panel">
+  <h4>DESIGN CONTROLS <button id="toggle" aria-label="折叠">—</button></h4>
+  <div class="row"><label>背景渐变浓度 <span id="vGrad">60%</span></label><input type="range" id="cGrad" min="0" max="100" value="60"></div>
+  <div class="row"><label>粒子密度 <span id="vDen">240</span></label><input type="range" id="cDen" min="80" max="420" step="10" value="240"></div>
+  <div class="row"><label>粒子光晕 <span id="vGlow">100%</span></label><input type="range" id="cGlow" min="50" max="180" value="100"></div>
+  <div class="row"><label>星球大小 <span id="vOrb">17px</span></label><input type="range" id="cOrb" min="10" max="30" value="17"></div>
+  <div class="row"><label>色谱</label>
+    <div class="pals"><button id="pal0" class="on">Gemini冷</button><button id="pal1">冷暖混</button><button id="pal2">紫罗兰</button></div>
+  </div>
+  <div id="readout">渐变60% 粒子240 光晕100% 星球17px Gemini冷</div>
+  <button id="copyBtn">复制参数给 Claude</button>
+</aside>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const PALS = {
+  gemini: ['#4796E3', '#5F7FE8', '#8E64D8', '#B65CC9', '#D85A8A'],
+  mix: ['#4796E3', '#8E64D8', '#B65CC9', '#D85A8A', '#E0705A'],
+  violet: ['#6E5AE0', '#7E64DC', '#8E64D8', '#A06CD0', '#B65CC9'],
+};
+const PALN = { gemini: 'Gemini冷', mix: '冷暖混', violet: '紫罗兰' };
+const state = { grad: 0.6, den: 240, glow: 1, orb: 17, pal: 'gemini' };
+
+function applyBg() {
+  const k = state.grad;
+  $('bg').style.background =
+    'radial-gradient(1000px 660px at 88% -12%, rgba(142,100,216,' + 0.43 * k + '), transparent 62%),' +
+    'radial-gradient(900px 580px at -12% 30%, rgba(71,150,227,' + 0.33 * k + '), transparent 60%),' +
+    'radial-gradient(820px 560px at 80% 98%, rgba(224,112,90,' + 0.3 * k + '), transparent 62%),' +
+    'radial-gradient(700px 480px at 30% 75%, rgba(216,90,138,' + 0.17 * k + '), transparent 60%),' +
+    'linear-gradient(180deg,#FBF7EF,#F5EDE2)';
+}
+function applyOrbs() {
+  document.querySelectorAll('.orb').forEach((o) => {
+    const c = o.dataset.c;
+    o.style.width = state.orb + 'px';
+    o.style.height = state.orb + 'px';
+    o.style.background = 'radial-gradient(circle at 32% 28%, rgba(255,255,255,.92), ' + c + ' 55%, ' + c + ')';
+    o.style.boxShadow = '0 0 ' + 16 * state.glow + 'px ' + 3 * state.glow + 'px ' + c + '88';
+  });
+}
+function readout() {
+  $('readout').textContent = '渐变' + Math.round(state.grad * 100) + '% 粒子' + state.den + ' 光晕' + Math.round(state.glow * 100) + '% 星球' + state.orb + 'px ' + PALN[state.pal];
+}
+
+const cv = $('px');
+const ctx = cv.getContext('2d');
+const DPR = Math.min(devicePixelRatio || 1, 2);
+let S = 200;
+function sizeCanvas() {
+  S = cv.clientWidth || 200;
+  cv.width = S * DPR;
+  cv.height = S * DPR;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+function sprite(col) {
+  const c = document.createElement('canvas');
+  c.width = 64; c.height = 64;
+  const g = c.getContext('2d');
+  const r = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  r.addColorStop(0, col);
+  r.addColorStop(0.3, col + 'B3');
+  r.addColorStop(1, col + '00');
+  g.fillStyle = r;
+  g.fillRect(0, 0, 64, 64);
+  return c;
+}
+const lerp = (a, b, t) => a + (b - a) * t;
+const ez = (t) => { t = Math.max(0, Math.min(1, t)); return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; };
+let parts = [], sprites = [], t0 = performance.now(), scatter = 0;
+function build() {
+  sizeCanvas();
+  sprites = PALS[state.pal].map(sprite);
+  parts = [];
+  const m = S * 0.21;
+  for (let i = 0; i < state.den; i++) {
+    const d = Math.random() < 0.5, t = Math.random();
+    const hx = (d ? lerp(m, S - m, t) : lerp(S - m, m, t)) + (Math.random() - 0.5) * S * 0.085;
+    const hy = lerp(m, S - m, t) + (Math.random() - 0.5) * S * 0.085;
+    const a = Math.random() * 6.283, r = S * (0.75 + Math.random() * 0.5);
+    const oa = Math.atan2(hy - S / 2, hx - S / 2) + (Math.random() - 0.5) * 0.9;
+    parts.push({
+      hx, hy,
+      sx: S / 2 + Math.cos(a) * r, sy: S / 2 + Math.sin(a) * r,
+      ox: S / 2 + Math.cos(oa) * S, oy: S / 2 + Math.sin(oa) * S,
+      x: S / 2 + Math.cos(a) * r, y: S / 2 + Math.sin(a) * r,
+      r: Math.random() < 0.08 ? 3 + Math.random() * 1.8 : 1 + Math.random() * 1.7,
+      sp: Math.floor(Math.pow(Math.random(), 1.3) * sprites.length),
+      ph: Math.random() * 6.283, sw: 1.5 + Math.random() * 3.5,
+      tw: 0.8 + Math.random() * 2.2, dl: (i % 24) * 0.022,
+    });
+  }
+  t0 = performance.now();
+}
+const mouse = { x: -9999, y: -9999 };
+cv.addEventListener('pointermove', (e) => { const r = cv.getBoundingClientRect(); mouse.x = (e.clientX - r.left) / r.width * S; mouse.y = (e.clientY - r.top) / r.height * S; });
+cv.addEventListener('pointerleave', () => { mouse.x = -9999; mouse.y = -9999; });
+function pframe(now) {
+  requestAnimationFrame(pframe);
+  ctx.clearRect(0, 0, S, S);
+  scatter = Math.min(Math.max(scrollY / (innerHeight * 0.8), 0), 1);
+  if (scatter >= 1) return;
+  const el = (now - t0) / 1000;
+  const fade = 1 - scatter * 0.9;
+  const se = ez(scatter);
+  for (const p of parts) {
+    const af = ez((el - p.dl) / 1.4);
+    const dx = Math.sin(el * 0.42 + p.ph) * S * 0.022 + Math.cos(el * (0.5 + p.tw * 0.1) + p.ph) * p.sw;
+    const dy = Math.cos(el * 0.38 + p.ph * 1.3) * S * 0.022 + Math.sin(el * (0.46 + p.tw * 0.08) + p.ph) * p.sw;
+    let tx = lerp(p.sx, p.hx + dx * af, af), ty = lerp(p.sy, p.hy + dy * af, af);
+    tx = lerp(tx, p.ox, se); ty = lerp(ty, p.oy, se);
+    const mx = tx - mouse.x, my = ty - mouse.y, m2 = mx * mx + my * my, R = S * 0.15;
+    if (m2 < R * R && m2 > 0.01) { const md = Math.sqrt(m2), f = (R - md) / R * S * 0.12; tx += mx / md * f; ty += my / md * f; }
+    p.x += (tx - p.x) * 0.12; p.y += (ty - p.y) * 0.12;
+    const tw = 0.72 + 0.28 * Math.sin(el * p.tw + p.ph * 2);
+    const d = p.r * 4.4 * state.glow;
+    ctx.globalAlpha = 0.9 * tw * fade * Math.min(af + 0.15, 1);
+    ctx.drawImage(sprites[p.sp], p.x - d / 2, p.y - d / 2, d, d);
+  }
+  ctx.globalAlpha = 1;
+}
+
+const pls = [...document.querySelectorAll('.pl')];
+const TAU = Math.PI * 2, FR = Math.PI / 2, N = pls.length, STEP = TAU / N;
+let rot = FR, tgt = FR;
+function sel(i) {
+  let d = (FR - i * STEP) - tgt;
+  d = ((((d + Math.PI) % TAU) + TAU) % TAU) - Math.PI;
+  tgt += d;
+  for (let j = 0; j < N; j++) {
+    $('cov' + j).classList.toggle('on', j === i);
+    $('cap' + j).classList.toggle('on', j === i);
+    pls[j].classList.toggle('on', j === i);
+  }
+}
+pls.forEach((p, i) => p.addEventListener('click', () => sel(i)));
+function gframe(now) {
+  requestAnimationFrame(gframe);
+  const g = $('gal'), w = g.clientWidth, h = g.clientHeight - 92, cx = w / 2, cy = h / 2, rx = w * 0.48, ry = h * 0.37;
+  rot += (tgt - rot) * 0.07;
+  const ts = now / 1000;
+  pls.forEach((p, i) => {
+    const a = i * STEP + rot, bob = Math.sin(ts * 1.3 + i * 2.1) * 4;
+    const dep = (Math.sin(a) + 1) / 2, sc = 0.62 + dep * 0.58;
+    p.style.transform = 'translate(' + (cx + Math.cos(a) * rx) + 'px,' + (cy + Math.sin(a) * ry + bob) + 'px) translate(-50%,-50%) scale(' + sc + ')';
+    p.style.zIndex = String(Math.round(dep * 100));
+    p.style.opacity = String(0.45 + dep * 0.55);
+  });
+}
+
+$('cGrad').addEventListener('input', (e) => { state.grad = e.target.value / 100; $('vGrad').textContent = e.target.value + '%'; applyBg(); readout(); });
+$('cDen').addEventListener('input', (e) => { state.den = Number(e.target.value); $('vDen').textContent = e.target.value; build(); readout(); });
+$('cGlow').addEventListener('input', (e) => { state.glow = e.target.value / 100; $('vGlow').textContent = e.target.value + '%'; applyOrbs(); readout(); });
+$('cOrb').addEventListener('input', (e) => { state.orb = Number(e.target.value); $('vOrb').textContent = e.target.value + 'px'; applyOrbs(); readout(); });
+['gemini', 'mix', 'violet'].forEach((p, i) => $('pal' + i).addEventListener('click', () => {
+  state.pal = p;
+  build();
+  [0, 1, 2].forEach((j) => $('pal' + j).classList.toggle('on', j === i));
+  readout();
+}));
+$('copyBtn').addEventListener('click', () => {
+  navigator.clipboard.writeText($('readout').textContent).then(() => {
+    $('copyBtn').textContent = '已复制 ✓';
+    setTimeout(() => { $('copyBtn').textContent = '复制参数给 Claude'; }, 1500);
+  });
+});
+$('toggle').addEventListener('click', () => $('panel').classList.toggle('min'));
+window.addEventListener('resize', () => { build(); });
+
+applyBg(); applyOrbs(); build(); sel(0); readout();
+requestAnimationFrame(pframe);
+requestAnimationFrame(gframe);
+</script>
+</body>
+</html>
