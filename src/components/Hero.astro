@@ -1,0 +1,82 @@
+---
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<section id="hero" class="hero">
+  <div class="container hero-inner">
+    <div class="hero-name" data-hero-name>
+      <h1 class="hero-title">Shaw<span class="sr-only"> X</span></h1>
+      <div class="x-wrap">
+        <canvas class="x-canvas" data-particle-x aria-hidden="true"></canvas>
+        <img class="x-fallback" src="/favicon.svg" alt="" aria-hidden="true" />
+      </div>
+    </div>
+    <p class="tagline mono" data-hero-sub>{t(lang, 'hero.tagline')}</p>
+    <p class="intro" data-hero-sub>{t(lang, 'hero.intro')}</p>
+  </div>
+  <p class="scroll-hint mono" data-hero-sub>{t(lang, 'hero.scroll')} ↓</p>
+</section>
+
+<style>
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding-top: 56px;
+  }
+  .hero-name {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 1.6vw, 20px);
+    width: max-content;
+  }
+  .hero-title {
+    font-size: clamp(56px, 11vw, 130px);
+    letter-spacing: -0.02em;
+  }
+  .x-wrap {
+    position: relative;
+    width: clamp(110px, 14vw, 190px);
+    aspect-ratio: 1;
+  }
+  .x-canvas {
+    position: absolute;
+    inset: -35%;
+    width: 170%;
+    height: 170%;
+  }
+  .x-fallback {
+    display: none;
+    position: absolute;
+    inset: 15%;
+    width: 70%;
+  }
+  .x-fallback.show { display: block; }
+  .tagline {
+    margin: 18px 0 0;
+    font-size: clamp(13px, 1.6vw, 16px);
+    color: var(--accent);
+  }
+  .intro {
+    margin: 14px 0 0;
+    max-width: 520px;
+    color: var(--ink-2);
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 26px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: var(--ink-2);
+  }
+</style>
