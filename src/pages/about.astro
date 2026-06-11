@@ -13,11 +13,7 @@ const skills = ['AI agents', 'LLM orchestration', 'Python', 'TypeScript', 'Produ
   <main class="container about">
     <p class="section-label">{t(lang, 'about.title')} <span class="idx">/02</span></p>
     <div class="grid">
-      <div class="photo" aria-hidden="true">
-        {/* TODO(验收后): 换成 Shaw 的照片 */}
-        <img src="/favicon.svg" alt="" width="64" height="64" />
-        <span class="mono">photo soon</span>
-      </div>
+      <img class="photo-img" src="/about/portrait.jpg" alt="Shaw" />
       <div class="bio">
         <h1>Shaw X</h1>
         <p>
@@ -34,6 +30,10 @@ const skills = ['AI agents', 'LLM orchestration', 'Python', 'TypeScript', 'Produ
           Art is my other home. It's where my sense of color, rhythm and restraint comes from — I
           collect things made with taste, and I try to ship like that.
         </p>
+        <div class="art-row">
+          <img src="/about/roses-1.jpg" alt="Roses in window light, shot by Shaw" loading="lazy" />
+          <img src="/about/roses-2.jpg" alt="Backlit roses, shot by Shaw" loading="lazy" />
+        </div>
         <h2 class="sub mono">Skills</h2>
         <div class="tags">
           {skills.map((s) => <span class="tag mono">{s}</span>)}
@@ -55,17 +55,25 @@ const skills = ['AI agents', 'LLM orchestration', 'Python', 'TypeScript', 'Produ
   @media (max-width: 768px) {
     .grid { grid-template-columns: 1fr; }
   }
-  .photo {
-    background: var(--card);
-    border-radius: 12px;
+  .photo-img {
+    width: 100%;
     aspect-ratio: 4 / 5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
+    object-fit: cover;
+    border-radius: 12px;
   }
-  .photo span { font-size: 11px; color: var(--card-ink-2); letter-spacing: 0.14em; }
+  .art-row {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 12px;
+    margin-top: 18px;
+    max-width: 560px;
+  }
+  .art-row img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
   .bio h1 { font-size: clamp(40px, 6vw, 64px); }
   .bio p { color: var(--ink); max-width: 560px; }
   .sub {

@@ -13,11 +13,7 @@ const skills = ['AI Agent', 'LLM 编排', 'Python', 'TypeScript', '产品设计'
   <main class="container about">
     <p class="section-label">{t(lang, 'about.title')} <span class="idx">/02</span></p>
     <div class="grid">
-      <div class="photo" aria-hidden="true">
-        {/* TODO(验收后): 换成 Shaw 的照片 */}
-        <img src="/favicon.svg" alt="" width="64" height="64" />
-        <span class="mono">photo soon</span>
-      </div>
+      <img class="photo-img" src="/about/portrait.jpg" alt="Shaw" />
       <div class="bio">
         <h1>Shaw X</h1>
         <p>
@@ -32,6 +28,10 @@ const skills = ['AI Agent', 'LLM 编排', 'Python', 'TypeScript', '产品设计'
           艺术是我的另一个家。我的色彩、节奏和克制感都来自那里 ——
           我收集一切有审美的东西,也试着以同样的标准交付作品。
         </p>
+        <div class="art-row">
+          <img src="/about/roses-1.jpg" alt="窗边暖光下的玫瑰,Shaw 摄" loading="lazy" />
+          <img src="/about/roses-2.jpg" alt="逆光中的玫瑰,Shaw 摄" loading="lazy" />
+        </div>
         <h2 class="sub mono">技能</h2>
         <div class="tags">
           {skills.map((s) => <span class="tag mono">{s}</span>)}
@@ -53,17 +53,25 @@ const skills = ['AI Agent', 'LLM 编排', 'Python', 'TypeScript', '产品设计'
   @media (max-width: 768px) {
     .grid { grid-template-columns: 1fr; }
   }
-  .photo {
-    background: var(--card);
-    border-radius: 12px;
+  .photo-img {
+    width: 100%;
     aspect-ratio: 4 / 5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
+    object-fit: cover;
+    border-radius: 12px;
   }
-  .photo span { font-size: 11px; color: var(--card-ink-2); letter-spacing: 0.14em; }
+  .art-row {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 12px;
+    margin-top: 18px;
+    max-width: 560px;
+  }
+  .art-row img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
   .bio h1 { font-size: clamp(40px, 6vw, 64px); }
   .bio p { color: var(--ink); max-width: 560px; }
   .sub {
