@@ -12,7 +12,7 @@ const aboutHref = lang === 'en' ? '/about/' : '/zh/about/';
 ---
 
 <header class="nav">
-  <div class="container nav-inner">
+  <div class="nav-inner">
     <a class="brand" href={home}>
       <span>Shaw</span>
       <svg viewBox="0 0 34 34" width="14" height="14" aria-hidden="true">
@@ -58,6 +58,8 @@ const aboutHref = lang === 'en' ? '/about/' : '/zh/about/';
     align-items: center;
     justify-content: space-between;
     height: 56px;
+    width: 100%;
+    padding: 0 clamp(20px, 3vw, 44px);
   }
   .brand {
     display: inline-flex;
