@@ -160,6 +160,11 @@ const lang = 'en' as const;
           <p>One profile, all 51 jurisdictions — including moves between them mid-year.</p>
         </div>
         <div class="goal">
+          <span class="g-num mono">Mixed</span>
+          <h3>Real-life income</h3>
+          <p>W-2 plus freelance plus capital gains plus NIIT — one answer, not four tools.</p>
+        </div>
+        <div class="goal">
           <span class="g-num mono">RSU</span>
           <h3>Equity income</h3>
           <p>Vesting, exercise, sale — stock compensation computed correctly at each step.</p>
@@ -167,12 +172,7 @@ const lang = 'en' as const;
         <div class="goal">
           <span class="g-num mono">₿</span>
           <h3>Crypto</h3>
-          <p>Gains and cost basis, with federal and state treatment in one pass.</p>
-        </div>
-        <div class="goal">
-          <span class="g-num mono">FEIE</span>
-          <h3>Working abroad</h3>
-          <p>Foreign earned income exclusion for expats and nomads — the "Global" in the name.</p>
+          <p>Gains, cost basis and transaction category — federal and state in one pass.</p>
         </div>
         <div class="goal">
           <span class="g-num mono">Nexus</span>
@@ -180,29 +180,29 @@ const lang = 'en' as const;
           <p>Selling across states? It detects exactly where you owe, state by state.</p>
         </div>
         <div class="goal">
-          <span class="g-num mono">Mixed</span>
-          <h3>Real-life income</h3>
-          <p>W-2 plus freelance plus capital gains plus NIIT — one answer, not four tools.</p>
+          <span class="g-num mono">Scan</span>
+          <h3>Snap your W-2</h3>
+          <p>Photograph a form and the numbers file themselves — no retyping.</p>
         </div>
-      </div>
-      <div class="next-row">
-        <span class="next-label mono">Next up</span>
-        <span class="q-chip">W-2 photo reading</span>
-        <span class="q-chip">1040 form generation</span>
-        <span class="q-chip">Tax treaty checks</span>
-        <span class="q-chip">Nomad city guide</span>
+        <div class="goal">
+          <span class="g-num mono">1040</span>
+          <h3>Forms, generated</h3>
+          <p>From a conversation to filing-ready forms, without touching a worksheet.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">FEIE</span>
+          <h3>Working abroad</h3>
+          <p>Income exclusions, foreign credits and treaty checks — the "Global" in the name.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">Nomad</span>
+          <h3>Where to next</h3>
+          <p>A city-by-city tax guide for digital nomads planning the next move.</p>
+        </div>
       </div>
     </section>
 
-    <section class="block">
-      <p class="b-label mono">05 — Where it is now</p>
-      <h2>Core done. Conversation in build.</h2>
-      <p>
-        The calculation core is complete and verified across multi-state scenarios.
-        Current work is the conversational layer — making exact answers feel
-        effortless to ask for. Live soon.
-      </p>
-    </section>
+    <p class="tbc"><span class="tbc-dots">…</span>To be continued</p>
   </main>
   <Footer lang={lang} />
 </Base>
@@ -298,6 +298,21 @@ const lang = 'en' as const;
     font-size: 11px;
     letter-spacing: 0.1em;
     color: rgba(240, 234, 248, 0.45);
+  }
+
+  .tbc {
+    margin: 130px 0 30px;
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(30px, 4.5vw, 48px);
+    letter-spacing: 0.01em;
+    color: var(--ink);
+  }
+  .tbc-dots {
+    color: var(--accent);
+    margin-right: 0.18em;
   }
 
   .block { margin-top: 88px; }
@@ -439,20 +454,6 @@ const lang = 'en' as const;
   }
   .goal h3 { font-size: 18px; margin-top: 10px; }
   .goal p { margin: 8px 0 0; font-size: 13px; line-height: 1.65; color: var(--ink-2); }
-  .next-row {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 26px;
-  }
-  .next-label {
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-right: 4px;
-  }
 
   @media (max-width: 720px) {
     .meta { grid-template-columns: 1fr; gap: 20px; }

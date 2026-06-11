@@ -159,6 +159,11 @@ const lang = 'zh' as const;
           <p>一份档案，51 个辖区全覆盖 —— 包括年中跨州搬家。</p>
         </div>
         <div class="goal">
+          <span class="g-num mono">Mixed</span>
+          <h3>真实人生的收入</h3>
+          <p>W-2 + 自由职业 + 资本利得 + NIIT —— 一个答案，不用四个工具。</p>
+        </div>
+        <div class="goal">
           <span class="g-num mono">RSU</span>
           <h3>股权收入</h3>
           <p>归属、行权、出售 —— 股票薪酬每一步都算对。</p>
@@ -166,12 +171,7 @@ const lang = 'zh' as const;
         <div class="goal">
           <span class="g-num mono">₿</span>
           <h3>加密货币</h3>
-          <p>收益与成本基础，联邦 + 州一次算清。</p>
-        </div>
-        <div class="goal">
-          <span class="g-num mono">FEIE</span>
-          <h3>海外工作</h3>
-          <p>海外收入豁免，为 expat 和数字游民而生 —— 名字里的 "Global"。</p>
+          <p>收益、成本基础、交易分类 —— 联邦 + 州一次算清。</p>
         </div>
         <div class="goal">
           <span class="g-num mono">Nexus</span>
@@ -179,28 +179,29 @@ const lang = 'zh' as const;
           <p>跨州卖货？它逐州检测你在哪里产生纳税义务。</p>
         </div>
         <div class="goal">
-          <span class="g-num mono">Mixed</span>
-          <h3>真实人生的收入</h3>
-          <p>W-2 + 自由职业 + 资本利得 + NIIT —— 一个答案，不用四个工具。</p>
+          <span class="g-num mono">Scan</span>
+          <h3>拍照录入</h3>
+          <p>W-2 拍张照，数字自己各就各位 —— 不用手敲。</p>
         </div>
-      </div>
-      <div class="next-row">
-        <span class="next-label mono">即将到来</span>
-        <span class="q-chip">W-2 拍照识别</span>
-        <span class="q-chip">1040 表单生成</span>
-        <span class="q-chip">税收协定核查</span>
-        <span class="q-chip">游民城市指南</span>
+        <div class="goal">
+          <span class="g-num mono">1040</span>
+          <h3>表单生成</h3>
+          <p>从一段对话，到可以提交的报税表 —— 不碰工作底稿。</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">FEIE</span>
+          <h3>海外工作</h3>
+          <p>收入豁免、海外抵免、协定核查 —— 名字里的 "Global"。</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">Nomad</span>
+          <h3>下一站去哪</h3>
+          <p>数字游民的逐城税务指南，规划下一次迁徙。</p>
+        </div>
       </div>
     </section>
 
-    <section class="block">
-      <p class="b-label mono">05 — 当前进度</p>
-      <h2>内核已完成，对话层在路上。</h2>
-      <p>
-        计算内核已经完成，并在多州场景下逐分验证。当前在做对话层 ——
-        让"得到一个精确答案"这件事，问起来毫不费力。即将上线。
-      </p>
-    </section>
+    <p class="tbc"><span class="tbc-dots">…</span>To be continued</p>
   </main>
   <Footer lang={lang} />
 </Base>
@@ -295,6 +296,21 @@ const lang = 'zh' as const;
     font-size: 11px;
     letter-spacing: 0.1em;
     color: rgba(240, 234, 248, 0.45);
+  }
+
+  .tbc {
+    margin: 130px 0 30px;
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(30px, 4.5vw, 48px);
+    letter-spacing: 0.01em;
+    color: var(--ink);
+  }
+  .tbc-dots {
+    color: var(--accent);
+    margin-right: 0.18em;
   }
 
   .block { margin-top: 88px; }
@@ -434,20 +450,6 @@ const lang = 'zh' as const;
   }
   .goal h3 { font-size: 18px; margin-top: 10px; }
   .goal p { margin: 8px 0 0; font-size: 13px; line-height: 1.75; color: var(--ink-2); }
-  .next-row {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 26px;
-  }
-  .next-label {
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-right: 4px;
-  }
 
   @media (max-width: 720px) {
     .meta { grid-template-columns: 1fr; gap: 20px; }
