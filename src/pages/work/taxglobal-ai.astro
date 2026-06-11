@@ -151,29 +151,46 @@ const lang = 'en' as const;
     </section>
 
     <section class="block">
-      <p class="b-label mono">04 — Design principles</p>
-      <h2>What the product refuses to compromise.</h2>
-      <div class="goals">
+      <p class="b-label mono">04 — What it covers</p>
+      <h2>Not just one tax. Your whole year.</h2>
+      <div class="goals three">
         <div class="goal">
-          <span class="g-num mono">1</span>
-          <h3>Exact, always</h3>
-          <p>Accuracy to the cent isn't a feature tier — it's the baseline for every answer.</p>
+          <span class="g-num mono">50 + DC</span>
+          <h3>Every state</h3>
+          <p>One profile, all 51 jurisdictions — including moves between them mid-year.</p>
         </div>
         <div class="goal">
-          <span class="g-num mono">2</span>
-          <h3>Always current</h3>
-          <p>Tax law changes land as data updates, so the product never lags a season behind.</p>
+          <span class="g-num mono">RSU</span>
+          <h3>Equity income</h3>
+          <p>Vesting, exercise, sale — stock compensation computed correctly at each step.</p>
         </div>
         <div class="goal">
-          <span class="g-num mono">3</span>
-          <h3>Honest limits</h3>
-          <p>It says "this needs a human" instead of hallucinating confidence.</p>
+          <span class="g-num mono">₿</span>
+          <h3>Crypto</h3>
+          <p>Gains and cost basis, with federal and state treatment in one pass.</p>
         </div>
         <div class="goal">
-          <span class="g-num mono">4</span>
-          <h3>Private by design</h3>
-          <p>Your financial life stays yours — privacy is built into the structure, not bolted on.</p>
+          <span class="g-num mono">FEIE</span>
+          <h3>Working abroad</h3>
+          <p>Foreign earned income exclusion for expats and nomads — the "Global" in the name.</p>
         </div>
+        <div class="goal">
+          <span class="g-num mono">Nexus</span>
+          <h3>E-commerce</h3>
+          <p>Selling across states? It detects exactly where you owe, state by state.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">Mixed</span>
+          <h3>Real-life income</h3>
+          <p>W-2 plus freelance plus capital gains plus NIIT — one answer, not four tools.</p>
+        </div>
+      </div>
+      <div class="next-row">
+        <span class="next-label mono">Next up</span>
+        <span class="q-chip">W-2 photo reading</span>
+        <span class="q-chip">1040 form generation</span>
+        <span class="q-chip">Tax treaty checks</span>
+        <span class="q-chip">Nomad city guide</span>
       </div>
     </section>
 
@@ -412,14 +429,34 @@ const lang = 'en' as const;
     gap: 18px;
     margin-top: 28px;
   }
+  .goals.three { grid-template-columns: repeat(3, 1fr); }
   .goal { border: 1px solid var(--hairline); border-radius: 14px; padding: 22px 22px 20px; }
-  .g-num { font-size: 13px; color: var(--accent); }
-  .goal h3 { font-size: 19px; margin-top: 10px; }
-  .goal p { margin: 8px 0 0; font-size: 13.5px; line-height: 1.65; color: var(--ink-2); }
+  .g-num {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .goal h3 { font-size: 18px; margin-top: 10px; }
+  .goal p { margin: 8px 0 0; font-size: 13px; line-height: 1.65; color: var(--ink-2); }
+  .next-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 26px;
+  }
+  .next-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-right: 4px;
+  }
 
   @media (max-width: 720px) {
     .meta { grid-template-columns: 1fr; gap: 20px; }
-    .goals { grid-template-columns: 1fr; }
+    .goals, .goals.three { grid-template-columns: 1fr; }
     .p-flow { flex-direction: column; }
     .p-arrow { transform: rotate(90deg); }
     .block { margin-top: 64px; }

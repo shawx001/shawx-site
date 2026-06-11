@@ -150,29 +150,46 @@ const lang = 'zh' as const;
     </section>
 
     <section class="block">
-      <p class="b-label mono">04 — 设计原则</p>
-      <h2>产品拒绝妥协的四件事。</h2>
-      <div class="goals">
+      <p class="b-label mono">04 — 覆盖范围</p>
+      <h2>不只算一种税，算你的一整年。</h2>
+      <div class="goals three">
         <div class="goal">
-          <span class="g-num mono">1</span>
-          <h3>永远精确</h3>
-          <p>分位精确不是高级版功能 —— 是每一个答案的底线。</p>
+          <span class="g-num mono">50 + DC</span>
+          <h3>全美所有州</h3>
+          <p>一份档案，51 个辖区全覆盖 —— 包括年中跨州搬家。</p>
         </div>
         <div class="goal">
-          <span class="g-num mono">2</span>
-          <h3>永远最新</h3>
-          <p>税法变化以数据形式落地，产品永远不会慢一个报税季。</p>
+          <span class="g-num mono">RSU</span>
+          <h3>股权收入</h3>
+          <p>归属、行权、出售 —— 股票薪酬每一步都算对。</p>
         </div>
         <div class="goal">
-          <span class="g-num mono">3</span>
-          <h3>诚实的边界</h3>
-          <p>它会说"这个需要人工"，而不是用幻觉伪装自信。</p>
+          <span class="g-num mono">₿</span>
+          <h3>加密货币</h3>
+          <p>收益与成本基础，联邦 + 州一次算清。</p>
         </div>
         <div class="goal">
-          <span class="g-num mono">4</span>
-          <h3>隐私即设计</h3>
-          <p>你的财务生活只属于你 —— 隐私长在结构里，不是事后补丁。</p>
+          <span class="g-num mono">FEIE</span>
+          <h3>海外工作</h3>
+          <p>海外收入豁免，为 expat 和数字游民而生 —— 名字里的 "Global"。</p>
         </div>
+        <div class="goal">
+          <span class="g-num mono">Nexus</span>
+          <h3>电商卖家</h3>
+          <p>跨州卖货？它逐州检测你在哪里产生纳税义务。</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">Mixed</span>
+          <h3>真实人生的收入</h3>
+          <p>W-2 + 自由职业 + 资本利得 + NIIT —— 一个答案，不用四个工具。</p>
+        </div>
+      </div>
+      <div class="next-row">
+        <span class="next-label mono">即将到来</span>
+        <span class="q-chip">W-2 拍照识别</span>
+        <span class="q-chip">1040 表单生成</span>
+        <span class="q-chip">税收协定核查</span>
+        <span class="q-chip">游民城市指南</span>
       </div>
     </section>
 
@@ -407,14 +424,34 @@ const lang = 'zh' as const;
     gap: 18px;
     margin-top: 28px;
   }
+  .goals.three { grid-template-columns: repeat(3, 1fr); }
   .goal { border: 1px solid var(--hairline); border-radius: 14px; padding: 22px 22px 20px; }
-  .g-num { font-size: 13px; color: var(--accent); }
-  .goal h3 { font-size: 19px; margin-top: 10px; }
-  .goal p { margin: 8px 0 0; font-size: 13.5px; line-height: 1.75; color: var(--ink-2); }
+  .g-num {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .goal h3 { font-size: 18px; margin-top: 10px; }
+  .goal p { margin: 8px 0 0; font-size: 13px; line-height: 1.75; color: var(--ink-2); }
+  .next-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 26px;
+  }
+  .next-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-right: 4px;
+  }
 
   @media (max-width: 720px) {
     .meta { grid-template-columns: 1fr; gap: 20px; }
-    .goals { grid-template-columns: 1fr; }
+    .goals, .goals.three { grid-template-columns: 1fr; }
     .p-flow { flex-direction: column; }
     .p-arrow { transform: rotate(90deg); }
     .block { margin-top: 64px; }
