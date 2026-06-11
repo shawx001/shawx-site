@@ -1,0 +1,425 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+
+const lang = 'zh' as const;
+---
+
+<Base
+  lang={lang}
+  title="TaxGlobal AI — Shaw X"
+  description="分位精确的 AI 报税助手 —— 精确的数字、人话的表达、诚实的边界。"
+>
+  <Nav lang={lang} />
+  <main class="container case">
+    <a class="back mono" href="/zh/#work">← 精选作品</a>
+
+    <header class="head">
+      <h1>TaxGlobal AI</h1>
+      <p class="lede">
+        一个你真的可以信任的报税助手 —— 数字精确到分，表达像人话，
+        遇到难案足够诚实地交给人工。
+      </p>
+    </header>
+
+    <div class="meta">
+      <div class="meta-item">
+        <span class="meta-label mono">Context</span>
+        <span class="meta-value">独立产品<br />2026 · 持续开发中</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label mono">My role</span>
+        <span class="meta-value">创始人 —— 产品、<br />设计、架构</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label mono">Status</span>
+        <span class="meta-value">计算内核已完成<br />对话层构建中</span>
+      </div>
+    </div>
+
+    <div class="shot dark">
+      <div class="chat">
+        <div class="bubble user">
+          我去年在两个州工作过 —— 我到底要交多少税？
+        </div>
+        <div class="bubble bot">
+          <p class="bot-line">根据你的 W-2，拆分如下：</p>
+          <div class="calc">
+            <div class="c-row"><span>加州 · 1–6 月</span><span class="mono">$4,283.17</span></div>
+            <div class="c-row"><span>纽约州 · 7–12 月</span><span class="mono">$2,941.50</span></div>
+            <div class="c-row total"><span>联邦</span><span class="mono">$11,224.67</span></div>
+          </div>
+          <span class="badge mono">● 由规则引擎计算 —— 精确到分</span>
+        </div>
+      </div>
+      <p class="shot-cap mono">一段对话讲清整个产品 · 数字为示意</p>
+    </div>
+
+    <section class="block">
+      <p class="b-label mono">01 — 概览</p>
+      <h2>"差不多对"就是错。</h2>
+      <p>
+        税务是一个"差一分钱就是错"的领域。大多数 AI 产品在猜 —— TaxGlobal AI 从不猜。
+        每一个数字都来自确定性的计算引擎；AI 唯一的工作，是听懂你的问题，
+        然后像一个人一样把结果讲清楚。
+      </p>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">02 — 它怎么工作</p>
+      <h2>你来问。它来算。它来讲。</h2>
+      <div class="pipeline" role="img" aria-label="产品流程：你用大白话问，引擎算出精确答案，助手再讲给你听">
+        <div class="p-flow">
+          <div class="p-step">
+            <span class="p-name mono">你来问</span>
+            <span class="p-desc">用大白话，像给朋友发消息</span>
+          </div>
+          <span class="p-arrow" aria-hidden="true">→</span>
+          <div class="p-step p-core">
+            <span class="p-name mono">它来算</span>
+            <span class="p-desc">每个数字都出自引擎，精确到分</span>
+          </div>
+          <span class="p-arrow" aria-hidden="true">→</span>
+          <div class="p-step">
+            <span class="p-name mono">它来讲</span>
+            <span class="p-desc">把已验证的结果，讲成你会说的话</span>
+          </div>
+        </div>
+        <p class="p-gate mono">真正的难案 —— 它会把你交给人工</p>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">03 — 功能</p>
+      <h2>它做得不一样的三件事。</h2>
+
+      <div class="feature">
+        <div class="f-text">
+          <h3>每个数字，可追溯</h3>
+          <p>
+            每一笔金额都能追到产生它的那条规则。没有黑箱、没有四舍五入的意外 ——
+            一张可以拿去应对审计的账单。
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="receipt">
+            <p class="r-title mono">你的 2025 明细</p>
+            <div class="r-row"><span>工资收入 · W-2</span><span class="mono">$98,400.00</span></div>
+            <div class="r-row"><span>标准扣除</span><span class="mono">−$14,600.00</span></div>
+            <div class="r-row"><span>应税收入</span><span class="mono">$83,800.00</span></div>
+            <div class="r-row accent"><span>联邦税</span><span class="mono">$13,216.00</span></div>
+            <p class="r-cap mono">每一行可追溯 · 数字为示意</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div class="f-text">
+          <h3>像跟人说话一样问</h3>
+          <p>
+            不是先填一堆表格。你像跟朋友聊天一样描述你的一年，
+            产品自己判断哪些信息重要。
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="chips-card">
+            <span class="q-chip">"年中搬了州？"</span>
+            <span class="q-chip">"W-2 之外还有自由职业？"</span>
+            <span class="q-chip">"RSU 六月归属了？"</span>
+            <span class="q-chip">"第一年合并报税？"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="f-text">
+          <h3>关键时刻足够诚实</h3>
+          <p>
+            真正复杂的案子，产品会直接说，并转给专家审核 ——
+            而不是把一个猜测包装成答案。
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="escalate">
+            <p class="e-line">你的期权行权横跨两个税务居民身份 —— 这一单值得人工来看。</p>
+            <span class="e-chip mono">已升级 · 专家审核</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">04 — 设计原则</p>
+      <h2>产品拒绝妥协的四件事。</h2>
+      <div class="goals">
+        <div class="goal">
+          <span class="g-num mono">1</span>
+          <h3>永远精确</h3>
+          <p>分位精确不是高级版功能 —— 是每一个答案的底线。</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">2</span>
+          <h3>永远最新</h3>
+          <p>税法变化以数据形式落地，产品永远不会慢一个报税季。</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">3</span>
+          <h3>诚实的边界</h3>
+          <p>它会说"这个需要人工"，而不是用幻觉伪装自信。</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">4</span>
+          <h3>隐私即设计</h3>
+          <p>你的财务生活只属于你 —— 隐私长在结构里，不是事后补丁。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">05 — 当前进度</p>
+      <h2>内核已完成，对话层在路上。</h2>
+      <p>
+        计算内核已经完成，并在多州场景下逐分验证。当前在做对话层 ——
+        让"得到一个精确答案"这件事，问起来毫不费力。即将上线。
+      </p>
+    </section>
+  </main>
+  <Footer lang={lang} />
+</Base>
+
+<style>
+  .case { padding: 130px 24px 90px; max-width: 880px; }
+  .back {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    transition: color 0.25s;
+  }
+  .back:hover { color: var(--accent); }
+  .head { margin-top: 34px; }
+  .head h1 { font-size: clamp(44px, 7vw, 76px); }
+  .lede {
+    margin: 18px 0 0;
+    font-size: clamp(16px, 2vw, 19px);
+    line-height: 1.8;
+    color: var(--ink-2);
+    max-width: 640px;
+  }
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 52px;
+    padding: 28px 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 8px; }
+  .meta-label {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .meta-value { font-size: 14px; line-height: 1.7; color: var(--ink); }
+
+  .shot {
+    margin-top: 56px;
+    border-radius: 18px;
+    padding: clamp(26px, 4.5vw, 52px);
+  }
+  .shot.dark { background: #1A112E; }
+  .chat { display: flex; flex-direction: column; gap: 14px; max-width: 560px; margin: 0 auto; }
+  .bubble {
+    border-radius: 16px;
+    padding: 14px 18px;
+    font-size: 14.5px;
+    line-height: 1.7;
+  }
+  .bubble.user {
+    align-self: flex-end;
+    background: #F0937A;
+    color: #1A112E;
+    border-bottom-right-radius: 4px;
+    max-width: 78%;
+  }
+  .bubble.bot {
+    align-self: flex-start;
+    background: rgba(245, 239, 228, 0.07);
+    border: 1px solid rgba(245, 239, 228, 0.16);
+    color: #F5EFE4;
+    border-bottom-left-radius: 4px;
+    width: 100%;
+  }
+  .bot-line { margin: 0; }
+  .calc { margin-top: 14px; border-top: 1px solid rgba(245, 239, 228, 0.16); }
+  .c-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 9px 0;
+    font-size: 13.5px;
+    color: rgba(240, 234, 248, 0.8);
+    border-bottom: 1px solid rgba(245, 239, 228, 0.1);
+  }
+  .c-row.total { color: #F5EFE4; font-weight: 600; border-bottom: none; }
+  .badge {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: #F0937A;
+  }
+  .shot-cap {
+    margin: 22px 0 0;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(240, 234, 248, 0.45);
+  }
+
+  .block { margin-top: 88px; }
+  .b-label {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .block h2 { margin-top: 12px; font-size: clamp(26px, 3.6vw, 38px); }
+  .block > p {
+    margin: 18px 0 0;
+    font-size: 15.5px;
+    line-height: 1.9;
+    color: var(--ink);
+    max-width: 660px;
+  }
+
+  .pipeline {
+    margin-top: 28px;
+    background: #1A112E;
+    border-radius: 18px;
+    padding: clamp(24px, 4vw, 44px);
+  }
+  .p-flow { display: flex; align-items: stretch; gap: 12px; flex-wrap: wrap; }
+  .p-step {
+    flex: 1 1 160px;
+    border: 1px solid rgba(245, 239, 228, 0.22);
+    border-radius: 12px;
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .p-core { border-color: #F0937A; background: rgba(240, 147, 122, 0.08); }
+  .p-name { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #F5EFE4; }
+  .p-core .p-name { color: #F0937A; }
+  .p-desc { font-size: 12.5px; line-height: 1.6; color: rgba(240, 234, 248, 0.66); }
+  .p-arrow { align-self: center; color: #F0937A; font-size: 16px; }
+  .p-gate {
+    margin: 22px 0 0;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: rgba(240, 234, 248, 0.55);
+  }
+
+  .feature {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: center;
+    margin-top: 56px;
+  }
+  .feature.flip .f-text { order: 2; }
+  .feature.flip .f-visual { order: 1; }
+  .f-text h3 { font-size: clamp(20px, 2.6vw, 26px); }
+  .f-text p { margin: 10px 0 0; font-size: 14.5px; line-height: 1.85; color: var(--ink-2); }
+
+  .receipt {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 24px 26px;
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
+  }
+  .r-title {
+    margin: 0 0 6px;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .r-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    font-size: 13.5px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .r-row.accent { color: var(--accent); font-weight: 600; border-bottom: none; }
+  .r-cap { margin: 10px 0 0; font-size: 10.5px; letter-spacing: 0.1em; color: var(--ink-2); }
+
+  .chips-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 26px;
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
+  }
+  .q-chip {
+    font-size: 13px;
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 8px 16px;
+  }
+
+  .escalate {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--accent);
+    border-radius: 14px;
+    padding: 24px 26px;
+    box-shadow: 0 24px 50px -32px rgba(240, 147, 122, 0.4);
+  }
+  .e-line { margin: 0; font-size: 14px; line-height: 1.75; color: var(--ink); }
+  .e-chip {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 5px 12px;
+  }
+
+  .goals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 28px;
+  }
+  .goal { border: 1px solid var(--hairline); border-radius: 14px; padding: 22px 22px 20px; }
+  .g-num { font-size: 13px; color: var(--accent); }
+  .goal h3 { font-size: 19px; margin-top: 10px; }
+  .goal p { margin: 8px 0 0; font-size: 13.5px; line-height: 1.75; color: var(--ink-2); }
+
+  @media (max-width: 720px) {
+    .meta { grid-template-columns: 1fr; gap: 20px; }
+    .goals { grid-template-columns: 1fr; }
+    .p-flow { flex-direction: column; }
+    .p-arrow { transform: rotate(90deg); }
+    .block { margin-top: 64px; }
+    .feature { grid-template-columns: 1fr; gap: 18px; margin-top: 44px; }
+    .feature.flip .f-text { order: 1; }
+    .feature.flip .f-visual { order: 2; }
+  }
+</style>

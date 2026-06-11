@@ -1,0 +1,430 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+
+const lang = 'en' as const;
+---
+
+<Base
+  lang={lang}
+  title="TaxGlobal AI — Shaw X"
+  description="A cent-accurate AI tax assistant — exact numbers, plain language, honest limits."
+>
+  <Nav lang={lang} />
+  <main class="container case">
+    <a class="back mono" href="/#work">← Selected work</a>
+
+    <header class="head">
+      <h1>TaxGlobal AI</h1>
+      <p class="lede">
+        A tax assistant you can actually trust — exact numbers, plain language,
+        and the honesty to hand the hard cases to a human.
+      </p>
+    </header>
+
+    <div class="meta">
+      <div class="meta-item">
+        <span class="meta-label mono">Context</span>
+        <span class="meta-value">Independent product<br />2026 · in active development</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label mono">My role</span>
+        <span class="meta-value">Founder — product,<br />design, architecture</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label mono">Status</span>
+        <span class="meta-value">Core engine done,<br />conversation layer in build</span>
+      </div>
+    </div>
+
+    <div class="shot dark">
+      <div class="chat">
+        <div class="bubble user">
+          I worked in two states last year — what do I actually owe?
+        </div>
+        <div class="bubble bot">
+          <p class="bot-line">Based on your W-2s, here's the split:</p>
+          <div class="calc">
+            <div class="c-row"><span>California · Jan–Jun</span><span class="mono">$4,283.17</span></div>
+            <div class="c-row"><span>New York · Jul–Dec</span><span class="mono">$2,941.50</span></div>
+            <div class="c-row total"><span>Federal</span><span class="mono">$11,224.67</span></div>
+          </div>
+          <span class="badge mono">● computed by the rules engine — exact to the cent</span>
+        </div>
+      </div>
+      <p class="shot-cap mono">the product in one exchange — illustrative numbers</p>
+    </div>
+
+    <section class="block">
+      <p class="b-label mono">01 — Overview</p>
+      <h2>"Almost right" means wrong.</h2>
+      <p>
+        Tax is the one domain where an answer off by a single cent is a wrong answer.
+        Most AI products guess — TaxGlobal AI never does. Every number comes from a
+        deterministic calculation engine; the AI's only job is to understand your
+        question and explain the result like a person would.
+      </p>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">02 — How it works</p>
+      <h2>You ask. It computes. It explains.</h2>
+      <div class="pipeline" role="img" aria-label="Product flow: you ask in plain language, the engine computes the exact answer, the assistant explains it back">
+        <div class="p-flow">
+          <div class="p-step">
+            <span class="p-name mono">You ask</span>
+            <span class="p-desc">in plain language, like texting a friend</span>
+          </div>
+          <span class="p-arrow" aria-hidden="true">→</span>
+          <div class="p-step p-core">
+            <span class="p-name mono">It computes</span>
+            <span class="p-desc">every number produced by the engine, to the cent</span>
+          </div>
+          <span class="p-arrow" aria-hidden="true">→</span>
+          <div class="p-step">
+            <span class="p-name mono">It explains</span>
+            <span class="p-desc">the verified result, in words you'd actually say</span>
+          </div>
+        </div>
+        <p class="p-gate mono">and when a case is genuinely hard — it hands you to a human</p>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">03 — Features</p>
+      <h2>Three things it does differently.</h2>
+
+      <div class="feature">
+        <div class="f-text">
+          <h3>Every number, proven</h3>
+          <p>
+            Each amount traces back to the exact rule that produced it. No black box,
+            no rounding surprises — a receipt you could take to an audit.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="receipt">
+            <p class="r-title mono">Your 2025 breakdown</p>
+            <div class="r-row"><span>Wages · W-2</span><span class="mono">$98,400.00</span></div>
+            <div class="r-row"><span>Standard deduction</span><span class="mono">−$14,600.00</span></div>
+            <div class="r-row"><span>Taxable income</span><span class="mono">$83,800.00</span></div>
+            <div class="r-row accent"><span>Federal tax</span><span class="mono">$13,216.00</span></div>
+            <p class="r-cap mono">every line traceable · illustrative</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div class="f-text">
+          <h3>Ask like a human</h3>
+          <p>
+            No forms-first interrogation. You describe your year the way you'd tell a
+            friend, and the product figures out what matters.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="chips-card">
+            <span class="q-chip">"Moved states mid-year?"</span>
+            <span class="q-chip">"Freelance on top of my W-2?"</span>
+            <span class="q-chip">"RSUs vested in June?"</span>
+            <span class="q-chip">"First year filing jointly?"</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="f-text">
+          <h3>Honest when it matters</h3>
+          <p>
+            When a case is genuinely complex, the product says so and routes it to expert
+            review — instead of dressing up a guess as an answer.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="escalate">
+            <p class="e-line">Your stock-option exercise spans two residencies — this one deserves human eyes.</p>
+            <span class="e-chip mono">Escalated · expert review</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">04 — Design principles</p>
+      <h2>What the product refuses to compromise.</h2>
+      <div class="goals">
+        <div class="goal">
+          <span class="g-num mono">1</span>
+          <h3>Exact, always</h3>
+          <p>Accuracy to the cent isn't a feature tier — it's the baseline for every answer.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">2</span>
+          <h3>Always current</h3>
+          <p>Tax law changes land as data updates, so the product never lags a season behind.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">3</span>
+          <h3>Honest limits</h3>
+          <p>It says "this needs a human" instead of hallucinating confidence.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">4</span>
+          <h3>Private by design</h3>
+          <p>Your financial life stays yours — privacy is built into the structure, not bolted on.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">05 — Where it is now</p>
+      <h2>Core done. Conversation in build.</h2>
+      <p>
+        The calculation core is complete and verified across multi-state scenarios.
+        Current work is the conversational layer — making exact answers feel
+        effortless to ask for. Live soon.
+      </p>
+    </section>
+  </main>
+  <Footer lang={lang} />
+</Base>
+
+<style>
+  .case { padding: 130px 24px 90px; max-width: 880px; }
+  .back {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    transition: color 0.25s;
+  }
+  .back:hover { color: var(--accent); }
+  .head { margin-top: 34px; }
+  .head h1 { font-size: clamp(44px, 7vw, 76px); }
+  .lede {
+    margin: 18px 0 0;
+    font-size: clamp(16px, 2vw, 19px);
+    line-height: 1.65;
+    color: var(--ink-2);
+    max-width: 640px;
+  }
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 52px;
+    padding: 28px 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 8px; }
+  .meta-label {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .meta-value { font-size: 14px; line-height: 1.6; color: var(--ink); }
+
+  /* hero product shot */
+  .shot {
+    margin-top: 56px;
+    border-radius: 18px;
+    padding: clamp(26px, 4.5vw, 52px);
+  }
+  .shot.dark { background: #1A112E; }
+  .chat { display: flex; flex-direction: column; gap: 14px; max-width: 560px; margin: 0 auto; }
+  .bubble {
+    border-radius: 16px;
+    padding: 14px 18px;
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  .bubble.user {
+    align-self: flex-end;
+    background: #F0937A;
+    color: #1A112E;
+    border-bottom-right-radius: 4px;
+    max-width: 78%;
+  }
+  .bubble.bot {
+    align-self: flex-start;
+    background: rgba(245, 239, 228, 0.07);
+    border: 1px solid rgba(245, 239, 228, 0.16);
+    color: #F5EFE4;
+    border-bottom-left-radius: 4px;
+    width: 100%;
+  }
+  .bot-line { margin: 0; }
+  .calc { margin-top: 14px; border-top: 1px solid rgba(245, 239, 228, 0.16); }
+  .c-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 9px 0;
+    font-size: 13.5px;
+    color: rgba(240, 234, 248, 0.8);
+    border-bottom: 1px solid rgba(245, 239, 228, 0.1);
+  }
+  .c-row.total { color: #F5EFE4; font-weight: 600; border-bottom: none; }
+  .badge {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: #F0937A;
+  }
+  .shot-cap {
+    margin: 22px 0 0;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(240, 234, 248, 0.45);
+  }
+
+  .block { margin-top: 88px; }
+  .b-label {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .block h2 { margin-top: 12px; font-size: clamp(26px, 3.6vw, 38px); }
+  .block > p {
+    margin: 18px 0 0;
+    font-size: 15.5px;
+    line-height: 1.8;
+    color: var(--ink);
+    max-width: 660px;
+  }
+
+  /* pipeline */
+  .pipeline {
+    margin-top: 28px;
+    background: #1A112E;
+    border-radius: 18px;
+    padding: clamp(24px, 4vw, 44px);
+  }
+  .p-flow { display: flex; align-items: stretch; gap: 12px; flex-wrap: wrap; }
+  .p-step {
+    flex: 1 1 160px;
+    border: 1px solid rgba(245, 239, 228, 0.22);
+    border-radius: 12px;
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .p-core { border-color: #F0937A; background: rgba(240, 147, 122, 0.08); }
+  .p-name { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #F5EFE4; }
+  .p-core .p-name { color: #F0937A; }
+  .p-desc { font-size: 12.5px; line-height: 1.5; color: rgba(240, 234, 248, 0.66); }
+  .p-arrow { align-self: center; color: #F0937A; font-size: 16px; }
+  .p-gate {
+    margin: 22px 0 0;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: rgba(240, 234, 248, 0.55);
+  }
+
+  /* features */
+  .feature {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: center;
+    margin-top: 56px;
+  }
+  .feature.flip .f-text { order: 2; }
+  .feature.flip .f-visual { order: 1; }
+  .f-text h3 { font-size: clamp(20px, 2.6vw, 26px); }
+  .f-text p { margin: 10px 0 0; font-size: 14.5px; line-height: 1.75; color: var(--ink-2); }
+
+  .receipt {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 24px 26px;
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
+  }
+  .r-title {
+    margin: 0 0 6px;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .r-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    font-size: 13.5px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .r-row.accent { color: var(--accent); font-weight: 600; border-bottom: none; }
+  .r-cap { margin: 10px 0 0; font-size: 10.5px; letter-spacing: 0.1em; color: var(--ink-2); }
+
+  .chips-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 26px;
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
+  }
+  .q-chip {
+    font-size: 13px;
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 8px 16px;
+  }
+
+  .escalate {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--accent);
+    border-radius: 14px;
+    padding: 24px 26px;
+    box-shadow: 0 24px 50px -32px rgba(240, 147, 122, 0.4);
+  }
+  .e-line { margin: 0; font-size: 14px; line-height: 1.65; color: var(--ink); }
+  .e-chip {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 5px 12px;
+  }
+
+  .goals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 28px;
+  }
+  .goal { border: 1px solid var(--hairline); border-radius: 14px; padding: 22px 22px 20px; }
+  .g-num { font-size: 13px; color: var(--accent); }
+  .goal h3 { font-size: 19px; margin-top: 10px; }
+  .goal p { margin: 8px 0 0; font-size: 13.5px; line-height: 1.65; color: var(--ink-2); }
+
+  @media (max-width: 720px) {
+    .meta { grid-template-columns: 1fr; gap: 20px; }
+    .goals { grid-template-columns: 1fr; }
+    .p-flow { flex-direction: column; }
+    .p-arrow { transform: rotate(90deg); }
+    .block { margin-top: 64px; }
+    .feature { grid-template-columns: 1fr; gap: 18px; margin-top: 44px; }
+    .feature.flip .f-text { order: 1; }
+    .feature.flip .f-visual { order: 2; }
+  }
+</style>

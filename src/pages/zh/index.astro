@@ -12,7 +12,7 @@ const lang = 'zh' as const;
 const work = await getWork(lang);
 ---
 
-<Base lang={lang} title="Shaw X — 有审美的独立工程师" description={t(lang, 'hero.intro')}>
+<Base lang={lang} title="Shaw X — AI 原生工程师与设计师" description={t(lang, 'hero.intro')}>
   <Nav lang={lang} />
   <Hero lang={lang} />
   <div class="sky">
@@ -24,8 +24,8 @@ const work = await getWork(lang);
           items={work.map((e) => ({
             title: e.data.title,
             summary: e.data.summary,
-            cover: e.data.cover ?? '/covers/taxglobal.svg',
             link: e.data.link,
+            casePath: e.data.casePath,
           }))}
         />
       </div>
@@ -54,7 +54,7 @@ const work = await getWork(lang);
     --ft-line: rgba(245, 239, 228, 0.25);
     --ft-accent: #F0937A;
   }
-  #work { padding: 110px 0 120px; }
+  #work { padding: 230px 0 120px; }
   .sky .section-label { color: rgba(240, 234, 248, 0.72); }
   .sky .section-label .idx { color: #F0937A; }
   @media (hover: none) {

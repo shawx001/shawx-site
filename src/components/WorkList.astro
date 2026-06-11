@@ -4,8 +4,8 @@ import { t, type Lang } from '../i18n/ui';
 export interface WorkItem {
   title: string;
   summary: string;
-  cover: string;
   link?: string | undefined;
+  casePath?: string | undefined;
 }
 interface Props {
   items: WorkItem[];
@@ -20,11 +20,19 @@ const { items, lang } = Astro.props;
       <div class="row" data-reveal>
         <span class="idx mono">{String(i + 1).padStart(2, '0')}</span>
         <div class="mid">
-          <h3 class="title">{it.title}</h3>
+          <h3 class="title">
+            {it.casePath ? (
+              <a class="case-link" href={it.casePath}>{it.title}</a>
+            ) : (
+              it.title
+            )}
+          </h3>
           <p class="summary">{it.summary}</p>
         </div>
         {it.link ? (
           <a class="chip mono live" href={it.link} target="_blank" rel="noopener">{t(lang, 'work.live')}</a>
+        ) : it.casePath ? (
+          <a class="chip mono live" href={it.casePath}>{t(lang, 'work.case')}</a>
         ) : (
           <span class="chip mono">{t(lang, 'work.soon')}</span>
         )}
@@ -51,6 +59,8 @@ const { items, lang } = Astro.props;
     color: var(--wl-title, var(--ink));
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
+  .case-link { color: inherit; }
+  .case-link::after { content: ''; position: absolute; inset: 0; }
   .row:hover .title { transform: translateX(10px); }
   .summary {
     margin: 4px 0 0;
@@ -60,6 +70,8 @@ const { items, lang } = Astro.props;
   }
   .chip {
     flex-shrink: 0;
+    position: relative;
+    z-index: 2;
     font-size: 12px;
     color: var(--wl-muted, var(--ink-2));
     border: 1px solid var(--wl-line, var(--hairline));

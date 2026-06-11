@@ -11,6 +11,7 @@ const work = defineCollection({
     year: z.number(),
     cover: z.string().optional(),
     link: z.string().url().optional(),
+    casePath: z.string().optional(),
     featured: z.boolean().default(true),
     order: z.number().default(99),
   }),

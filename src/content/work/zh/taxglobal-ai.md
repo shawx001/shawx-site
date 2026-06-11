@@ -5,6 +5,7 @@ role: 创始人 —— 架构、产品、审查门禁
 stack: [Python, FastAPI, LangChain, 规则引擎]
 year: 2026
 cover: /covers/taxglobal.svg
+casePath: /zh/work/taxglobal-ai
 order: 1
 ---
 
