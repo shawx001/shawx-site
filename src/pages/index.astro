@@ -44,6 +44,7 @@ const work = await getWork(lang);
     background:
       linear-gradient(rgba(26, 17, 46, 0.55), rgba(26, 17, 46, 0.55)),
       url('/bg/dusk.jpg') center / cover no-repeat;
+    background-attachment: fixed;
     --wl-line: rgba(245, 239, 228, 0.28);
     --wl-title: #F5EFE4;
     --wl-muted: rgba(240, 234, 248, 0.75);
@@ -51,4 +52,7 @@ const work = await getWork(lang);
   }
   .work-band .section-label { color: rgba(240, 234, 248, 0.72); }
   .work-band .section-label .idx { color: #F0937A; }
+  @media (hover: none) {
+    .work-band { background-attachment: scroll; }
+  }
 </style>
