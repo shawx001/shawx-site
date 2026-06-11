@@ -30,6 +30,18 @@ const { lang } = Astro.props;
     justify-content: center;
     position: relative;
     padding-top: 56px;
+    background:
+      linear-gradient(180deg, rgba(16, 11, 34, 0.28) 0%, rgba(16, 11, 34, 0.06) 42%, rgba(16, 11, 34, 0) 70%),
+      url('/bg/dusk.jpg') center 38% / cover no-repeat,
+      linear-gradient(180deg, #55549A 0%, #8A6CB5 32%, #D98A63 56%, #7A5E92 78%, #4E3F70 100%);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 180px;
+    background: linear-gradient(180deg, transparent, var(--bg));
+    pointer-events: none;
   }
   .hero-name {
     display: flex;
@@ -40,6 +52,8 @@ const { lang } = Astro.props;
   .hero-title {
     font-size: clamp(56px, 11vw, 130px);
     letter-spacing: -0.02em;
+    color: #F8F3E8;
+    text-shadow: 0 2px 28px rgba(20, 12, 44, 0.4);
   }
   .x-wrap {
     position: relative;
@@ -67,10 +81,16 @@ const { lang } = Astro.props;
     letter-spacing: 0.01em;
     width: max-content;
   }
+  .hero .tagline.grad-text {
+    background: linear-gradient(92deg, #A8CCF5, #CDB0F5 45%, #F5AFC9 75%, #F8BC9E);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
   .intro {
     margin: 14px 0 0;
     max-width: 520px;
-    color: var(--ink-2);
+    color: rgba(248, 243, 232, 0.9);
+    text-shadow: 0 1px 18px rgba(20, 12, 44, 0.35);
   }
   .scroll-hint {
     position: absolute;
@@ -80,6 +100,7 @@ const { lang } = Astro.props;
     margin: 0;
     font-size: 12px;
     letter-spacing: 0.14em;
-    color: var(--ink-2);
+    color: rgba(248, 243, 232, 0.8);
+    z-index: 2;
   }
 </style>
