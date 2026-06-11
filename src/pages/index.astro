@@ -15,22 +15,24 @@ const work = await getWork(lang);
 <Base lang={lang} title="Shaw X — engineer with taste" description={t(lang, 'hero.intro')}>
   <Nav lang={lang} />
   <Hero lang={lang} />
-  <section id="work" class="work-band">
-    <div class="container work-section">
-      <p class="section-label">{t(lang, 'work.label')} <span class="idx">/01</span></p>
-      <WorkList
-        lang={lang}
-        items={work.map((e) => ({
-          title: e.data.title,
-          summary: e.data.summary,
-          cover: e.data.cover ?? '/covers/taxglobal.svg',
-          link: e.data.link,
-        }))}
-      />
-    </div>
-  </section>
-  <Highlight lang={lang} />
-  <Footer lang={lang} />
+  <div class="sky">
+    <section id="work">
+      <div class="container work-section">
+        <p class="section-label">{t(lang, 'work.label')} <span class="idx">/01</span></p>
+        <WorkList
+          lang={lang}
+          items={work.map((e) => ({
+            title: e.data.title,
+            summary: e.data.summary,
+            cover: e.data.cover ?? '/covers/taxglobal.svg',
+            link: e.data.link,
+          }))}
+        />
+      </div>
+    </section>
+    <Highlight lang={lang} />
+    <Footer lang={lang} />
+  </div>
   <script>
     import { initSite } from '../scripts/scroll-fx';
     initSite();
@@ -38,9 +40,7 @@ const work = await getWork(lang);
 </Base>
 
 <style>
-  .work-band {
-    margin-top: 90px;
-    padding: 96px 0 120px;
+  .sky {
     background:
       linear-gradient(rgba(26, 17, 46, 0.55), rgba(26, 17, 46, 0.55)),
       url('/bg/dusk.jpg') center / cover no-repeat;
@@ -49,10 +49,15 @@ const work = await getWork(lang);
     --wl-title: #F5EFE4;
     --wl-muted: rgba(240, 234, 248, 0.75);
     --wl-accent: #F0937A;
+    --ft-title: #F5EFE4;
+    --ft-muted: rgba(240, 234, 248, 0.7);
+    --ft-line: rgba(245, 239, 228, 0.25);
+    --ft-accent: #F0937A;
   }
-  .work-band .section-label { color: rgba(240, 234, 248, 0.72); }
-  .work-band .section-label .idx { color: #F0937A; }
+  #work { padding: 110px 0 120px; }
+  .sky .section-label { color: rgba(240, 234, 248, 0.72); }
+  .sky .section-label .idx { color: #F0937A; }
   @media (hover: none) {
-    .work-band { background-attachment: scroll; }
+    .sky { background-attachment: scroll; }
   }
 </style>
