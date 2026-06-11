@@ -9,7 +9,13 @@ const { lang } = Astro.props;
 
 <section id="hero" class="hero">
   <div class="stack">
-    <p class="kicker mono" data-hero-sub>SHAW X</p>
+    <div class="brand-name" data-hero-sub>
+      <span class="brand-shaw">Shaw</span>
+      <span class="x-wrap">
+        <canvas class="x-canvas" data-particle-x aria-hidden="true"></canvas>
+        <img class="x-fallback" src="/favicon.svg" alt="" aria-hidden="true" />
+      </span>
+    </div>
     <p class="lede" data-hero-sub>
       AI Native Coder And Designer<br />Across Brands And Creative Products
     </p>
@@ -50,12 +56,37 @@ const { lang } = Astro.props;
     flex-direction: column;
     align-items: center;
   }
-  .kicker {
-    margin: 0;
-    font-size: 12px;
-    letter-spacing: 0.26em;
-    color: rgba(246, 238, 230, 0.92);
+  .brand-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
+  .brand-shaw {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(30px, 4vw, 46px);
+    color: #F8F3E8;
+    text-shadow: 0 2px 24px rgba(10, 4, 2, 0.35);
+  }
+  .x-wrap {
+    position: relative;
+    width: clamp(48px, 6vw, 76px);
+    aspect-ratio: 1;
+    display: block;
+  }
+  .x-canvas {
+    position: absolute;
+    inset: -35%;
+    width: 170%;
+    height: 170%;
+  }
+  .x-fallback {
+    display: none;
+    position: absolute;
+    inset: 15%;
+    width: 70%;
+  }
+  .x-fallback.show { display: block; }
   .lede {
     margin: 18px 0 0;
     font-size: clamp(12px, 1.4vw, 15px);
