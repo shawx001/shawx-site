@@ -31,8 +31,9 @@ const skills = ['AI agents', 'LLM orchestration', 'Python', 'TypeScript', 'Produ
           collect things made with taste, and I try to ship like that.
         </p>
         <div class="art-row">
-          <img src="/about/roses-1.jpg" alt="Roses in window light, shot by Shaw" loading="lazy" />
-          <img src="/about/roses-2.jpg" alt="Backlit roses, shot by Shaw" loading="lazy" />
+          <img src="/about/art-1.jpg" alt="Roses in low light, shot by Shaw" loading="lazy" />
+          <img src="/about/art-3.jpg" alt="Backlit roses, shot by Shaw" loading="lazy" />
+          <img src="/about/art-2.jpg" alt="Roses and shadows on a warm wall, shot by Shaw" loading="lazy" />
         </div>
         <h2 class="sub mono">Skills</h2>
         <div class="tags">
@@ -63,16 +64,20 @@ const skills = ['AI agents', 'LLM orchestration', 'Python', 'TypeScript', 'Produ
   }
   .art-row {
     display: grid;
-    grid-template-columns: 3fr 2fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
     margin-top: 18px;
-    max-width: 560px;
+    max-width: 640px;
   }
   .art-row img {
     width: 100%;
-    height: 220px;
+    height: 210px;
     object-fit: cover;
     border-radius: 10px;
+  }
+  @media (max-width: 600px) {
+    .art-row { grid-template-columns: 1fr; }
+    .art-row img { height: 200px; }
   }
   .bio h1 { font-size: clamp(40px, 6vw, 64px); }
   .bio p { color: var(--ink); max-width: 560px; }
