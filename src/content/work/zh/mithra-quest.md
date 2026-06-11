@@ -5,7 +5,7 @@ role: 独立完成
 stack: [LLM 编排, 增量缓存, 验证器]
 year: 2026
 cover: /covers/mithra.svg
-order: 2
+order: 3
 ---
 
 ## 问题

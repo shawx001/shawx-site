@@ -1,0 +1,711 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+
+const lang = 'en' as const;
+---
+
+<Base
+  lang={lang}
+  title="AI Camera Copilot — Shaw X"
+  description="A photography copilot that learns your taste — where to stand, how to frame, what to dial in."
+>
+  <Nav lang={lang} />
+  <main class="container case">
+    <a class="back mono" href="/#work">← Selected work</a>
+
+    <header class="head">
+      <h1>AI Camera Copilot</h1>
+      <p class="lede">
+        A photography copilot that learns your taste — then walks you to the shot:
+        where to stand, how to frame, what to dial in.
+      </p>
+    </header>
+
+    <div class="meta">
+      <div class="meta-item">
+        <span class="meta-label mono">Context</span>
+        <span class="meta-value">Independent product<br />2026 · in design</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label mono">My role</span>
+        <span class="meta-value">Founder — product,<br />design, architecture</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label mono">Status</span>
+        <span class="meta-value">Experience designed,<br />prototype next</span>
+      </div>
+    </div>
+
+    <div class="vf" role="img" aria-label="Camera viewfinder with the copilot suggesting: golden hour in 12 minutes, walk 40 meters west, shoot into the backlight">
+      <div class="vf-grid" aria-hidden="true"></div>
+      <span class="vf-corner tl" aria-hidden="true"></span>
+      <span class="vf-corner tr" aria-hidden="true"></span>
+      <span class="vf-corner bl" aria-hidden="true"></span>
+      <span class="vf-corner br" aria-hidden="true"></span>
+      <span class="vf-focus" aria-hidden="true"></span>
+      <p class="vf-toast mono">Golden hour in 12 min — walk 40 m west, shoot into the backlight</p>
+      <div class="vf-bar mono">
+        <span>ISO 100</span>
+        <span>f/2.8</span>
+        <span>1/250</span>
+        <span>EV +0.3</span>
+        <span class="vf-rec">● AI</span>
+      </div>
+    </div>
+    <p class="vf-cap mono">the copilot mid-shoot · concept frame</p>
+
+    <section class="block">
+      <p class="b-label mono">01 — Overview</p>
+      <h2>Everyone has taste. Not everyone has technique.</h2>
+      <p>
+        You know exactly which photos you love — you just can't always take them.
+        The gap between the photo you see and the photo you get is technique:
+        position, framing, light, settings. Camera Copilot starts from the photos
+        you wish you'd shot, learns your aesthetic, and closes that gap — frame
+        by frame.
+      </p>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">02 — How it works</p>
+      <h2>Show it your taste. It does the rest.</h2>
+      <div class="pipeline" role="img" aria-label="Product flow: show it the photos you love, it reads the scene in real time, then walks you to the shot with position, framing and settings">
+        <div class="p-flow">
+          <div class="p-step">
+            <span class="p-name mono">Show it your taste</span>
+            <span class="p-desc">the photos you love are the brief</span>
+          </div>
+          <span class="p-arrow" aria-hidden="true">→</span>
+          <div class="p-step p-core">
+            <span class="p-name mono">It reads the scene</span>
+            <span class="p-desc">light, subject, geometry — in real time</span>
+          </div>
+          <span class="p-arrow" aria-hidden="true">→</span>
+          <div class="p-step">
+            <span class="p-name mono">It walks you there</span>
+            <span class="p-desc">position, framing, settings — dialed</span>
+          </div>
+        </div>
+        <p class="p-gate mono">phone, mirrorless or drone — same eye, every body</p>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">03 — Features</p>
+      <h2>Six things it does for your eye.</h2>
+
+      <div class="feature">
+        <div class="f-text">
+          <h3>Learns your eye</h3>
+          <p>
+            Upload the photos you love — yours or anyone's. It distills them into an
+            aesthetic profile: the light you chase, the colors you keep, the frames
+            you choose.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="taste">
+            <div class="t-grid" aria-hidden="true">
+              <span class="t-tile t1"></span>
+              <span class="t-tile t2"></span>
+              <span class="t-tile t3"></span>
+              <span class="t-tile t4"></span>
+              <span class="t-tile t5"></span>
+              <span class="t-tile t6"></span>
+            </div>
+            <div class="t-tags">
+              <span class="q-chip">warm shadows</span>
+              <span class="q-chip">backlight</span>
+              <span class="q-chip">negative space</span>
+            </div>
+            <p class="r-cap mono">your aesthetic profile · learned from 24 photos you love</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div class="f-text">
+          <h3>Walks you to the shot</h3>
+          <p>
+            Not just "nice scene" — it tells you where to stand, which way to face,
+            how low to get, and when the light peaks.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="mapcard">
+            <div class="map" aria-hidden="true">
+              <span class="m-you"></span>
+              <span class="m-path"></span>
+              <span class="m-spot"></span>
+              <span class="m-label l-you mono">you</span>
+              <span class="m-label l-spot mono">the shot · 40 m</span>
+            </div>
+            <p class="map-meta mono">face northwest · low angle · 24 mm</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="f-text">
+          <h3>Dials it in</h3>
+          <p>
+            ISO, aperture, shutter, white balance — set for the exact shot you're
+            about to take. One tap to apply, or full manual if you'd rather turn
+            the dials yourself.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="dial">
+            <p class="fc-head mono">Set for · backlit portrait</p>
+            <div class="dial-grid">
+              <div class="d-item"><span class="d-k mono">ISO</span><span class="d-v">100</span></div>
+              <div class="d-item"><span class="d-k mono">Aperture</span><span class="d-v">f/1.8</span></div>
+              <div class="d-item"><span class="d-k mono">Shutter</span><span class="d-v">1/250</span></div>
+              <div class="d-item"><span class="d-k mono">WB</span><span class="d-v">5600K</span></div>
+            </div>
+            <p class="r-cap mono">one tap to apply · or turn the dials yourself</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div class="f-text">
+          <h3>Grades like you</h3>
+          <p>
+            Edits arrive as a recipe in your taste — warmth, contrast, grain —
+            not a one-size preset slapped on top.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="grade">
+            <div class="g-strip" aria-hidden="true"></div>
+            <div class="g-rows">
+              <div class="g-row"><span>Warmth</span><span class="mono">+12</span></div>
+              <div class="g-row"><span>Contrast</span><span class="mono">+8</span></div>
+              <div class="g-row"><span>Shadows</span><span class="mono">lifted</span></div>
+              <div class="g-row"><span>Grain</span><span class="mono">6</span></div>
+            </div>
+            <p class="r-cap mono">a recipe in your taste — not a preset</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="f-text">
+          <h3>Pro cameras welcome</h3>
+          <p>
+            Pairs with real bodies, reads RAW and speaks manual — guidance that
+            respects the dials you already love.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="rig">
+            <div class="rig-row">
+              <span class="rig-dot" aria-hidden="true"></span>
+              <span class="rig-name">Sony α7 IV</span>
+              <span class="rig-tag mono">connected</span>
+            </div>
+            <div class="rig-chips">
+              <span class="q-chip">Canon</span>
+              <span class="q-chip">Nikon</span>
+              <span class="q-chip">Fujifilm</span>
+              <span class="q-chip">DJI</span>
+              <span class="q-chip">iPhone</span>
+            </div>
+            <p class="r-cap mono">reads RAW · speaks manual</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div class="f-text">
+          <h3>Drone autopilot</h3>
+          <p>
+            Finding the angle is the boring part of flying. The copilot scouts the
+            orbit, picks the altitude and frames the shot — you just approve.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="drone">
+            <div class="orbit" aria-hidden="true">
+              <span class="o-ring"></span>
+              <span class="o-subject"></span>
+              <span class="o-dot d1"></span>
+              <span class="o-dot d2"></span>
+              <span class="o-dot d3"></span>
+            </div>
+            <p class="drone-meta mono"><span>alt 42 m</span><span>orbit 270°</span><span>3 angles found</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">04 — What it covers</p>
+      <h2>One eye, every kind of shot.</h2>
+      <div class="goals three">
+        <div class="goal">
+          <span class="g-num mono">24mm</span>
+          <h3>Street</h3>
+          <p>Settings pre-dialed so the moment never waits for a menu.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">85mm</span>
+          <h3>Portrait</h3>
+          <p>Light on faces, posing distance, lens compression — handled.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">16mm</span>
+          <h3>Landscape</h3>
+          <p>Horizons, foreground anchors and golden-hour timing.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">30s</span>
+          <h3>Night</h3>
+          <p>Long-exposure math without the trial and error.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">42m</span>
+          <h3>Aerial</h3>
+          <p>Orbits and altitudes scouted before you even take off.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">RAW</span>
+          <h3>Any camera</h3>
+          <p>Phone, mirrorless, drone — one taste profile across every body.</p>
+        </div>
+      </div>
+    </section>
+
+    <p class="tbc"><span class="tbc-dots">…</span>To be continued</p>
+  </main>
+  <Footer lang={lang} />
+</Base>
+
+<style>
+  .case { padding: 130px 24px 90px; max-width: 880px; }
+  .back {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    transition: color 0.25s;
+  }
+  .back:hover { color: var(--accent); }
+  .head { margin-top: 34px; }
+  .head h1 { font-size: clamp(40px, 6.4vw, 72px); }
+  .lede {
+    margin: 18px 0 0;
+    font-size: clamp(16px, 2vw, 19px);
+    line-height: 1.65;
+    color: var(--ink-2);
+    max-width: 640px;
+  }
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 52px;
+    padding: 28px 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 8px; }
+  .meta-label {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .meta-value { font-size: 14px; line-height: 1.6; color: var(--ink); }
+
+  /* viewfinder hero */
+  .vf {
+    position: relative;
+    margin-top: 56px;
+    aspect-ratio: 16 / 9.5;
+    border-radius: 18px;
+    overflow: hidden;
+    background:
+      radial-gradient(130% 90% at 50% 105%, rgba(230, 86, 46, 0.4), transparent 58%),
+      radial-gradient(60% 40% at 72% 70%, rgba(240, 147, 122, 0.18), transparent 70%),
+      linear-gradient(168deg, #2B1B45 0%, #1A112E 58%, #140D24 100%);
+  }
+  .vf-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(245, 239, 228, 0.13) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(245, 239, 228, 0.13) 1px, transparent 1px);
+    background-size: 33.4% 33.4%;
+    background-position: -1px -1px;
+  }
+  .vf-corner {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border: 2px solid rgba(245, 239, 228, 0.7);
+  }
+  .vf-corner.tl { top: 16px; left: 16px; border-right: none; border-bottom: none; }
+  .vf-corner.tr { top: 16px; right: 16px; border-left: none; border-bottom: none; }
+  .vf-corner.bl { bottom: 16px; left: 16px; border-right: none; border-top: none; }
+  .vf-corner.br { bottom: 16px; right: 16px; border-left: none; border-top: none; }
+  .vf-focus {
+    position: absolute;
+    left: 62%;
+    top: 52%;
+    width: clamp(64px, 12vw, 96px);
+    height: clamp(48px, 9vw, 72px);
+    transform: translate(-50%, -50%);
+    border: 1.5px solid #F0937A;
+    border-radius: 6px;
+    box-shadow: 0 0 24px rgba(240, 147, 122, 0.35);
+  }
+  .vf-toast {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    max-width: 82%;
+    text-align: center;
+    font-size: clamp(10px, 1.4vw, 12px);
+    letter-spacing: 0.06em;
+    color: #F5EFE4;
+    background: rgba(16, 10, 30, 0.72);
+    border: 1px solid rgba(240, 147, 122, 0.55);
+    border-radius: 999px;
+    padding: 8px 18px;
+    backdrop-filter: blur(6px);
+  }
+  .vf-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: clamp(14px, 4.5vw, 40px);
+    padding: 16px 12px 14px;
+    background: linear-gradient(transparent, rgba(8, 5, 18, 0.7));
+    font-size: clamp(10px, 1.4vw, 12px);
+    letter-spacing: 0.1em;
+    color: #F5EFE4;
+  }
+  .vf-rec { color: #F0937A; }
+  .vf-cap {
+    margin: 14px 0 0;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink-2);
+  }
+
+  .block { margin-top: 88px; }
+  .b-label {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .block h2 { margin-top: 12px; font-size: clamp(26px, 3.6vw, 38px); }
+  .block > p {
+    margin: 18px 0 0;
+    font-size: 15.5px;
+    line-height: 1.8;
+    color: var(--ink);
+    max-width: 660px;
+  }
+
+  /* pipeline */
+  .pipeline {
+    margin-top: 28px;
+    background: #1A112E;
+    border-radius: 18px;
+    padding: clamp(24px, 4vw, 44px);
+  }
+  .p-flow { display: flex; align-items: stretch; gap: 12px; flex-wrap: wrap; }
+  .p-step {
+    flex: 1 1 160px;
+    border: 1px solid rgba(245, 239, 228, 0.22);
+    border-radius: 12px;
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .p-core { border-color: #F0937A; background: rgba(240, 147, 122, 0.08); }
+  .p-name { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #F5EFE4; }
+  .p-core .p-name { color: #F0937A; }
+  .p-desc { font-size: 12.5px; line-height: 1.5; color: rgba(240, 234, 248, 0.66); }
+  .p-arrow { align-self: center; color: #F0937A; font-size: 16px; }
+  .p-gate {
+    margin: 22px 0 0;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: rgba(240, 234, 248, 0.55);
+  }
+
+  /* features */
+  .feature {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: center;
+    margin-top: 56px;
+  }
+  .feature.flip .f-text { order: 2; }
+  .feature.flip .f-visual { order: 1; }
+  .f-text h3 { font-size: clamp(20px, 2.6vw, 26px); }
+  .f-text p { margin: 10px 0 0; font-size: 14.5px; line-height: 1.75; color: var(--ink-2); }
+  .r-cap { margin: 12px 0 0; font-size: 10.5px; letter-spacing: 0.1em; color: var(--ink-2); }
+  .q-chip {
+    font-size: 13px;
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 8px 16px;
+  }
+
+  /* taste board */
+  .taste {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
+  }
+  .t-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .t-tile { display: block; aspect-ratio: 4 / 3; border-radius: 8px; }
+  .t1 { background: linear-gradient(160deg, #E6562E, #8E2F4B); }
+  .t2 { background: linear-gradient(200deg, #2B1B45, #C56A4A); }
+  .t3 { background: linear-gradient(150deg, #F0B47A, #B65CC9); }
+  .t4 { background: linear-gradient(180deg, #1A2C45, #4796E3); }
+  .t5 { background: linear-gradient(140deg, #2E2A26, #A89F8D); }
+  .t6 { background: linear-gradient(170deg, #D85A8A, #5F7FE8); }
+  .t-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .t-tags .q-chip { font-size: 11.5px; padding: 5px 12px; }
+
+  /* map card */
+  .mapcard {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
+  }
+  .map { position: relative; height: 170px; }
+  .m-you {
+    position: absolute;
+    left: 14%;
+    bottom: 18%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--ink);
+  }
+  .m-path {
+    position: absolute;
+    left: 19%;
+    bottom: 26%;
+    width: 58%;
+    border-top: 2px dashed var(--accent);
+    transform: rotate(-24deg);
+    transform-origin: left bottom;
+  }
+  .m-spot {
+    position: absolute;
+    right: 16%;
+    top: 22%;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2.5px solid var(--accent);
+    box-shadow: 0 0 0 5px rgba(240, 147, 122, 0.18);
+  }
+  .m-label { position: absolute; font-size: 10.5px; letter-spacing: 0.08em; color: var(--ink-2); }
+  .l-you { left: 10%; bottom: 4%; }
+  .l-spot { right: 6%; top: 6%; color: var(--accent); }
+  .map-meta {
+    margin: 12px 0 0;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    border-top: 1px solid var(--hairline);
+    padding-top: 12px;
+  }
+
+  /* settings dial */
+  .dial {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 24px 26px;
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
+  }
+  .fc-head {
+    margin: 0 0 14px;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .dial-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .d-item {
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .d-k { font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2); }
+  .d-v { font-family: var(--serif); font-size: clamp(15px, 2vw, 20px); color: var(--ink); }
+
+  /* grade recipe */
+  .grade {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 22px 26px;
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
+  }
+  .g-strip {
+    height: 14px;
+    border-radius: 7px;
+    background: linear-gradient(90deg, #8E8B86, #B0937C, #D88E5A, #E6562E);
+  }
+  .g-rows { margin-top: 8px; }
+  .g-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 0;
+    font-size: 13px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .g-row:last-child { border-bottom: none; }
+
+  /* camera rig */
+  .rig {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 24px 26px;
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
+  }
+  .rig-row { display: flex; align-items: center; gap: 10px; }
+  .rig-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+  .rig-name { font-family: var(--serif); font-size: 19px; color: var(--ink); }
+  .rig-tag { margin-left: auto; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+  .rig-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .rig-chips .q-chip { font-size: 11.5px; padding: 5px 12px; color: var(--ink-2); }
+
+  /* drone orbit */
+  .drone {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
+  }
+  .orbit { position: relative; height: 170px; }
+  .o-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 140px;
+    height: 140px;
+    transform: translate(-50%, -50%);
+    border: 2px dashed var(--hairline);
+    border-radius: 50%;
+  }
+  .o-subject {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--ink);
+  }
+  .o-dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(240, 147, 122, 0.18);
+  }
+  .o-dot.d1 { left: calc(50% + 70px); top: 50%; transform: translate(-50%, -50%); }
+  .o-dot.d2 { left: 50%; top: calc(50% - 70px); transform: translate(-50%, -50%); }
+  .o-dot.d3 { left: calc(50% - 60px); top: calc(50% + 38px); transform: translate(-50%, -50%); }
+  .drone-meta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 10px 0 0;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    border-top: 1px solid var(--hairline);
+    padding-top: 12px;
+  }
+
+  /* coverage grid */
+  .goals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 28px;
+  }
+  .goals.three { grid-template-columns: repeat(3, 1fr); }
+  .goal { border: 1px solid var(--hairline); border-radius: 14px; padding: 22px 22px 20px; }
+  .g-num {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .goal h3 { font-size: 18px; margin-top: 10px; }
+  .goal p { margin: 8px 0 0; font-size: 13px; line-height: 1.65; color: var(--ink-2); }
+
+  .tbc {
+    margin: 130px 0 30px;
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(30px, 4.5vw, 48px);
+    letter-spacing: 0.01em;
+    color: var(--ink);
+  }
+  .tbc-dots { color: var(--accent); margin-right: 0.18em; }
+
+  @media (max-width: 720px) {
+    .meta { grid-template-columns: 1fr; gap: 20px; }
+    .goals, .goals.three { grid-template-columns: 1fr; }
+    .p-flow { flex-direction: column; }
+    .p-arrow { transform: rotate(90deg); }
+    .block { margin-top: 64px; }
+    .feature { grid-template-columns: 1fr; gap: 18px; margin-top: 44px; }
+    .feature.flip .f-text { order: 1; }
+    .feature.flip .f-visual { order: 2; }
+    .vf { aspect-ratio: 4 / 3.4; }
+    .dial-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
