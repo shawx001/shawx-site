@@ -8,16 +8,16 @@ const { lang } = Astro.props;
 ---
 
 <section id="hero" class="hero">
-  <div class="container hero-inner">
-    <div class="hero-name" data-hero-name>
-      <h1 class="hero-title">Shaw<span class="sr-only"> X</span></h1>
-      <div class="x-wrap">
-        <canvas class="x-canvas" data-particle-x aria-hidden="true"></canvas>
-        <img class="x-fallback" src="/favicon.svg" alt="" aria-hidden="true" />
-      </div>
-    </div>
-    <p class="tagline grad-text" data-hero-sub>{t(lang, 'hero.tagline')}</p>
-    <p class="intro" data-hero-sub>{t(lang, 'hero.intro')}</p>
+  <div class="stack">
+    <p class="kicker mono" data-hero-sub>SHAW X</p>
+    <p class="lede" data-hero-sub>
+      AI Native Coder And Designer<br />Across Brands And Creative Products
+    </p>
+    <h1 class="display" data-hero-name>
+      <span>An Idea</span>
+      <span>And</span>
+      <span>A Call</span>
+    </h1>
   </div>
   <p class="scroll-hint mono" data-hero-sub>{t(lang, 'hero.scroll')} ↓</p>
 </section>
@@ -27,71 +27,56 @@ const { lang } = Astro.props;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
     position: relative;
-    padding-top: 56px;
+    padding: 56px 24px 0;
+    text-align: center;
     background:
-      linear-gradient(180deg, rgba(16, 11, 34, 0.28) 0%, rgba(16, 11, 34, 0.06) 42%, rgba(16, 11, 34, 0) 70%),
-      url('/bg/dusk.jpg') center 38% / cover no-repeat,
-      linear-gradient(180deg, #55549A 0%, #8A6CB5 32%, #D98A63 56%, #7A5E92 78%, #4E3F70 100%);
+      linear-gradient(180deg, rgba(12, 5, 4, 0.3) 0%, rgba(12, 5, 4, 0.05) 38%, rgba(12, 5, 4, 0) 60%),
+      url('/about/portrait.jpg') center 30% / cover no-repeat,
+      linear-gradient(180deg, #D9492A 0%, #E6562E 50%, #C8401F 100%);
   }
   .hero::after {
     content: '';
     position: absolute;
     inset: auto 0 0 0;
-    height: 180px;
+    height: 140px;
     background: linear-gradient(180deg, transparent, var(--bg));
     pointer-events: none;
   }
-  .hero-name {
+  .stack {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: clamp(8px, 1.6vw, 20px);
-    width: max-content;
   }
-  .hero-title {
-    font-size: clamp(56px, 11vw, 130px);
-    letter-spacing: -0.02em;
-    color: #F8F3E8;
-    text-shadow: 0 2px 28px rgba(20, 12, 44, 0.4);
+  .kicker {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    color: rgba(246, 238, 230, 0.92);
   }
-  .x-wrap {
-    position: relative;
-    width: clamp(120px, 16vw, 220px);
-    aspect-ratio: 1;
-  }
-  .x-canvas {
-    position: absolute;
-    inset: -35%;
-    width: 170%;
-    height: 170%;
-  }
-  .x-fallback {
-    display: none;
-    position: absolute;
-    inset: 15%;
-    width: 70%;
-  }
-  .x-fallback.show { display: block; }
-  .tagline {
-    margin: 22px 0 0;
-    font-family: var(--serif);
-    font-size: clamp(26px, 3.4vw, 44px);
+  .lede {
+    margin: 18px 0 0;
+    font-size: clamp(12px, 1.4vw, 15px);
     font-weight: 500;
-    letter-spacing: 0.01em;
-    width: max-content;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.75;
+    color: #F4EEE6;
   }
-  .hero .tagline.grad-text {
-    background: linear-gradient(92deg, #A8CCF5, #CDB0F5 45%, #F5AFC9 75%, #F8BC9E);
-    -webkit-background-clip: text;
-    background-clip: text;
+  .display {
+    margin: clamp(28px, 5vh, 56px) 0 0;
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: clamp(58px, 13.5vw, 185px);
+    line-height: 0.94;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    color: #F4F2ED;
+    text-shadow: 0 3px 36px rgba(10, 4, 2, 0.28);
   }
-  .intro {
-    margin: 14px 0 0;
-    max-width: 520px;
-    color: rgba(248, 243, 232, 0.9);
-    text-shadow: 0 1px 18px rgba(20, 12, 44, 0.35);
-  }
+  .display span { display: block; }
   .scroll-hint {
     position: absolute;
     bottom: 26px;
@@ -100,7 +85,7 @@ const { lang } = Astro.props;
     margin: 0;
     font-size: 12px;
     letter-spacing: 0.14em;
-    color: rgba(248, 243, 232, 0.8);
+    color: rgba(246, 238, 230, 0.8);
     z-index: 2;
   }
 </style>

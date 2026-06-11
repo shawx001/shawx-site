@@ -42,32 +42,33 @@ const { items, lang } = Astro.props;
     align-items: center;
     gap: 24px;
     padding: 32px 0;
-    border-top: 1px solid var(--hairline);
+    border-top: 1px solid var(--wl-line, var(--hairline));
   }
-  .row:last-child { border-bottom: 1px solid var(--hairline); }
-  .idx { font-size: 13px; color: var(--accent); min-width: 2.2ch; }
+  .row:last-child { border-bottom: 1px solid var(--wl-line, var(--hairline)); }
+  .idx { font-size: 13px; color: var(--wl-accent, var(--accent)); min-width: 2.2ch; }
   .mid { flex: 1; min-width: 0; }
   .title {
     font-size: clamp(28px, 4vw, 44px);
+    color: var(--wl-title, var(--ink));
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .row:hover .title { transform: translateX(10px); }
   .summary {
     margin: 4px 0 0;
     font-size: 13.5px;
-    color: var(--ink-2);
+    color: var(--wl-muted, var(--ink-2));
     max-width: 520px;
   }
   .chip {
     flex-shrink: 0;
     font-size: 12px;
-    color: var(--ink-2);
-    border: 1px solid var(--hairline);
+    color: var(--wl-muted, var(--ink-2));
+    border: 1px solid var(--wl-line, var(--hairline));
     border-radius: 999px;
     padding: 5px 14px;
   }
-  .chip.live { color: var(--accent); border-color: var(--accent); }
-  .chip.live:hover { background: var(--accent); color: var(--bg); }
+  .chip.live { color: var(--wl-accent, var(--accent)); border-color: var(--wl-accent, var(--accent)); }
+  .chip.live:hover { background: var(--wl-accent, var(--accent)); color: #1A112E; }
   .preview {
     position: absolute;
     right: 140px;

@@ -35,9 +35,9 @@ export function initSite(): void {
       },
     });
     tl.to('[data-hero-name]', {
-      scale: 2.6,
-      yPercent: -12,
-      transformOrigin: 'left center',
+      scale: 2.2,
+      yPercent: -10,
+      transformOrigin: 'center center',
       ease: 'power2.in',
     }, 0).to('[data-hero-sub]', { opacity: 0, y: -30 }, 0);
   });

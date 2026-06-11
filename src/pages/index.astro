@@ -15,17 +15,19 @@ const work = await getWork(lang);
 <Base lang={lang} title="Shaw X — engineer with taste" description={t(lang, 'hero.intro')}>
   <Nav lang={lang} />
   <Hero lang={lang} />
-  <section id="work" class="container work-section">
-    <p class="section-label">{t(lang, 'work.label')} <span class="idx">/01</span></p>
-    <WorkList
-      lang={lang}
-      items={work.map((e) => ({
-        title: e.data.title,
-        summary: e.data.summary,
-        cover: e.data.cover ?? '/covers/taxglobal.svg',
-        link: e.data.link,
-      }))}
-    />
+  <section id="work" class="work-band">
+    <div class="container work-section">
+      <p class="section-label">{t(lang, 'work.label')} <span class="idx">/01</span></p>
+      <WorkList
+        lang={lang}
+        items={work.map((e) => ({
+          title: e.data.title,
+          summary: e.data.summary,
+          cover: e.data.cover ?? '/covers/taxglobal.svg',
+          link: e.data.link,
+        }))}
+      />
+    </div>
   </section>
   <Highlight lang={lang} />
   <Footer lang={lang} />
@@ -36,5 +38,17 @@ const work = await getWork(lang);
 </Base>
 
 <style>
-  .work-section { padding-top: 90px; }
+  .work-band {
+    margin-top: 90px;
+    padding: 96px 0 120px;
+    background:
+      linear-gradient(rgba(26, 17, 46, 0.55), rgba(26, 17, 46, 0.55)),
+      url('/bg/dusk.jpg') center / cover no-repeat;
+    --wl-line: rgba(245, 239, 228, 0.28);
+    --wl-title: #F5EFE4;
+    --wl-muted: rgba(240, 234, 248, 0.75);
+    --wl-accent: #F0937A;
+  }
+  .work-band .section-label { color: rgba(240, 234, 248, 0.72); }
+  .work-band .section-label .idx { color: #F0937A; }
 </style>

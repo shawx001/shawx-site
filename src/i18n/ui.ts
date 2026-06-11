@@ -5,9 +5,7 @@ export const ui = {
   en: {
     'nav.work': 'Work',
     'nav.about': 'About',
-    'hero.tagline': 'code × design × art',
-    'hero.intro':
-      'I build AI products end to end — and treat beauty as a feature. Taste trained by art, discipline trained by shipping.',
+    'hero.intro': 'AI-native coder and designer across brands and creative products.',
     'hero.scroll': 'scroll',
     'work.label': 'Selected work',
     'work.soon': 'live soon',
@@ -24,8 +22,7 @@ export const ui = {
   zh: {
     'nav.work': '作品',
     'nav.about': '关于',
-    'hero.tagline': 'code × design × art',
-    'hero.intro': '从零到一构建 AI 产品,并把「美」当作功能的一部分 —— 审美来自艺术,纪律来自交付。',
+    'hero.intro': 'AI 原生的工程师与设计师,横跨品牌与创意产品。',
     'hero.scroll': '滚动',
     'work.label': '精选作品',
     'work.soon': '即将上线',
