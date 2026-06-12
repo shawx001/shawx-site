@@ -1,6 +1,8 @@
 ---
-// 「无人机环绕实拍演示」 16s 一镜到底循环 · 纯 CSS
-// 真实照片做机位画面,连续飞行漂移 + DJI 式遥测 HUD + 小地图环绕航线
+// 「自动定位 · 飞到 reference 的角度」 14s 循环演示 · 纯 CSS
+// 构图 = 真实场景(人+无人机)背景里的一台笔记本:
+// 屏幕左侧 = TARGET SHOT(参考构图) + 任务状态 + 航线小地图(无人机移动)
+// 屏幕右侧 = 无人机实时画面,从完全不同的取景逐渐收敛到与参考图一致
 import type { Lang } from '../i18n/ui';
 
 interface Props {
@@ -10,75 +12,93 @@ const { lang } = Astro.props;
 
 const T = {
   en: {
-    mode: 'ORBIT · AUTO',
-    lock: 'SUBJECT LOCKED',
-    done: '✓ 3 angles saved',
-    cap: 'drone autopilot — one continuous take',
-    aria: 'Continuous drone demo: the camera feed drifts through a golden cloud sea while telemetry ticks — altitude around 42 meters, heading sweeping through the orbit — and on the minimap the drone circles the subject; at the end three angles are saved',
+    ref: 'TARGET SHOT · reference',
+    live: 'LIVE · drone feed',
+    s1: 'Locating the angle…',
+    s2: 'Flight path set — flying',
+    s3: 'Angle matched',
+    matched: '✓ ANGLE MATCHED',
+    cap: 'auto-locate — the drone flies itself to the reference angle',
+    aria: 'Demo: on a laptop by the water, the left panel holds a reference photo while the right panel streams the drone live feed; the drone locates the angle, flies the plotted path on the minimap as distance counts down from 86 meters, and the live view converges until it matches the reference — 100 percent, angle matched',
   },
   zh: {
-    mode: 'ORBIT · 自动',
-    lock: '主体已锁定',
-    done: '✓ 已存 3 个角度',
-    cap: '无人机自动驾驶 —— 一镜到底',
-    aria: '无人机连续演示：镜头在金色云海上缓慢飞行，遥测实时跳动 —— 高度约 42 米，航向随环绕扫过 —— 小地图上无人机绕主体转圈，结尾保存 3 个角度',
+    ref: '目标构图 · 参考图',
+    live: '实时 · 无人机画面',
+    s1: '正在定位角度…',
+    s2: '航线已规划 —— 飞行中',
+    s3: '角度已对齐',
+    matched: '✓ 角度已对齐',
+    cap: '自动定位 —— 无人机自己飞到 reference 的角度',
+    aria: '演示：水边的笔记本上，左侧面板是一张参考照片，右侧面板是无人机实时回传；无人机定位角度后沿小地图航线飞行，距离从 86 米倒数，实时画面逐渐收敛直至与参考图完全一致 —— 匹配 100%，角度对齐',
   },
 }[lang];
 ---
 
-<figure class="fpv" role="img" aria-label={T.aria}>
-  <div class="feed" aria-hidden="true"></div>
-  <div class="vig" aria-hidden="true"></div>
+<figure class="loc" role="img" aria-label={T.aria}>
+  <div class="bg" aria-hidden="true"></div>
 
-  <!-- 三分线 -->
-  <div class="fgrid" aria-hidden="true"></div>
-
-  <!-- 顶部:REC + 标题 + 电量 -->
-  <div class="hud top mono">
-    <span class="rec"><i class="rdot"></i>REC
-      <span class="tnums"><i class="tn t1">00:02</i><i class="tn t2">00:04</i><i class="tn t3">00:06</i><i class="tn t4">00:08</i><i class="tn t5">00:10</i><i class="tn t6">00:12</i><i class="tn t7">00:14</i><i class="tn t8">00:16</i></span>
-    </span>
-    <span class="title">AI CAMERA COPILOT · DRONE</span>
-    <span class="batt">⛀ 87% · GPS 14</span>
-  </div>
-
-  <!-- 中心:目标锁定框 -->
-  <span class="lockbox" aria-hidden="true">
-    <i class="lk tl"></i><i class="lk tr"></i><i class="lk bl"></i><i class="lk br"></i>
-  </span>
-  <span class="locktag mono">{T.lock}</span>
-
-  <!-- 左下:遥测 -->
-  <div class="hud tele mono">
-    <span class="t-row">ALT
-      <span class="tnums"><i class="tn a1">41.8 m</i><i class="tn a2">42.0 m</i><i class="tn a3">42.3 m</i><i class="tn a4">42.1 m</i><i class="tn a5">42.6 m</i><i class="tn a6">42.4 m</i><i class="tn a7">42.2 m</i><i class="tn a8">42.0 m</i></span>
-    </span>
-    <span class="t-row">SPD <b>3.2 m/s</b></span>
-    <span class="t-row">HDG
-      <span class="tnums"><i class="tn h1">132°</i><i class="tn h2">156°</i><i class="tn h3">180°</i><i class="tn h4">204°</i><i class="tn h5">228°</i><i class="tn h6">252°</i><i class="tn h7">276°</i><i class="tn h8">300°</i></span>
-    </span>
-  </div>
-
-  <!-- 底中:模式 chip + 完成 toast -->
-  <span class="mode mono">{T.mode}</span>
-  <span class="done mono">{T.done}</span>
-
-  <!-- 右下:小地图,无人机沿轨道环绕 -->
-  <div class="map" aria-hidden="true">
-    <span class="m-ring"></span>
-    <span class="m-subject"></span>
-    <span class="m-orbit">
-      <span class="m-drone"><i class="m-fov"></i></span>
-    </span>
+  <div class="laptop">
+    <div class="lscreen">
+      <div class="lbar mono">
+        <span class="lb-left"><i class="gdot"></i>AI CAMERA COPILOT · MISSION 04</span>
+        <span class="lb-right"><i class="rdot"></i>REC · ⛀ 87%</span>
+      </div>
+      <div class="lbody">
+        <div class="lleft">
+          <div class="panel ref">
+            <img src="/bg/dusk.jpg" alt="" loading="lazy" />
+            <span class="p-tag mono">{T.ref}</span>
+          </div>
+          <div class="steps mono">
+            <span class="st st1"><i class="st-dot"></i>{T.s1}</span>
+            <span class="st st2"><i class="st-dot"></i>{T.s2}</span>
+            <span class="st st3"><i class="st-dot"></i>{T.s3}</span>
+          </div>
+          <div class="mini" aria-hidden="true">
+            <svg viewBox="0 0 100 64" preserveAspectRatio="none">
+              <path class="route" d="M12 52 Q34 50 52 36 T88 14" fill="none"/>
+            </svg>
+            <span class="m-home"></span>
+            <span class="m-target"></span>
+            <span class="m-uav"></span>
+          </div>
+        </div>
+        <div class="lright">
+          <div class="panel live">
+            <div class="live-crop">
+              <img class="live-img" src="/bg/dusk.jpg" alt="" loading="lazy" />
+            </div>
+            <div class="lv-grid" aria-hidden="true"></div>
+            <span class="p-tag mono"><i class="rdot"></i>{T.live}</span>
+            <span class="ring-wrap">
+              <svg viewBox="0 0 44 44" aria-hidden="true">
+                <circle class="ring-bg" cx="22" cy="22" r="18"/>
+                <circle class="ring" cx="22" cy="22" r="18"/>
+              </svg>
+              <span class="nums mono">
+                <i class="n n58">58%</i><i class="n n72">72%</i><i class="n n86">86%</i><i class="n n93">93%</i><i class="n n100">100%</i>
+              </span>
+            </span>
+            <span class="dist mono">DIST
+              <span class="dn d1">86 m</span><span class="dn d2">61 m</span><span class="dn d3">42 m</span><span class="dn d4">27 m</span><span class="dn d5">14 m</span><span class="dn d6">6 m</span><span class="dn d7">2 m</span><span class="dn d8">0 m</span>
+            </span>
+            <span class="lflash" aria-hidden="true"></span>
+            <span class="matched mono">{T.matched}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lbase"></div>
   </div>
 </figure>
-<p class="fpv-cap mono">{T.cap}</p>
+<p class="loc-cap mono">{T.cap}</p>
 
 <style>
-  .fpv {
-    --t: 16s;
+  .loc {
+    --t: 14s;
     --hud: #58D87E;
     --hud-glow: rgba(88, 216, 126, 0.4);
+    --glass-line: rgba(255, 255, 255, 0.12);
     position: relative;
     margin: 88px 0 0;
     aspect-ratio: 16 / 9;
@@ -86,37 +106,228 @@ const T = {
     overflow: hidden;
     background: #0E0816;
     box-shadow: 0 36px 80px -42px rgba(44, 36, 24, 0.55);
-    font-size: clamp(9px, 1.4vw, 13.5px);
+    display: grid;
+    place-items: center;
+    container-type: size;
+    font-size: clamp(7px, 1.1cqw, 12px);
   }
-  .fpv-cap {
+  .loc-cap {
     margin: 14px 0 0;
     text-align: center;
     font-size: 11px;
     letter-spacing: 0.1em;
     color: var(--ink-2);
   }
-
-  /* —— 机位画面:连续飞行漂移(首尾相接无缝循环) —— */
-  .feed {
+  .bg {
     position: absolute;
-    inset: -6%;
-    background: url('/bg/dusk.jpg') center 42% / cover no-repeat;
-    animation: fly var(--t) ease-in-out infinite;
+    inset: -20px;
+    background: url('/case/camera/p-locate.jpg') center 30% / cover no-repeat;
+    filter: blur(10px) brightness(0.62) saturate(1.05);
   }
-  @keyframes fly {
-    0% { transform: scale(1.16) translate(2.6%, 1.6%); }
-    50% { transform: scale(1.08) translate(-2.4%, -1.2%); }
-    100% { transform: scale(1.16) translate(2.6%, 1.6%); }
-  }
-  .vig {
+  .loc::after {
+    content: '';
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(rgba(8, 6, 14, 0.5), transparent 18%),
-      linear-gradient(to top, rgba(8, 6, 14, 0.55), transparent 26%),
-      radial-gradient(115% 100% at 50% 50%, transparent 60%, rgba(8, 6, 14, 0.4));
+    background: radial-gradient(120% 105% at 50% 46%, transparent 52%, rgba(8, 5, 14, 0.6));
+    pointer-events: none;
   }
-  .fgrid {
+
+  /* —— 笔记本 —— */
+  .laptop {
+    position: relative;
+    z-index: 2;
+    width: 80cqw;
+    animation: lapIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+  @keyframes lapIn {
+    0% { opacity: 0; transform: translateY(12px) scale(0.99); }
+    5%, 100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .lscreen {
+    background: #0C0F0D;
+    border: 1.5px solid rgba(255, 255, 255, 0.13);
+    border-bottom: none;
+    border-radius: 1.1em 1.1em 0 0;
+    padding: 1em 1.2em 1.2em;
+    box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.8);
+  }
+  .lbase {
+    height: 1.05em;
+    background: linear-gradient(#2A2E2B, #151816);
+    border-radius: 0 0 1.2em 1.2em;
+    box-shadow: 0 14px 30px -14px rgba(0, 0, 0, 0.8);
+  }
+  .lbase::after {
+    content: '';
+    display: block;
+    width: 16%;
+    height: 38%;
+    margin: 0 auto;
+    background: #0B0D0C;
+    border-radius: 0 0 0.6em 0.6em;
+  }
+
+  .lbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.2em 0.2em 0.9em;
+    font-size: 0.82em;
+    letter-spacing: 0.16em;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .lb-left, .lb-right { display: inline-flex; align-items: center; gap: 0.6em; }
+  .gdot { width: 0.55em; height: 0.55em; border-radius: 50%; background: var(--hud); box-shadow: 0 0 8px var(--hud-glow); }
+  .rdot {
+    display: inline-block;
+    width: 0.55em;
+    height: 0.55em;
+    border-radius: 50%;
+    background: #FF5A4E;
+    animation: blink 1.2s steps(2, jump-none) infinite;
+  }
+  @keyframes blink { 0% { opacity: 1; } 100% { opacity: 0.25; } }
+
+  .lbody {
+    display: grid;
+    grid-template-columns: 1fr 2.2fr;
+    gap: 1em;
+  }
+  .lleft { display: flex; flex-direction: column; gap: 0.9em; min-width: 0; }
+  .lright { min-width: 0; }
+
+  /* —— 面板通用 —— */
+  .panel {
+    position: relative;
+    border-radius: 0.7em;
+    overflow: hidden;
+    background: #161A17;
+    border: 1px solid var(--glass-line);
+  }
+  .panel img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .p-tag {
+    position: absolute;
+    top: 0.7em;
+    left: 0.7em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.35em 0.8em;
+    border-radius: 0.45em;
+    background: rgba(6, 8, 7, 0.72);
+    border: 1px solid var(--glass-line);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.66em;
+    letter-spacing: 0.16em;
+    backdrop-filter: blur(4px);
+    white-space: nowrap;
+  }
+
+  /* —— 参考图:最终构图(静态) + 对齐瞬间绿框脉冲 —— */
+  .ref { aspect-ratio: 16 / 10; }
+  .ref img { object-position: 50% 38%; }
+  .ref { animation: refPulse var(--t) ease infinite; }
+  @keyframes refPulse {
+    0%, 76% { border-color: var(--glass-line); box-shadow: none; }
+    80%, 92% { border-color: var(--hud); box-shadow: 0 0 18px var(--hud-glow); }
+    100% { border-color: var(--glass-line); }
+  }
+
+  /* —— 任务状态 —— */
+  .steps { display: flex; flex-direction: column; gap: 0.55em; font-size: 0.74em; letter-spacing: 0.1em; }
+  .st { display: inline-flex; align-items: center; gap: 0.7em; color: rgba(255, 255, 255, 0.45); }
+  .st-dot { width: 0.5em; height: 0.5em; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+  .st1 { animation: st1 var(--t) steps(1) infinite; }
+  .st2 { animation: st2 var(--t) steps(1) infinite; }
+  .st3 { animation: st3 var(--t) steps(1) infinite; }
+  @keyframes st1 { 0%, 7% { color: rgba(255,255,255,0.45); } 8%, 21% { color: #fff; } 22%, 100% { color: rgba(255,255,255,0.45); } }
+  @keyframes st2 { 0%, 21% { color: rgba(255,255,255,0.45); } 22%, 75% { color: #fff; } 76%, 100% { color: rgba(255,255,255,0.45); } }
+  @keyframes st3 { 0%, 76% { color: rgba(255,255,255,0.45); } 77%, 100% { color: #58D87E; } }
+
+  /* —— 航线小地图:无人机沿路径移动 —— */
+  .mini {
+    position: relative;
+    flex: 1;
+    min-height: 5.5em;
+    border-radius: 0.7em;
+    background: #11140F;
+    border: 1px solid var(--glass-line);
+    overflow: hidden;
+  }
+  .mini svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .route {
+    stroke: var(--hud);
+    stroke-width: 1.6;
+    stroke-dasharray: 4 5;
+    opacity: 0.7;
+    animation: routeIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+  @keyframes routeIn {
+    0%, 9% { opacity: 0; }
+    14%, 100% { opacity: 0.7; }
+  }
+  .m-home {
+    position: absolute;
+    left: 10%;
+    top: 78%;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    transform: translate(-50%, -50%);
+  }
+  .m-target {
+    position: absolute;
+    left: 88%;
+    top: 22%;
+    width: 0.9em;
+    height: 0.9em;
+    border-radius: 50%;
+    border: 1.5px solid var(--hud);
+    transform: translate(-50%, -50%);
+    animation: targetPulse var(--t) ease infinite;
+  }
+  @keyframes targetPulse {
+    0%, 76% { box-shadow: none; background: transparent; }
+    80%, 100% { box-shadow: 0 0 12px var(--hud-glow); background: var(--hud); }
+  }
+  /* 无人机点:沿 (10,78)->(52,56)->(88,22) 的弧线 */
+  .m-uav {
+    position: absolute;
+    left: 10%;
+    top: 78%;
+    width: 0.62em;
+    height: 0.62em;
+    border-radius: 50%;
+    background: var(--hud);
+    box-shadow: 0 0 10px var(--hud-glow);
+    transform: translate(-50%, -50%);
+    animation: uavFly var(--t) ease-in-out infinite;
+  }
+  @keyframes uavFly {
+    0%, 20% { left: 10%; top: 78%; }
+    38% { left: 38%; top: 62%; }
+    52% { left: 56%; top: 50%; }
+    64% { left: 74%; top: 34%; }
+    72%, 100% { left: 88%; top: 22%; }
+  }
+
+  /* —— 实时画面:从错位取景收敛到与参考一致 —— */
+  .live { aspect-ratio: 16 / 9.7; }
+  .live-crop { position: absolute; inset: 0; overflow: hidden; }
+  .live-img {
+    position: absolute;
+    inset: 0;
+    object-position: 50% 38%;
+    transform: scale(1.62) translate(11%, 9%) rotate(2.6deg);
+    animation: converge var(--t) cubic-bezier(0.45, 0.05, 0.25, 1) infinite;
+  }
+  @keyframes converge {
+    0%, 16% { transform: scale(1.62) translate(11%, 9%) rotate(2.6deg); }
+    40% { transform: scale(1.34) translate(5.5%, 4.5%) rotate(1.3deg); }
+    72%, 100% { transform: scale(1.0) translate(0, 0) rotate(0deg); }
+  }
+  .lv-grid {
     position: absolute;
     inset: 0;
     background-image:
@@ -126,212 +337,143 @@ const T = {
     background-position: -1px -1px;
   }
 
-  .hud { position: absolute; z-index: 3; color: rgba(255, 255, 255, 0.92); }
-  .hud.top {
-    top: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.2em 1.6em;
-    font-size: 0.86em;
+  /* —— 匹配环 —— */
+  .ring-wrap {
+    position: absolute;
+    top: 0.7em;
+    right: 0.7em;
+    width: 3.8em;
+    aspect-ratio: 1;
+    animation: ringIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+  @keyframes ringIn {
+    0%, 12% { opacity: 0; transform: scale(0.85); }
+    17%, 100% { opacity: 1; transform: scale(1); }
+  }
+  .ring-wrap svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring-bg { fill: rgba(6, 8, 7, 0.74); stroke: rgba(255, 255, 255, 0.18); stroke-width: 3.5; }
+  .ring {
+    fill: none;
+    stroke: var(--hud);
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-dasharray: 113;
+    filter: drop-shadow(0 0 4px var(--hud-glow));
+    animation: ringFill var(--t) cubic-bezier(0.45, 0.05, 0.25, 1) infinite;
+  }
+  /* offset = 113*(1-p): 58→72→86→93→悬停→100 */
+  @keyframes ringFill {
+    0%, 16% { stroke-dashoffset: 47.5; }
+    40% { stroke-dashoffset: 31.6; }
+    58% { stroke-dashoffset: 15.8; }
+    70% { stroke-dashoffset: 7.9; }
+    76% { stroke-dashoffset: 7.9; }
+    80%, 100% { stroke-dashoffset: 0; }
+  }
+  .nums {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 0.78em;
+    color: #fff;
+  }
+  .n { font-style: normal; grid-area: 1 / 1; opacity: 0; }
+  .n58 { animation: n58 var(--t) steps(1) infinite; }
+  .n72 { animation: n72 var(--t) steps(1) infinite; }
+  .n86 { animation: n86 var(--t) steps(1) infinite; }
+  .n93 { animation: n93 var(--t) steps(1) infinite; }
+  .n100 { color: var(--hud); animation: n100 var(--t) cubic-bezier(0.34, 1.56, 0.64, 1) infinite; }
+  @keyframes n58 { 0%, 39% { opacity: 1; } 40%, 100% { opacity: 0; } }
+  @keyframes n72 { 0%, 39% { opacity: 0; } 40%, 57% { opacity: 1; } 58%, 100% { opacity: 0; } }
+  @keyframes n86 { 0%, 57% { opacity: 0; } 58%, 69% { opacity: 1; } 70%, 100% { opacity: 0; } }
+  @keyframes n93 { 0%, 69% { opacity: 0; } 70%, 78% { opacity: 1; } 79%, 100% { opacity: 0; } }
+  @keyframes n100 {
+    0%, 78% { opacity: 0; transform: scale(0.7); }
+    81% { opacity: 1; transform: scale(1.15); }
+    84%, 100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* —— 距离倒数 —— */
+  .dist {
+    position: absolute;
+    left: 0.7em;
+    bottom: 0.7em;
+    padding: 0.35em 0.8em;
+    border-radius: 0.45em;
+    background: rgba(6, 8, 7, 0.72);
+    border: 1px solid var(--glass-line);
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.7em;
     letter-spacing: 0.14em;
+    backdrop-filter: blur(4px);
   }
-  .rec { display: inline-flex; align-items: center; gap: 0.6em; }
-  .rdot {
-    width: 0.6em;
-    height: 0.6em;
-    border-radius: 50%;
-    background: #FF5A4E;
-    animation: blink 1.2s steps(2, jump-none) infinite;
+  .dn { position: absolute; left: 4.2em; top: 0.35em; color: #fff; opacity: 0; font-style: normal; }
+  .dn:first-of-type { position: static; padding-left: 0.5em; }
+  .d1 { animation: dk1 var(--t) steps(1) infinite; }
+  .d2 { animation: dk2 var(--t) steps(1) infinite; }
+  .d3 { animation: dk3 var(--t) steps(1) infinite; }
+  .d4 { animation: dk4 var(--t) steps(1) infinite; }
+  .d5 { animation: dk5 var(--t) steps(1) infinite; }
+  .d6 { animation: dk6 var(--t) steps(1) infinite; }
+  .d7 { animation: dk7 var(--t) steps(1) infinite; }
+  .d8 { animation: dk8 var(--t) steps(1) infinite; }
+  @keyframes dk1 { 0%, 27% { opacity: 1; } 28%, 100% { opacity: 0; } }
+  @keyframes dk2 { 0%, 27% { opacity: 0; } 28%, 38% { opacity: 1; } 39%, 100% { opacity: 0; } }
+  @keyframes dk3 { 0%, 38% { opacity: 0; } 39%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
+  @keyframes dk4 { 0%, 48% { opacity: 0; } 49%, 57% { opacity: 1; } 58%, 100% { opacity: 0; } }
+  @keyframes dk5 { 0%, 57% { opacity: 0; } 58%, 64% { opacity: 1; } 65%, 100% { opacity: 0; } }
+  @keyframes dk6 { 0%, 64% { opacity: 0; } 65%, 70% { opacity: 1; } 71%, 100% { opacity: 0; } }
+  @keyframes dk7 { 0%, 70% { opacity: 0; } 71%, 75% { opacity: 1; } 76%, 100% { opacity: 0; } }
+  @keyframes dk8 { 0%, 75% { opacity: 0; } 76%, 100% { opacity: 1; } }
+
+  /* —— 对齐瞬间:闪光 + 徽章 —— */
+  .lflash {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    animation: lFlash var(--t) ease-out infinite;
   }
-  @keyframes blink { 0% { opacity: 1; } 100% { opacity: 0.25; } }
-  .title { opacity: 0.85; }
-  .batt { opacity: 0.85; }
-
-  /* —— 跳动数字:8 帧 steps 交叉 —— */
-  .tnums { position: relative; display: inline-block; min-width: 4.6em; }
-  .tn { font-style: normal; position: absolute; left: 0.4em; top: 0; opacity: 0; }
-  .tn:first-child { position: relative; left: 0; padding-left: 0.4em; }
-  .t1, .a1, .h1 { animation: k1 var(--t) steps(1) infinite; }
-  .t2, .a2, .h2 { animation: k2 var(--t) steps(1) infinite; }
-  .t3, .a3, .h3 { animation: k3 var(--t) steps(1) infinite; }
-  .t4, .a4, .h4 { animation: k4 var(--t) steps(1) infinite; }
-  .t5, .a5, .h5 { animation: k5 var(--t) steps(1) infinite; }
-  .t6, .a6, .h6 { animation: k6 var(--t) steps(1) infinite; }
-  .t7, .a7, .h7 { animation: k7 var(--t) steps(1) infinite; }
-  .t8, .a8, .h8 { animation: k8 var(--t) steps(1) infinite; }
-  @keyframes k1 { 0%, 12.4% { opacity: 1; } 12.5%, 100% { opacity: 0; } }
-  @keyframes k2 { 0%, 12.4% { opacity: 0; } 12.5%, 24.9% { opacity: 1; } 25%, 100% { opacity: 0; } }
-  @keyframes k3 { 0%, 24.9% { opacity: 0; } 25%, 37.4% { opacity: 1; } 37.5%, 100% { opacity: 0; } }
-  @keyframes k4 { 0%, 37.4% { opacity: 0; } 37.5%, 49.9% { opacity: 1; } 50%, 100% { opacity: 0; } }
-  @keyframes k5 { 0%, 49.9% { opacity: 0; } 50%, 62.4% { opacity: 1; } 62.5%, 100% { opacity: 0; } }
-  @keyframes k6 { 0%, 62.4% { opacity: 0; } 62.5%, 74.9% { opacity: 1; } 75%, 100% { opacity: 0; } }
-  @keyframes k7 { 0%, 74.9% { opacity: 0; } 75%, 87.4% { opacity: 1; } 87.5%, 100% { opacity: 0; } }
-  @keyframes k8 { 0%, 87.4% { opacity: 0; } 87.5%, 100% { opacity: 1; } }
-
-  /* —— 目标锁定框:中心微调追踪 —— */
-  .lockbox {
+  @keyframes lFlash {
+    0%, 78.5% { opacity: 0; }
+    79.5% { opacity: 0.45; }
+    81%, 100% { opacity: 0; }
+  }
+  .matched {
     position: absolute;
     left: 50%;
-    top: 47%;
-    width: 17%;
-    aspect-ratio: 4 / 3;
-    transform: translate(-50%, -50%);
-    animation: track var(--t) ease-in-out infinite;
-    z-index: 2;
-  }
-  .lk { position: absolute; width: 1.1em; height: 1.1em; border: 2px solid var(--hud); filter: drop-shadow(0 0 6px var(--hud-glow)); }
-  .lk.tl { top: 0; left: 0; border-right: none; border-bottom: none; }
-  .lk.tr { top: 0; right: 0; border-left: none; border-bottom: none; }
-  .lk.bl { bottom: 0; left: 0; border-right: none; border-top: none; }
-  .lk.br { bottom: 0; right: 0; border-left: none; border-top: none; }
-  @keyframes track {
-    0% { transform: translate(-50%, -50%); }
-    18% { transform: translate(-52.5%, -48.5%); }
-    41% { transform: translate(-48%, -51.5%); }
-    63% { transform: translate(-51%, -49%); }
-    84% { transform: translate(-49%, -50.5%); }
-    100% { transform: translate(-50%, -50%); }
-  }
-  .locktag {
-    position: absolute;
-    left: 50%;
-    top: 33.5%;
+    bottom: 0.9em;
     transform: translateX(-50%);
-    font-size: 0.72em;
-    letter-spacing: 0.2em;
-    color: var(--hud);
-    text-shadow: 0 0 8px var(--hud-glow);
-    z-index: 2;
-  }
-
-  /* —— 遥测 —— */
-  .tele {
-    left: 1.6em;
-    bottom: 1.4em;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-    font-size: 0.86em;
-    letter-spacing: 0.12em;
-  }
-  .t-row { color: rgba(255, 255, 255, 0.66); }
-  .t-row b, .tn { font-weight: 400; color: #fff; }
-  .t-row b { padding-left: 0.4em; }
-
-  /* —— 模式 chip / 完成 toast —— */
-  .mode {
-    position: absolute;
-    left: 50%;
-    bottom: 7%;
-    transform: translateX(-50%);
-    padding: 0.55em 1.3em;
-    border-radius: 999px;
-    background: rgba(8, 6, 14, 0.6);
-    border: 1px solid var(--hud);
-    color: var(--hud);
-    font-size: 0.8em;
-    letter-spacing: 0.18em;
-    backdrop-filter: blur(5px);
-    z-index: 3;
-    animation: modeSwap var(--t) ease infinite;
-  }
-  .done {
-    position: absolute;
-    left: 50%;
-    bottom: 7%;
-    transform: translateX(-50%);
-    padding: 0.55em 1.3em;
-    border-radius: 999px;
+    padding: 0.5em 1.2em;
+    border-radius: 0.5em;
     background: var(--hud);
     color: #0B1410;
     font-weight: 600;
-    font-size: 0.8em;
-    letter-spacing: 0.12em;
+    font-size: 0.78em;
+    letter-spacing: 0.14em;
     white-space: nowrap;
     box-shadow: 0 0 24px var(--hud-glow);
-    z-index: 4;
-    animation: doneIn var(--t) cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+    animation: matchedPop var(--t) cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
   }
-  @keyframes modeSwap {
-    0%, 86% { opacity: 1; }
-    89%, 100% { opacity: 0; }
-  }
-  @keyframes doneIn {
-    0%, 88% { opacity: 0; transform: translateX(-50%) scale(0.7); }
-    92% { opacity: 1; transform: translateX(-50%) scale(1.06); }
-    94%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  @keyframes matchedPop {
+    0%, 80% { opacity: 0; transform: translateX(-50%) scale(0.7); }
+    84% { opacity: 1; transform: translateX(-50%) scale(1.07); }
+    87%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
   }
 
-  /* —— 小地图:无人机连续环绕 —— */
-  .map {
-    position: absolute;
-    right: 1.6em;
-    bottom: 1.4em;
-    width: clamp(76px, 13%, 110px);
-    aspect-ratio: 1;
-    border-radius: 12px;
-    background: rgba(8, 6, 14, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    backdrop-filter: blur(5px);
-    z-index: 3;
-  }
-  .m-ring {
-    position: absolute;
-    inset: 18%;
-    border: 1.5px dashed rgba(255, 255, 255, 0.35);
-    border-radius: 50%;
-  }
-  .m-subject {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 7px;
-    height: 7px;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background: #fff;
-  }
-  .m-orbit {
-    position: absolute;
-    inset: 0;
-    animation: orbit var(--t) linear infinite;
-  }
-  @keyframes orbit {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  .m-drone {
-    position: absolute;
-    left: 50%;
-    top: 18%;
-    width: 9px;
-    height: 9px;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background: var(--hud);
-    box-shadow: 0 0 8px var(--hud-glow);
-  }
-  .m-fov {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 0;
-    height: 0;
-    transform: translateX(-50%);
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
-    border-bottom: 16px solid rgba(88, 216, 126, 0.28);
-  }
-
-  /* 减少动效:定格带 HUD 的画面 */
+  /* 减少动效:定格已对齐画面 */
   @media (prefers-reduced-motion: reduce) {
-    .fpv * { animation: none !important; }
-    .tn { opacity: 0; }
-    .t1, .a1, .h1 { opacity: 1; }
-    .done { opacity: 0; }
-    .mode { opacity: 1; }
+    .loc * { animation: none !important; }
+    .laptop { opacity: 1; transform: none; }
+    .live-img { transform: scale(1) translate(0, 0) rotate(0); }
+    .ring { stroke-dashoffset: 0; }
+    .n { opacity: 0; }
+    .n100 { opacity: 1; transform: none; }
+    .dn { opacity: 0; }
+    .d8 { opacity: 1; }
+    .st3 { color: #58D87E; }
+    .m-uav { left: 88%; top: 22%; }
+    .lflash { opacity: 0; }
+    .matched { opacity: 1; transform: translateX(-50%) scale(1); }
   }
 </style>
