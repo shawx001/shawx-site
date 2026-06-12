@@ -2,6 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import Nav from '../../../components/Nav.astro';
 import Footer from '../../../components/Footer.astro';
+import CopilotDemo from '../../../components/CopilotDemo.astro';
 
 const lang = 'zh' as const;
 ---
@@ -74,6 +75,7 @@ const lang = 'zh' as const;
           <p>站位、构图、参数 —— 在你按下快门之前全部就位。</p>
         </div>
       </div>
+      <CopilotDemo lang={lang} />
     </section>
 
     <section class="block">
