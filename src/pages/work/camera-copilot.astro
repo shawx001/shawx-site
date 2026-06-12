@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import CopilotDemo from '../../components/CopilotDemo.astro';
+import CopilotFilm from '../../components/CopilotFilm.astro';
 
 const lang = 'en' as const;
 ---
@@ -164,10 +165,7 @@ const lang = 'en' as const;
       </div>
     </section>
 
-    <figure class="band">
-      <img src="/case/camera/p-coast.jpg" alt="Hands on a drone controller above a golden coastline, the copilot tracking the shot at 91 percent while the drone holds the angle" width="1400" height="788" loading="lazy" />
-      <figcaption class="mono">the copilot scouts the angle — you fly the story</figcaption>
-    </figure>
+    <CopilotFilm lang={lang} />
 
     <section class="block">
       <p class="b-label mono">04 — What it covers</p>

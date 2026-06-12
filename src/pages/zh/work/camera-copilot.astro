@@ -3,6 +3,7 @@ import Base from '../../../layouts/Base.astro';
 import Nav from '../../../components/Nav.astro';
 import Footer from '../../../components/Footer.astro';
 import CopilotDemo from '../../../components/CopilotDemo.astro';
+import CopilotFilm from '../../../components/CopilotFilm.astro';
 
 const lang = 'zh' as const;
 ---
@@ -161,10 +162,7 @@ const lang = 'zh' as const;
       </div>
     </section>
 
-    <figure class="band">
-      <img src="/case/camera/p-coast.jpg" alt="手持无人机遥控器俯瞰金色海岸公路，副驾以 91% 匹配度锁定镜头，无人机稳住角度" width="1400" height="788" loading="lazy" />
-      <figcaption class="mono">副驾勘好角度 —— 你来飞故事</figcaption>
-    </figure>
+    <CopilotFilm lang={lang} />
 
     <section class="block">
       <p class="b-label mono">04 — 覆盖范围</p>
