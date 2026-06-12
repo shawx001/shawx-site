@@ -1,7 +1,7 @@
 ---
-// 「副驾完成一次拍摄」 10s 循环动画 · 纯 CSS
-// 视觉语言对齐产品渲染图: 深色玻璃 HUD + 科技绿 (#69E08A)
-// 节奏: Slow(取景) - Fast(指导/参数) - 悬停0.5s - Boom(快门+95) - Stop(定格)
+// 「副驾对齐一张目标构图」 10s 循环 · 纯 CSS
+// 视觉 = 产品渲染图同款 App UI(深色 + 科技绿),照片为真实摄影
+// 节奏: Slow(界面) - Fast(live view 平移对齐) - 悬停 - Boom(96%+快门) - 定格
 import type { Lang } from '../i18n/ui';
 
 interface Props {
@@ -11,118 +11,67 @@ const { lang } = Astro.props;
 
 const T = {
   en: {
-    taste: 'TASTE · CINEMATIC WARM',
-    toast: 'Move left — cleaner leading line',
+    pan: 'Move right',
+    tilt: 'Tilt up slightly',
+    zoom: 'Zoom in a bit',
     badge: '✓ Saved · in your taste',
-    cap: 'one shot with the copilot — live, in ten seconds',
-    aria: 'Animated demo: the copilot reads the dusk scene, guides the framing left, dials ISO 100 f/1.8 1/250, the score ring climbs from 72 to 95 and the shot is saved in your taste',
+    cap: 'live view, matched to your taste — in ten seconds',
+    aria: 'Animated demo: the app compares your target shot with the live view, suggests pan right, tilt up and zoom 1.2x; the live view drifts into alignment, the match ring climbs from 64 to 96 percent and the shot is saved',
   },
   zh: {
-    taste: '审美档案 · 电影感暖调',
-    toast: '向左一点 —— 引导线更干净',
+    pan: '向右移',
+    tilt: '稍微上抬',
+    zoom: '拉近一点',
     badge: '✓ 已保存 · 是你的味道',
-    cap: '副驾陪你拍一张 —— 十秒钟，实时',
-    aria: '动画演示：副驾读取黄昏场景，引导构图向左，调好 ISO 100、f/1.8、1/250，评分环从 72 爬到 95，照片按你的审美保存',
+    cap: '实时取景，对齐你的审美 —— 十秒钟',
+    aria: '动画演示：App 将目标构图与实时取景比对，建议右移、上抬、拉近 1.2 倍；取景画面缓缓对齐，匹配度从 64% 爬到 96%，照片保存',
   },
 }[lang];
 ---
 
 <div class="demo" role="img" aria-label={T.aria}>
-  <!-- 场景：黄昏 + 太阳 + 天际线 + 路灯 -->
-  <svg class="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <defs>
-      <linearGradient id="cd-sky" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#150D26"/>
-        <stop offset=".5" stop-color="#43223F"/>
-        <stop offset=".78" stop-color="#C04C2B"/>
-        <stop offset="1" stop-color="#EFB077"/>
-      </linearGradient>
-      <radialGradient id="cd-sun" cx=".5" cy=".5" r=".5">
-        <stop offset="0" stop-color="#FFE2B0" stop-opacity=".9"/>
-        <stop offset=".55" stop-color="#F0937A" stop-opacity=".3"/>
-        <stop offset="1" stop-color="#F0937A" stop-opacity="0"/>
-      </radialGradient>
-      <radialGradient id="cd-vig" cx=".5" cy=".5" r=".72">
-        <stop offset=".62" stop-color="#000" stop-opacity="0"/>
-        <stop offset="1" stop-color="#000" stop-opacity=".42"/>
-      </radialGradient>
-    </defs>
-    <rect width="1600" height="900" fill="url(#cd-sky)"/>
-    <circle cx="520" cy="680" r="200" fill="url(#cd-sun)"/>
-    <circle cx="520" cy="660" r="52" fill="#FFE0A8"/>
-    <g fill="#1A0F2B">
-      <rect x="120" y="640" width="34" height="160"/>
-      <rect x="162" y="600" width="24" height="200"/>
-      <rect x="194" y="656" width="40" height="144"/>
-      <polygon points="252,800 252,612 268,568 284,612 284,800"/>
-      <rect x="294" y="668" width="30" height="132"/>
-      <rect x="640" y="676" width="28" height="124"/>
-      <rect x="676" y="644" width="20" height="156"/>
-    </g>
-    <g fill="#0C0716">
-      <rect x="1052" y="412" width="14" height="388"/>
-      <path d="M1059 412 Q1059 360 1014 352 L1014 340 Q1059 346 1059 326 Q1059 346 1104 340 L1104 352 Q1059 360 1059 412"/>
-      <circle cx="1014" cy="364" r="18"/>
-      <circle cx="1104" cy="364" r="18"/>
-    </g>
-    <circle cx="1014" cy="364" r="11" fill="#FFE0A8"/>
-    <circle cx="1104" cy="364" r="11" fill="#FFE0A8"/>
-    <rect y="796" width="1600" height="104" fill="#120A20"/>
-    <rect width="1600" height="900" fill="url(#cd-vig)"/>
-  </svg>
+  <div class="backdrop" aria-hidden="true"></div>
 
-  <!-- 顶部状态栏 -->
-  <div class="topbar mono">
-    <span class="tb-left"><i class="rec"></i>AI CAMERA COPILOT</span>
-    <span class="tb-right">PRO</span>
+  <div class="phone">
+    <div class="screen">
+      <div class="statusbar mono"><span>7:42</span><span class="sig">●●●</span></div>
+      <div class="titlebar"><span class="tb-back">‹</span><span class="tb-title">AI Camera Copilot</span><span class="tb-gear">⚙</span></div>
+
+      <p class="panel-label mono">TARGET SHOT</p>
+      <div class="shot target">
+        <img src="/bg/dusk.jpg" alt="" loading="lazy" />
+      </div>
+
+      <p class="panel-label mono lv-label">LIVE VIEW</p>
+      <div class="shot live">
+        <img class="live-img" src="/bg/dusk.jpg" alt="" loading="lazy" />
+        <div class="lv-grid" aria-hidden="true"></div>
+        <span class="match">
+          <svg viewBox="0 0 44 44" aria-hidden="true">
+            <circle class="ring-bg" cx="22" cy="22" r="18"/>
+            <circle class="ring" cx="22" cy="22" r="18"/>
+          </svg>
+          <span class="nums mono">
+            <i class="s s64">64%</i><i class="s s78">78%</i><i class="s s91">91%</i><i class="s s96">96%</i>
+          </span>
+        </span>
+        <span class="lv-flash" aria-hidden="true"></span>
+        <span class="badge mono">{T.badge}</span>
+      </div>
+
+      <div class="rows">
+        <div class="row r1"><span class="r-k">Pan</span><span class="r-v mono">{T.pan} →</span></div>
+        <div class="row r2"><span class="r-k">Tilt</span><span class="r-v mono">{T.tilt} ↑</span></div>
+        <div class="row r3"><span class="r-k">Zoom</span><span class="r-v mono">{T.zoom} 1.2×</span></div>
+      </div>
+
+      <div class="dock">
+        <span class="d-ico" aria-hidden="true">⊕</span>
+        <span class="shutter" aria-hidden="true"></span>
+        <span class="d-ico" aria-hidden="true">≑</span>
+      </div>
+    </div>
   </div>
-
-  <!-- 三分线 -->
-  <div class="grid g-v g1" aria-hidden="true"></div>
-  <div class="grid g-v g2" aria-hidden="true"></div>
-  <div class="grid g-h g3" aria-hidden="true"></div>
-  <div class="grid g-h g4" aria-hidden="true"></div>
-
-  <!-- 取景框四角 -->
-  <span class="corner tl" aria-hidden="true"></span>
-  <span class="corner tr" aria-hidden="true"></span>
-  <span class="corner bl" aria-hidden="true"></span>
-  <span class="corner br" aria-hidden="true"></span>
-
-  <!-- 审美档案 chip -->
-  <span class="taste mono">{T.taste}</span>
-
-  <!-- 对焦标线（滑向路灯）-->
-  <span class="focus" aria-hidden="true">
-    <i class="tick t1"></i><i class="tick t2"></i><i class="tick t3"></i><i class="tick t4"></i>
-    <i class="cross"></i>
-  </span>
-
-  <!-- 指导 toast + 箭头 -->
-  <span class="arrow" aria-hidden="true">←</span>
-  <span class="toast mono"><i class="dot"></i>{T.toast}</span>
-
-  <!-- 参数 chips -->
-  <span class="chip c1 mono">ISO 100</span>
-  <span class="chip c2 mono">f/1.8</span>
-  <span class="chip c3 mono">1/250</span>
-
-  <!-- 评分仪表环 -->
-  <span class="score">
-    <svg viewBox="0 0 44 44" aria-hidden="true">
-      <circle class="ring-bg" cx="22" cy="22" r="18"/>
-      <circle class="ring" cx="22" cy="22" r="18"/>
-    </svg>
-    <span class="nums mono">
-      <i class="s s72">72</i><i class="s s84">84</i><i class="s s91">91</i><i class="s s95">95</i>
-    </span>
-  </span>
-
-  <!-- 快门闪光 -->
-  <span class="flash" aria-hidden="true"></span>
-
-  <!-- 收束徽章 -->
-  <span class="badge mono">{T.badge}</span>
 </div>
 <p class="demo-cap mono">{T.cap}</p>
 
@@ -130,10 +79,11 @@ const T = {
   /* expoOut ≈ cubic-bezier(.16,1,.3,1) · overshoot ≈ cubic-bezier(.34,1.56,.64,1) */
   .demo {
     --t: 10s;
-    --hud: #69E08A;
-    --hud-glow: rgba(105, 224, 138, 0.4);
-    --glass: rgba(10, 8, 18, 0.68);
-    --glass-line: rgba(255, 255, 255, 0.14);
+    --hud: #58D87E;
+    --hud-glow: rgba(88, 216, 126, 0.4);
+    --app: #101312;
+    --app-2: #1A1E1C;
+    --app-line: rgba(255, 255, 255, 0.09);
     position: relative;
     margin-top: 44px;
     aspect-ratio: 16 / 9;
@@ -141,9 +91,11 @@ const T = {
     overflow: hidden;
     background: #150D26;
     box-shadow: 0 36px 80px -42px rgba(44, 36, 24, 0.55);
-    font-size: clamp(9px, 1.5vw, 14px);
+    display: grid;
+    place-items: center;
+    container-type: size;
+    font-size: clamp(7px, 1.05vw, 10.5px);
   }
-  .scene { position: absolute; inset: 0; width: 100%; height: 100%; }
   .demo-cap {
     margin: 14px 0 0;
     text-align: center;
@@ -151,316 +103,261 @@ const T = {
     letter-spacing: 0.1em;
     color: var(--ink-2);
   }
-
-  /* —— 顶部状态栏:S1 —— */
-  .topbar {
+  .backdrop {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    inset: -24px;
+    background: url('/bg/dusk.jpg') center 38% / cover no-repeat;
+    filter: blur(14px) saturate(1.12) brightness(0.78);
+  }
+  .demo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(120% 100% at 50% 50%, transparent 55%, rgba(10, 6, 16, 0.55));
+    pointer-events: none;
+  }
+
+  /* —— 手机 —— */
+  .phone {
+    position: relative;
+    z-index: 2;
+    height: 94cqh;
+    aspect-ratio: 9 / 18.6;
+    border-radius: 2.6em;
+    background: #060807;
+    padding: 0.55em;
+    box-shadow: 0 30px 70px -28px rgba(0, 0, 0, 0.75), 0 0 0 1.5px rgba(255, 255, 255, 0.1);
+    animation: phoneIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+  @keyframes phoneIn {
+    0% { opacity: 0; transform: translateY(14px) scale(0.985); }
+    7%, 100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .screen {
+    height: 100%;
+    border-radius: 2.1em;
+    background: var(--app);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 0.9em 1.1em 1em;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .statusbar {
     display: flex;
     justify-content: space-between;
+    font-size: 0.78em;
+    color: rgba(255, 255, 255, 0.75);
+    letter-spacing: 0.08em;
+    padding: 0.2em 0.4em 0;
+  }
+  .sig { letter-spacing: 0.18em; font-size: 0.6em; line-height: 2; }
+  .titlebar {
+    display: flex;
     align-items: center;
-    padding: 1.1em 1.6em;
-    font-size: 0.86em;
-    letter-spacing: 0.18em;
-    color: rgba(255, 255, 255, 0.92);
-    background: linear-gradient(rgba(8, 6, 16, 0.55), transparent);
-    animation: tbIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    justify-content: space-between;
+    padding: 0.55em 0.2em 0.75em;
+    border-bottom: 1px solid var(--app-line);
   }
-  .tb-left { display: inline-flex; align-items: center; gap: 0.7em; }
-  .rec {
-    width: 0.6em;
-    height: 0.6em;
-    border-radius: 50%;
-    background: var(--hud);
-    box-shadow: 0 0 8px var(--hud-glow);
-    animation: recBlink 2s ease-in-out infinite;
-  }
-  @keyframes recBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-  .tb-right {
-    border: 1px solid var(--hud);
-    color: var(--hud);
-    border-radius: 4px;
-    padding: 0.15em 0.6em;
-    font-size: 0.9em;
-  }
-  @keyframes tbIn {
-    0% { opacity: 0; transform: translateY(-8px); }
-    6%, 100% { opacity: 1; transform: translateY(0); }
+  .tb-title { font-size: 0.95em; font-weight: 600; letter-spacing: 0.02em; }
+  .tb-back, .tb-gear { color: rgba(255, 255, 255, 0.6); font-size: 1.1em; }
+
+  .panel-label {
+    margin: 0.9em 0.2em 0.45em;
+    font-size: 0.62em;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.48);
   }
 
-  /* —— 三分线:S1 慢入 —— */
-  .grid { position: absolute; background: rgba(255, 255, 255, 0.1); }
-  .g-v { top: 0; bottom: 0; width: 1px; }
-  .g-h { left: 0; right: 0; height: 1px; }
-  .g1 { left: 33.33%; }
-  .g2 { left: 66.66%; }
-  .g3 { top: 33.33%; }
-  .g4 { top: 66.66%; }
-  .grid { animation: gridIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite; }
-  @keyframes gridIn {
-    0% { opacity: 0; }
-    5%, 100% { opacity: 1; }
+  /* —— 照片面板 —— */
+  .shot {
+    position: relative;
+    border-radius: 0.8em;
+    overflow: hidden;
+    background: var(--app-2);
+  }
+  .shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .target { aspect-ratio: 16 / 6.6; animation: targetIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+  .target img { object-position: 50% 34%; }
+  @keyframes targetIn {
+    0%, 8% { opacity: 0; transform: translateY(8px); }
+    14%, 100% { opacity: 1; transform: translateY(0); }
+  }
+  .lv-label { animation: targetIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+
+  .live { aspect-ratio: 16 / 10.2; animation: liveIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+  @keyframes liveIn {
+    0%, 14% { opacity: 0; transform: translateY(8px); }
+    20%, 100% { opacity: 1; transform: translateY(0); }
+  }
+  /* live view 画面:从"偏了"缓缓对齐 target 构图 */
+  .live-img {
+    object-position: 50% 34%;
+    transform: translate(-5.5%, 4.5%) scale(1.22);
+    animation: align var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+  @keyframes align {
+    0%, 30% { transform: translate(-5.5%, 4.5%) scale(1.22); }
+    72%, 100% { transform: translate(0, 0) scale(1.02); }
+  }
+  .lv-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.14) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+    background-size: 33.4% 33.4%;
+    background-position: -1px -1px;
   }
 
-  /* —— 四角:30ms stagger —— */
-  .corner {
+  /* —— 匹配度仪表 —— */
+  .match {
     position: absolute;
-    width: 22px;
-    height: 22px;
-    border: 2px solid rgba(255, 255, 255, 0.55);
-    animation: cornerIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
-  }
-  .tl { top: 14px; left: 14px; border-right: none; border-bottom: none; }
-  .tr { top: 14px; right: 14px; border-left: none; border-bottom: none; }
-  .bl { bottom: 14px; left: 14px; border-right: none; border-top: none; }
-  .br { bottom: 14px; right: 14px; border-left: none; border-top: none; }
-  .tr { animation-delay: 0.03s; }
-  .bl { animation-delay: 0.06s; }
-  .br { animation-delay: 0.09s; }
-  @keyframes cornerIn {
-    0%, 4% { opacity: 0; transform: scale(1.35); }
-    10%, 100% { opacity: 1; transform: scale(1); }
-  }
-
-  /* —— 审美档案 chip:S2 —— */
-  .taste {
-    position: absolute;
-    top: 13%;
-    left: 4%;
-    padding: 0.55em 1.1em;
-    border-radius: 6px;
-    background: var(--glass);
-    border: 1px solid var(--glass-line);
-    border-left: 3px solid var(--hud);
-    color: rgba(255, 255, 255, 0.92);
-    font-size: 0.86em;
-    letter-spacing: 0.12em;
-    backdrop-filter: blur(6px);
-    animation: riseIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
-  }
-  @keyframes riseIn {
-    0%, 13% { opacity: 0; transform: translateY(12px); }
-    19%, 100% { opacity: 1; transform: translateY(0); }
-  }
-
-  /* —— 对焦标线:anticipation → 滑向路灯 —— */
-  .focus {
-    position: absolute;
-    width: 13%;
-    aspect-ratio: 4 / 3;
-    border: 1.5px solid var(--hud);
-    border-radius: 4px;
-    box-shadow: 0 0 22px var(--hud-glow), inset 0 0 14px rgba(105, 224, 138, 0.12);
-    left: 40%;
-    top: 44%;
-    animation: focusMove var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
-  }
-  .tick { position: absolute; background: var(--hud); }
-  .t1 { top: -1.5px; left: 50%; width: 1.5px; height: 7px; transform: translateX(-50%); }
-  .t2 { bottom: -1.5px; left: 50%; width: 1.5px; height: 7px; transform: translateX(-50%); }
-  .t3 { left: -1.5px; top: 50%; height: 1.5px; width: 7px; transform: translateY(-50%); }
-  .t4 { right: -1.5px; top: 50%; height: 1.5px; width: 7px; transform: translateY(-50%); }
-  .cross {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 12px;
-    height: 12px;
-    transform: translate(-50%, -50%);
-    background:
-      linear-gradient(var(--hud), var(--hud)) center/1.5px 100% no-repeat,
-      linear-gradient(var(--hud), var(--hud)) center/100% 1.5px no-repeat;
-    opacity: 0.9;
-  }
-  @keyframes focusMove {
-    0%, 20% { opacity: 0; transform: scale(0.92); }
-    24% { opacity: 1; transform: scale(1.05); }
-    27% { transform: scale(1); left: 40%; top: 44%; }
-    33% { left: 47%; top: 38%; }
-    42%, 100% { opacity: 1; transform: scale(1); left: 59.5%; top: 31%; }
-  }
-
-  /* —— 指导:箭头脉冲 + toast —— */
-  .arrow {
-    position: absolute;
-    left: 30%;
-    top: 44%;
-    color: var(--hud);
-    font-size: 2.4em;
-    line-height: 1;
-    text-shadow: 0 0 14px var(--hud-glow);
-    animation: arrowNudge var(--t) ease-in-out infinite;
-  }
-  @keyframes arrowNudge {
-    0%, 30% { opacity: 0; transform: translateX(6px); }
-    34% { opacity: 1; transform: translateX(0); }
-    38% { transform: translateX(-8px); }
-    42% { transform: translateX(0); }
-    46% { transform: translateX(-8px); }
-    50% { opacity: 1; transform: translateX(0); }
-    56%, 100% { opacity: 0; transform: translateX(0); }
-  }
-  .toast {
-    position: absolute;
-    left: 50%;
-    bottom: 16%;
-    transform: translateX(-50%);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.7em;
-    white-space: nowrap;
-    padding: 0.7em 1.4em;
-    border-radius: 8px;
-    background: var(--glass);
-    border: 1px solid var(--glass-line);
-    color: rgba(255, 255, 255, 0.94);
-    font-size: 0.95em;
-    letter-spacing: 0.04em;
-    backdrop-filter: blur(6px);
-    animation: toastIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
-  }
-  .toast .dot {
-    width: 0.55em;
-    height: 0.55em;
-    border-radius: 50%;
-    background: var(--hud);
-    box-shadow: 0 0 8px var(--hud-glow);
-  }
-  @keyframes toastIn {
-    0%, 30% { opacity: 0; transform: translate(-50%, 14px); }
-    36% { opacity: 1; transform: translate(-50%, 0); }
-    70% { opacity: 1; transform: translate(-50%, 0); }
-    74%, 100% { opacity: 0; transform: translate(-50%, 0); }
-  }
-
-  /* —— 参数 chips:30ms stagger fade-up —— */
-  .chip {
-    position: absolute;
-    bottom: 6%;
-    padding: 0.5em 1em;
-    border-radius: 6px;
-    background: var(--glass);
-    border: 1px solid var(--glass-line);
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.9em;
-    letter-spacing: 0.1em;
-    backdrop-filter: blur(6px);
-    animation: chipIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
-  }
-  .c1 { left: 4%; }
-  .c2 { left: 4%; margin-left: 7.2em; animation-delay: 0.12s; border-color: var(--hud); color: var(--hud); }
-  .c3 { left: 4%; margin-left: 12.8em; animation-delay: 0.24s; }
-  @keyframes chipIn {
-    0%, 50% { opacity: 0; translate: 0 10px; }
-    56%, 100% { opacity: 1; translate: 0 0; }
-  }
-
-  /* —— 评分仪表环:72→84→91 →悬停→ 95 —— */
-  .score {
-    position: absolute;
-    top: 12%;
-    right: 4%;
-    width: 4.6em;
+    top: 0.7em;
+    right: 0.7em;
+    width: 3.6em;
     aspect-ratio: 1;
-    animation: scoreShell var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    animation: matchIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
   }
-  .score svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
-  .ring-bg { fill: var(--glass); stroke: rgba(255, 255, 255, 0.16); stroke-width: 3; }
+  @keyframes matchIn {
+    0%, 21% { opacity: 0; transform: scale(0.8); }
+    26%, 100% { opacity: 1; transform: scale(1); }
+  }
+  .match svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring-bg { fill: rgba(6, 8, 7, 0.72); stroke: rgba(255, 255, 255, 0.18); stroke-width: 3.5; }
   .ring {
     fill: none;
     stroke: var(--hud);
-    stroke-width: 3;
+    stroke-width: 3.5;
     stroke-linecap: round;
     stroke-dasharray: 113;
-    filter: drop-shadow(0 0 5px var(--hud-glow));
+    filter: drop-shadow(0 0 4px var(--hud-glow));
     animation: ringFill var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
   }
-  /* 113 = 周长; offset = 113*(1-score/100) */
+  /* offset = 113*(1-p) · 64→78→91→悬停→96 */
   @keyframes ringFill {
-    0%, 57% { stroke-dashoffset: 113; }
-    63% { stroke-dashoffset: 31.6; }   /* 72 */
-    68% { stroke-dashoffset: 18.1; }   /* 84 */
-    72% { stroke-dashoffset: 10.2; }   /* 91 */
-    77% { stroke-dashoffset: 10.2; }   /* 悬停 0.5s */
-    81%, 100% { stroke-dashoffset: 5.65; } /* 95 */
-  }
-  @keyframes scoreShell {
-    0%, 53% { opacity: 0; transform: translateY(10px); }
-    58%, 100% { opacity: 1; transform: translateY(0); }
+    0%, 26% { stroke-dashoffset: 113; }
+    32% { stroke-dashoffset: 40.7; }
+    52% { stroke-dashoffset: 24.9; }
+    70% { stroke-dashoffset: 10.2; }
+    77% { stroke-dashoffset: 10.2; }
+    81%, 100% { stroke-dashoffset: 4.5; }
   }
   .nums {
     position: absolute;
     inset: 0;
     display: grid;
     place-items: center;
-    color: rgba(255, 255, 255, 0.95);
-    font-size: 1.3em;
+    font-size: 0.82em;
+    color: #fff;
   }
   .s { font-style: normal; grid-area: 1 / 1; opacity: 0; }
-  .s72 { animation: s72 var(--t) steps(1) infinite; }
-  .s84 { animation: s84 var(--t) steps(1) infinite; }
+  .s64 { animation: s64 var(--t) steps(1) infinite; }
+  .s78 { animation: s78 var(--t) steps(1) infinite; }
   .s91 { animation: s91 var(--t) steps(1) infinite; }
-  .s95 { color: var(--hud); animation: s95 var(--t) cubic-bezier(0.34, 1.56, 0.64, 1) infinite; }
-  @keyframes s72 { 0%, 57% { opacity: 0; } 58%, 63% { opacity: 1; } 64%, 100% { opacity: 0; } }
-  @keyframes s84 { 0%, 63% { opacity: 0; } 64%, 68% { opacity: 1; } 69%, 100% { opacity: 0; } }
-  @keyframes s91 { 0%, 68% { opacity: 0; } 69%, 77% { opacity: 1; } 78%, 100% { opacity: 0; } }
-  @keyframes s95 {
-    0%, 77% { opacity: 0; transform: scale(0.6); }
-    80% { opacity: 1; transform: scale(1.18); }
-    84%, 100% { opacity: 1; transform: scale(1); }
+  .s96 { color: var(--hud); animation: s96 var(--t) cubic-bezier(0.34, 1.56, 0.64, 1) infinite; }
+  @keyframes s64 { 0%, 25% { opacity: 0; } 26%, 51% { opacity: 1; } 52%, 100% { opacity: 0; } }
+  @keyframes s78 { 0%, 51% { opacity: 0; } 52%, 69% { opacity: 1; } 70%, 100% { opacity: 0; } }
+  @keyframes s91 { 0%, 69% { opacity: 0; } 70%, 79% { opacity: 1; } 80%, 100% { opacity: 0; } }
+  @keyframes s96 {
+    0%, 79% { opacity: 0; transform: scale(0.7); }
+    82% { opacity: 1; transform: scale(1.16); }
+    85%, 100% { opacity: 1; transform: scale(1); }
   }
 
-  /* —— Boom:快门闪光 150ms —— */
-  .flash {
+  /* —— 快门闪 + 保存徽章 —— */
+  .lv-flash {
     position: absolute;
     inset: 0;
-    background: #FFF6E8;
-    pointer-events: none;
-    animation: shutter var(--t) ease-out infinite;
+    background: #fff;
+    animation: lvFlash var(--t) ease-out infinite;
   }
-  @keyframes shutter {
-    0%, 77.5% { opacity: 0; }
-    78.5% { opacity: 0.38; }
-    80%, 100% { opacity: 0; }
+  @keyframes lvFlash {
+    0%, 79.5% { opacity: 0; }
+    80.5% { opacity: 0.5; }
+    82%, 100% { opacity: 0; }
   }
-
-  /* —— 收束徽章:overshoot pop 定格 —— */
   .badge {
     position: absolute;
     left: 50%;
-    bottom: 15%;
+    bottom: 0.8em;
     transform: translateX(-50%);
-    padding: 0.65em 1.5em;
-    border-radius: 8px;
-    background: var(--hud);
-    color: #0B1410;
-    font-weight: 600;
-    font-size: 1em;
-    letter-spacing: 0.06em;
     white-space: nowrap;
-    box-shadow: 0 0 28px var(--hud-glow);
+    padding: 0.5em 1.1em;
+    border-radius: 0.6em;
+    background: rgba(6, 8, 7, 0.78);
+    border: 1px solid var(--hud);
+    color: var(--hud);
+    font-size: 0.74em;
+    letter-spacing: 0.08em;
+    backdrop-filter: blur(4px);
     animation: badgePop var(--t) cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
   }
   @keyframes badgePop {
-    0%, 79% { opacity: 0; transform: translateX(-50%) scale(0.6); }
-    83% { opacity: 1; transform: translateX(-50%) scale(1.08); }
-    86%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+    0%, 81% { opacity: 0; transform: translateX(-50%) scale(0.7); }
+    85% { opacity: 1; transform: translateX(-50%) scale(1.06); }
+    88%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  }
+
+  /* —— 建议行:stagger 入场 —— */
+  .rows { margin-top: 0.9em; border-top: 1px solid var(--app-line); }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6em 0.3em;
+    border-bottom: 1px solid var(--app-line);
+    font-size: 0.82em;
+    animation: rowIn var(--t) cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+  .r2 { animation-delay: 0.14s; }
+  .r3 { animation-delay: 0.28s; }
+  .r-k { color: rgba(255, 255, 255, 0.78); }
+  .r-v { color: var(--hud); letter-spacing: 0.04em; }
+  @keyframes rowIn {
+    0%, 26% { opacity: 0; transform: translateY(8px); }
+    33%, 100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* —— 底部 dock —— */
+  .dock {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-top: 0.7em;
+  }
+  .d-ico { color: rgba(255, 255, 255, 0.55); font-size: 1.15em; }
+  .shutter {
+    width: 3.2em;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #F2F0EA;
+    box-shadow: 0 0 0 0.28em rgba(255, 255, 255, 0.25);
+    animation: shutterPress var(--t) ease-in-out infinite;
+  }
+  @keyframes shutterPress {
+    0%, 78% { transform: scale(1); }
+    80% { transform: scale(0.88); }
+    82%, 100% { transform: scale(1); }
   }
 
   /* 减少动效:定格最终画面 */
   @media (prefers-reduced-motion: reduce) {
     .demo *, .demo { animation: none !important; }
-    .grid, .corner, .topbar { opacity: 1; }
-    .taste { opacity: 1; transform: none; }
-    .focus { opacity: 1; left: 59.5%; top: 31%; }
-    .arrow, .toast, .flash { opacity: 0; }
-    .chip { opacity: 1; translate: 0 0; }
-    .score { opacity: 1; transform: none; }
-    .ring { stroke-dashoffset: 5.65; }
-    .s72, .s84, .s91 { opacity: 0; }
-    .s95 { opacity: 1; transform: none; }
+    .phone { opacity: 1; transform: none; }
+    .target, .lv-label, .live, .row, .match { opacity: 1; transform: none; }
+    .live-img { transform: translate(0, 0) scale(1.02); }
+    .ring { stroke-dashoffset: 4.5; }
+    .s64, .s78, .s91 { opacity: 0; }
+    .s96 { opacity: 1; transform: none; }
+    .lv-flash { opacity: 0; }
     .badge { opacity: 1; transform: translateX(-50%) scale(1); }
   }
 </style>
