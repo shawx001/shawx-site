@@ -1,0 +1,615 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+
+const lang = 'en' as const;
+---
+
+<Base
+  lang={lang}
+  title="对话哲学家 — Shaw X"
+  description="Pull 26 distilled thinkers into one group chat — the mic goes to whoever wants it most."
+>
+  <Nav lang={lang} />
+  <main class="container case">
+    <a class="back mono" href="/#work">← Selected work</a>
+
+    <header class="head">
+      <h1>对话哲学家</h1>
+      <p class="lede">
+        Pull 26 distilled thinkers into one group chat: drop a question, they debate
+        and rebut each other, you interject anytime — and the mic always goes to
+        whoever wants it most.
+      </p>
+    </header>
+
+    <div class="meta">
+      <div class="meta-item">
+        <span class="meta-label mono">Context</span>
+        <span class="meta-value">Independent product<br />2026 · v1 shipped</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label mono">My role</span>
+        <span class="meta-value">Founder — product,<br />design, engineering</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label mono">Status</span>
+        <span class="meta-value">Web version playable<br />WeChat adapter = v2</span>
+      </div>
+    </div>
+
+    <!-- the salon -->
+    <div class="salon" role="img" aria-label="Group chat Twilight of the Gods: the user asks whether effort matters if everything is fated; all members bid, Nietzsche wins at 87 and replies; Zhuangzi is raising his hand">
+      <div class="s-bar">
+        <span class="s-title">Twilight of the Gods</span>
+        <span class="s-count mono">4 thinkers · deep mode</span>
+      </div>
+      <div class="s-body">
+        <div class="msg user">
+          <p>If everything is fated, does effort still mean anything?</p>
+        </div>
+        <div class="bidrow mono" aria-hidden="true">
+          <span class="b-label">bidding</span>
+          <span class="bid win">Nietzsche 87</span>
+          <span class="bid">Camus 78</span>
+          <span class="bid">Kant 71</span>
+          <span class="bid">Zhuangzi 62</span>
+        </div>
+        <div class="msg bot">
+          <span class="avatar a-n" aria-hidden="true">N</span>
+          <div class="m-block">
+            <span class="m-name">Nietzsche</span>
+            <p>
+              You're asking it backwards. Meaning was never something to "have" —
+              it's something you dare to forge. Eternal recurrence isn't a chain,
+              it's a test: if this life repeated forever, would the way you're
+              living it deserve that?
+            </p>
+          </div>
+        </div>
+        <div class="typing mono"><i class="t-dot"></i>Zhuangzi is raising his hand…</div>
+      </div>
+    </div>
+    <p class="shot-cap mono">the salon — concept interface</p>
+
+    <section class="block">
+      <p class="b-label mono">01 — Overview</p>
+      <h2>Reading a thinker is a monologue. This is a seminar.</h2>
+      <p>
+        The Nietzsche on your shelf will never rebut the Zhuangzi in your hand.
+        Distill 26 thinkers into personas, drop them in one room, and the
+        interesting thing finally happens: Marx debates a market economist,
+        the Daoists share a table, a stand-up comedian crashes Kant —
+        <strong>the lineup itself is the gameplay</strong>. Throw a question,
+        watch them argue; speak whenever you like.
+      </p>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">02 — How it runs</p>
+      <h2>No moderator. The mic finds its own speaker.</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="s-num">1</span>
+          <h3>Build the room</h3>
+          <p>Pick 2–8 of the 26 thinkers; choose fast talk or deep mode.</p>
+        </div>
+        <div class="step">
+          <span class="s-num">2</span>
+          <h3>Everyone bids</h3>
+          <p>After each message, all members score how much they want to speak.</p>
+        </div>
+        <div class="step">
+          <span class="s-num">3</span>
+          <h3>Winner speaks</h3>
+          <p>Highest bid takes the mic, streaming. Nobody bids — the room waits for you.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">03 — Features</p>
+      <h2>Four mechanics that make it alive.</h2>
+
+      <div class="feature">
+        <div class="f-text">
+          <h3>Bid-auction orchestration</h3>
+          <p>
+            One cheap parallel call and every member returns a score plus intent.
+            Deterministic de-weighting stops flame wars: just spoke ×0.5, dominating
+            ×0.3, name-called +30. Everyone under 35 — the room goes naturally
+            quiet and waits for you.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="auction">
+            <p class="fc-head mono">Round 7 · bidding</p>
+            <div class="a-row win"><span class="a-name">Nietzsche</span><span class="a-bar"><i style="width:87%"></i></span><span class="a-val mono">87</span></div>
+            <div class="a-row"><span class="a-name">Camus</span><span class="a-bar"><i style="width:78%"></i></span><span class="a-val mono">78</span></div>
+            <div class="a-row"><span class="a-name">Kant</span><span class="a-bar"><i style="width:71%"></i></span><span class="a-val mono">71<em class="a-tag">named +30</em></span></div>
+            <div class="a-row dim"><span class="a-name">Wang Xiaobo</span><span class="a-bar"><i style="width:28%"></i></span><span class="a-val mono">28<em class="a-tag">just spoke ×0.5</em></span></div>
+            <p class="r-cap mono">highest bid speaks · all &lt;35 = the room cools down</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div class="f-text">
+          <h3>Six-layer persona distillation</h3>
+          <p>
+            Each thinker is a pure data file: expression DNA, mental models,
+            decision heuristics, anti-patterns and values, honesty boundaries —
+            plus a library of their own works. A speaker owns their books
+            instead of retrieving quotes.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="distill">
+            <p class="fc-head mono">nietzsche.md</p>
+            <span class="d-layer">Expression DNA</span>
+            <span class="d-layer">Mental models</span>
+            <span class="d-layer">Decision heuristics</span>
+            <span class="d-layer">Anti-patterns & values</span>
+            <span class="d-layer">Honesty boundaries</span>
+            <span class="d-layer accent">Works library · Zarathustra, Genealogy of Morals…</span>
+            <p class="r-cap mono">adding a thinker = dropping one markdown file</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="f-text">
+          <h3>Fast talk & deep mode</h3>
+          <p>
+            Fast talk replies in seconds — a hidden reasoning call before each
+            message, compressed into chat. Deep mode runs a reasoning model that
+            must answer the previous speaker's strongest argument head-on:
+            half a minute per message, a different depth entirely.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="modes">
+            <div class="mode-card">
+              <span class="mc-name">Fast talk</span>
+              <span class="mc-sub mono">deepseek-chat</span>
+              <p>instant · hidden reasoning · built for banter</p>
+            </div>
+            <div class="mode-card on">
+              <span class="mc-name">Deep mode</span>
+              <span class="mc-sub mono">deepseek-reasoner</span>
+              <p>30–90s per message · meets the strongest argument</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div class="f-text">
+          <h3>Interject anytime</h3>
+          <p>
+            The discussion pivots to your input instantly; one tap stops it cold;
+            twelve consecutive messages force a pause — guardrails that keep a
+            20-message debate at pennies.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="interject">
+            <div class="msg user small"><p>Wait — none of you answered what *I* should do</p></div>
+            <p class="pivot mono">↓ the room pivots to your question</p>
+            <div class="msg bot small">
+              <span class="avatar a-z" aria-hidden="true">Z</span>
+              <div class="m-block">
+                <span class="m-name">Zhuangzi</span>
+                <p>See — even "what should I do" is a cage…</p>
+              </div>
+            </div>
+            <p class="r-cap mono">20-message debate ≈ pennies · 12-message hard pause</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">04 — The lineup is the gameplay</p>
+      <h2>Who you invite is your curation.</h2>
+      <div class="goals three">
+        <div class="goal">
+          <span class="g-num mono">The ring</span>
+          <h3>Marx × Xue Zhaofeng</h3>
+          <p>Political economy settles its century-old bill.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">Doubles</span>
+          <h3>Laozi × Zhuangzi</h3>
+          <p>Two Daoists, one table — who out-wu-weis whom.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">Crasher</span>
+          <h3>Li Dan × Kant</h3>
+          <p>Stand-up comedy walks into the three Critiques.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">The abyss</span>
+          <h3>Nietzsche × Dostoevsky</h3>
+          <p>Whoever blinks first, believes first.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">Presence</span>
+          <h3>Xiang Biao × Bourdieu</h3>
+          <p>"The nearby" meets the field.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">Labyrinth</span>
+          <h3>Borges × Márquez</h3>
+          <p>Latin America's twin stars, fiction against fiction.</p>
+        </div>
+      </div>
+      <div class="roster">
+        <span class="r-chip mono">26 on the roster</span>
+        <span class="r-names">Nietzsche · Jung · Camus · Hegel · Schopenhauer · Foucault · McLuhan · Wang Xiaobo · Yu Hua · Kundera · Lacan · Goethe · Liu Qing · Dai Jinhua …</span>
+      </div>
+    </section>
+
+    <p class="tbc"><span class="tbc-dots">…</span>To be continued</p>
+  </main>
+  <Footer lang={lang} />
+</Base>
+
+<style>
+  .case { padding: 130px 24px 90px; max-width: 880px; }
+  .back {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    transition: color 0.25s;
+  }
+  .back:hover { color: var(--accent); }
+  .head { margin-top: 34px; }
+  .head h1 { font-size: clamp(44px, 7vw, 76px); }
+  .lede {
+    margin: 18px 0 0;
+    font-size: clamp(16px, 2vw, 19px);
+    line-height: 1.65;
+    color: var(--ink-2);
+    max-width: 640px;
+  }
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 52px;
+    padding: 28px 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 8px; }
+  .meta-label {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .meta-value { font-size: 14px; line-height: 1.6; color: var(--ink); }
+
+  /* —— salon mockup —— */
+  .salon {
+    margin-top: 56px;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #1A112E;
+    box-shadow: 0 36px 80px -42px rgba(44, 36, 24, 0.55);
+  }
+  .s-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 20px 28px;
+    border-bottom: 1px solid rgba(245, 239, 228, 0.12);
+  }
+  .s-title {
+    font-family: var(--serif);
+    font-size: clamp(17px, 2.2vw, 21px);
+    color: #F5EFE4;
+  }
+  .s-count { font-size: 11px; letter-spacing: 0.14em; color: rgba(240, 234, 248, 0.55); }
+  .s-body {
+    padding: 26px 28px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .msg { display: flex; gap: 12px; }
+  .msg p { margin: 0; font-size: 14.5px; line-height: 1.7; }
+  .msg.user { justify-content: flex-end; }
+  .msg.user p {
+    background: #F0937A;
+    color: #1A112E;
+    border-radius: 16px 16px 4px 16px;
+    padding: 12px 18px;
+    max-width: 75%;
+  }
+  .msg.bot .m-block {
+    background: rgba(245, 239, 228, 0.07);
+    border: 1px solid rgba(245, 239, 228, 0.14);
+    border-radius: 4px 16px 16px 16px;
+    padding: 12px 18px;
+    color: rgba(245, 239, 228, 0.92);
+    max-width: 82%;
+  }
+  .m-name {
+    display: block;
+    font-family: var(--serif);
+    font-size: 13px;
+    color: #F0937A;
+    margin-bottom: 5px;
+  }
+  .avatar {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--serif);
+    font-size: 15px;
+    color: #1A112E;
+  }
+  .a-n { background: linear-gradient(150deg, #F0937A, #C8502F); }
+  .a-z { background: linear-gradient(150deg, #8EC9A8, #4B8E6F); }
+  .bidrow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+  .b-label { color: rgba(240, 234, 248, 0.45); margin-right: 4px; }
+  .bid {
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(245, 239, 228, 0.22);
+    color: rgba(245, 239, 228, 0.75);
+  }
+  .bid.win {
+    border-color: #F0937A;
+    color: #F0937A;
+    box-shadow: 0 0 14px rgba(240, 147, 122, 0.25);
+  }
+  .typing {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    color: rgba(240, 234, 248, 0.5);
+  }
+  .t-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #F0937A;
+    animation: tblink 1.4s ease-in-out infinite;
+  }
+  @keyframes tblink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+  .shot-cap {
+    margin: 14px 0 0;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink-2);
+  }
+
+  .block { margin-top: 88px; }
+  .b-label {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .block h2 { margin-top: 12px; font-size: clamp(26px, 3.6vw, 38px); }
+  .block > p {
+    margin: 18px 0 0;
+    font-size: 15.5px;
+    line-height: 1.8;
+    color: var(--ink);
+    max-width: 660px;
+  }
+  .block > p strong { color: var(--accent); font-weight: 600; }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(20px, 4vw, 44px);
+    margin-top: 36px;
+    border-top: 1px solid var(--hairline);
+    padding-top: 32px;
+  }
+  .s-num {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(38px, 5vw, 56px);
+    line-height: 1;
+    color: var(--accent);
+  }
+  .step h3 { font-size: 18px; margin-top: 14px; }
+  .step p { margin: 8px 0 0; font-size: 13.5px; line-height: 1.7; color: var(--ink-2); }
+
+  .feature {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: center;
+    margin-top: 64px;
+  }
+  .feature.flip .f-text { order: 2; }
+  .feature.flip .f-visual { order: 1; }
+  .f-text h3 { font-size: clamp(20px, 2.6vw, 26px); }
+  .f-text p { margin: 10px 0 0; font-size: 14.5px; line-height: 1.75; color: var(--ink-2); }
+  .f-visual { min-width: 0; }
+  .fc-head {
+    margin: 0 0 14px;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .r-cap { margin: 14px 0 0; font-size: 10.5px; letter-spacing: 0.1em; color: var(--ink-2); }
+
+  .auction {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 24px 26px;
+    box-shadow: 0 28px 60px -36px rgba(44, 36, 24, 0.5);
+  }
+  .a-row {
+    display: grid;
+    grid-template-columns: 6.4em 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+  }
+  .a-name { font-family: var(--serif); font-size: 14.5px; color: var(--ink); }
+  .a-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(44, 36, 24, 0.08);
+    overflow: hidden;
+  }
+  .a-bar i { display: block; height: 100%; border-radius: 4px; background: var(--ink-2); opacity: 0.45; }
+  .a-row.win .a-bar i { background: var(--accent); opacity: 1; }
+  .a-row.win .a-name { color: var(--accent); }
+  .a-val { font-size: 12.5px; color: var(--ink); display: inline-flex; align-items: center; gap: 8px; }
+  .a-tag {
+    font-style: normal;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 1px 8px;
+  }
+  .a-row.dim { opacity: 0.55; }
+
+  .distill {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 24px 26px;
+    box-shadow: 0 28px 60px -36px rgba(44, 36, 24, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .d-layer {
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .d-layer.accent {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(216, 90, 48, 0.05);
+  }
+
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .mode-card {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 28px 60px -36px rgba(44, 36, 24, 0.5);
+  }
+  .mode-card.on { border-color: var(--accent); }
+  .mc-name { font-family: var(--serif); font-size: 20px; color: var(--ink); display: block; }
+  .mode-card.on .mc-name { color: var(--accent); }
+  .mc-sub { display: block; font-size: 10.5px; letter-spacing: 0.1em; color: var(--ink-2); margin-top: 4px; }
+  .mode-card p { margin: 12px 0 0; font-size: 12.5px; line-height: 1.65; color: var(--ink-2); }
+
+  .interject {
+    background: #1A112E;
+    border-radius: 14px;
+    padding: 22px 24px;
+    box-shadow: 0 28px 60px -36px rgba(44, 36, 24, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .msg.small p { font-size: 13px; }
+  .msg.small .m-block { padding: 10px 14px; }
+  .msg.small .avatar { width: 30px; height: 30px; font-size: 13px; }
+  .pivot {
+    text-align: center;
+    margin: 0;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    color: #F0937A;
+  }
+  .interject .r-cap { color: rgba(240, 234, 248, 0.5); text-align: center; }
+
+  .goals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 28px;
+  }
+  .goals.three { grid-template-columns: repeat(3, 1fr); }
+  .goal { border: 1px solid var(--hairline); border-radius: 14px; padding: 22px 22px 20px; }
+  .g-num {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .goal h3 { font-size: 17px; margin-top: 10px; }
+  .goal p { margin: 8px 0 0; font-size: 13px; line-height: 1.65; color: var(--ink-2); }
+  .roster {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 26px;
+  }
+  .r-chip {
+    flex-shrink: 0;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 4px 12px;
+  }
+  .r-names { font-size: 13px; line-height: 1.8; color: var(--ink-2); }
+
+  .tbc {
+    margin: 130px 0 30px;
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(30px, 4.5vw, 48px);
+    letter-spacing: 0.01em;
+    color: var(--ink);
+  }
+  .tbc-dots { color: var(--accent); margin-right: 0.18em; }
+
+  @media (max-width: 720px) {
+    .meta { grid-template-columns: 1fr; gap: 20px; }
+    .goals, .goals.three { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; gap: 28px; }
+    .block { margin-top: 64px; }
+    .feature { grid-template-columns: 1fr; gap: 18px; margin-top: 48px; }
+    .feature.flip .f-text { order: 1; }
+    .feature.flip .f-visual { order: 2; }
+    .modes { grid-template-columns: 1fr; }
+    .s-body { padding: 22px 18px 26px; }
+  }
+</style>

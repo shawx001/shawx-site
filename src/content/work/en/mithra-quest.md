@@ -5,7 +5,7 @@ role: Solo builder
 stack: [LLM orchestration, Incremental cache, Validators]
 year: 2026
 cover: /covers/mithra.svg
-order: 3
+order: 4
 ---
 
 ## Problem
