@@ -1,10 +1,11 @@
 ---
-title: 对话哲学家
+title: Talk to Philosophers
 summary: Pull 26 distilled thinkers into one group chat — the mic goes to whoever wants it most.
 role: Founder — product, design, engineering
 stack: [DeepSeek, FastAPI, WebSocket, Persona distillation]
 year: 2026
 casePath: /work/philosophers
+link: https://philosophers.tail0820a5.ts.net/
 order: 3
 ---
 

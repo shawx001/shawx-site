@@ -16,12 +16,16 @@ const lang = 'en' as const;
     <a class="back mono" href="/#work">← Selected work</a>
 
     <header class="head">
-      <h1>对话哲学家</h1>
+      <h1>Talk to Philosophers</h1>
+      <p class="zh-name mono">对话哲学家</p>
       <p class="lede">
         Pull 26 distilled thinkers into one group chat: drop a question, they debate
         and rebut each other, you interject anytime — and the mic always goes to
         whoever wants it most.
       </p>
+      <a class="try-live" href="https://philosophers.tail0820a5.ts.net/" target="_blank" rel="noopener">
+        Try it live <span class="tl-arrow">↗</span>
+      </a>
     </header>
 
     <div class="meta">
@@ -268,6 +272,12 @@ const lang = 'en' as const;
   .back:hover { color: var(--accent); }
   .head { margin-top: 34px; }
   .head h1 { font-size: clamp(44px, 7vw, 76px); }
+  .zh-name {
+    margin: 8px 0 0;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+  }
   .lede {
     margin: 18px 0 0;
     font-size: clamp(16px, 2vw, 19px);
@@ -275,6 +285,23 @@ const lang = 'en' as const;
     color: var(--ink-2);
     max-width: 640px;
   }
+  .try-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: 28px;
+    padding: 12px 26px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #FFFDF8;
+    font-size: 14.5px;
+    font-weight: 500;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s;
+    box-shadow: 0 14px 30px -14px rgba(216, 90, 48, 0.6);
+  }
+  .try-live:hover { transform: translateY(-2px); box-shadow: 0 20px 38px -16px rgba(216, 90, 48, 0.7); }
+  .tl-arrow { transition: transform 0.25s; }
+  .try-live:hover .tl-arrow { transform: translate(2px, -2px); }
   .meta {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

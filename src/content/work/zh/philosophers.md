@@ -1,10 +1,11 @@
 ---
-title: 对话哲学家
+title: Talk to Philosophers
 summary: 把 26 位蒸馏好的思想家拉进一个群聊 —— 话筒永远给最想说话的那个人。
 role: 创始人 —— 产品、设计、工程
 stack: [DeepSeek, FastAPI, WebSocket, 人格蒸馏]
 year: 2026
 casePath: /zh/work/philosophers
+link: https://philosophers.tail0820a5.ts.net/
 order: 3
 ---
 
