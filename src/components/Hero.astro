@@ -5,6 +5,18 @@ interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
+
+// 大字拆成单字母 + 逐字掉落延迟
+const lines = ['An Idea', 'And', 'A Call'];
+let n = 0;
+const rendered = lines.map((line) =>
+  [...line].map((ch) => {
+    if (ch === ' ') return { ch: ' ', space: true, d: 0 };
+    const d = 0.55 + n * 0.05;
+    n++;
+    return { ch, space: false, d };
+  })
+);
 ---
 
 <section id="hero" class="hero">
@@ -32,9 +44,19 @@ const { lang } = Astro.props;
       AI Native Coder And Designer<br />Across Brands And Creative Products
     </p>
     <h1 class="display" data-hero-name>
-      <span>An Idea</span>
-      <span>And</span>
-      <span>A Call</span>
+      {
+        rendered.map((line) => (
+          <span class="line">
+            {line.map((c) =>
+              c.space ? (
+                <span class="sp"> </span>
+              ) : (
+                <span class="ch" style={`--d:${c.d}s`}>{c.ch}</span>
+              )
+            )}
+          </span>
+        ))
+      }
       <i class="drop d1" aria-hidden="true"></i>
       <i class="drop d2" aria-hidden="true"></i>
       <i class="drop d3" aria-hidden="true"></i>
@@ -85,6 +107,11 @@ const { lang } = Astro.props;
     letter-spacing: -0.01em;
     color: #F8F3E8;
     filter: url(#inkbleed-sm) drop-shadow(0 2px 18px rgba(10, 4, 2, 0.45));
+    animation: brandDrop 0.7s cubic-bezier(0.3, 1.4, 0.5, 1) 0.1s both;
+  }
+  @keyframes brandDrop {
+    0% { opacity: 0; transform: translateY(-18px) rotate(-4deg); }
+    100% { opacity: 1; transform: translateY(0) rotate(0); }
   }
   .x-wrap {
     position: relative;
@@ -126,7 +153,20 @@ const { lang } = Astro.props;
     color: #F4F2ED;
     filter: url(#inkbleed) drop-shadow(0 4px 30px rgba(10, 4, 2, 0.4));
   }
-  .display span { display: block; }
+  .display .line { display: block; }
+  .display .ch {
+    display: inline-block;
+    will-change: transform, opacity;
+    opacity: 0;
+    transform: translateY(-0.85em) rotate(-7deg);
+    animation: chDrop 0.6s cubic-bezier(0.3, 1.5, 0.5, 1) var(--d) forwards;
+  }
+  .display .sp { display: inline-block; width: 0.26em; }
+  @keyframes chDrop {
+    0% { opacity: 0; transform: translateY(-0.85em) rotate(-7deg); }
+    55% { opacity: 1; }
+    100% { opacity: 1; transform: translateY(0) rotate(0); }
+  }
   /* 墨点飞溅 */
   .drop {
     position: absolute;
@@ -140,6 +180,13 @@ const { lang } = Astro.props;
   .d3 { width: 16px; height: 13px; bottom: 2%; left: 6%; opacity: 0.7; }
   .d4 { width: 7px; height: 9px; bottom: 16%; right: 20%; opacity: 0.55; }
   @media (max-width: 600px) { .drop { display: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .brand-shaw, .display .ch {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
   .scroll-hint {
     position: absolute;
     bottom: 26px;
