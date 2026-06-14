@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base lang="en" title="Shaw X — ink type" description="Ink-bleed serif type study for Shaw X.">
+  <main class="ink-lab">
+    <svg class="ink-defs" width="0" height="0" aria-hidden="true">
+      <filter id="lab-ink" x="-15%" y="-15%" width="130%" height="130%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="6" result="n" />
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+      <filter id="lab-ink-sm" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.026 0.032" numOctaves="2" seed="3" result="n" />
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="5.5" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
+
+    <p class="kicker mono">Ink type · study</p>
+
+    <div class="wordmark">Shaw<span class="wx">✕</span></div>
+
+    <h1 class="poster">
+      <span>An Idea</span>
+      <span>And</span>
+      <span>A Call</span>
+      <i class="drop a"></i><i class="drop b"></i><i class="drop c"></i>
+    </h1>
+
+    <p class="note">
+      High-contrast serif with a fractal-noise ink bleed — every edge dissolves a little,
+      like type printed and left to soak. Pure code, infinitely crisp at any size.
+    </p>
+
+    <a class="back mono" href="/">← back home</a>
+  </main>
+</Base>
+
+<style>
+  .ink-lab {
+    min-height: 100vh;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 120px 24px 90px;
+    text-align: center;
+    background: #FBF7EF;
+  }
+  .ink-defs { position: absolute; }
+  .kicker {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .wordmark {
+    margin-top: 44px;
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: clamp(44px, 8vw, 96px);
+    letter-spacing: -0.01em;
+    color: #16100B;
+    filter: url(#lab-ink-sm);
+  }
+  .wx { color: var(--accent); margin-left: 0.08em; }
+  .poster {
+    position: relative;
+    margin: clamp(36px, 7vh, 80px) 0 0;
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: clamp(64px, 16vw, 200px);
+    line-height: 0.88;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    color: #16100B;
+    filter: url(#lab-ink);
+  }
+  .poster span { display: block; }
+  .drop {
+    position: absolute;
+    border-radius: 50%;
+    background: #16100B;
+    filter: url(#lab-ink-sm);
+  }
+  .a { width: 18px; height: 15px; top: -3%; left: 22%; }
+  .b { width: 11px; height: 11px; top: 30%; right: 16%; opacity: 0.7; }
+  .c { width: 22px; height: 17px; bottom: 0; left: 12%; opacity: 0.8; }
+  .note {
+    max-width: 520px;
+    margin: 64px auto 0;
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--ink-2);
+  }
+  .back {
+    display: inline-block;
+    margin-top: 44px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    transition: color 0.25s;
+  }
+  .back:hover { color: var(--accent); }
+</style>
