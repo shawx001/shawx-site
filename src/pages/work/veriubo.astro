@@ -1,0 +1,803 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import VeriuboBenchCharts from '../../components/VeriuboBenchCharts.astro';
+
+const lang = 'en' as const;
+---
+
+<Base
+  lang={lang}
+  title="VeriUBO — Shaw X"
+  description="An AI corporate due-diligence workbench — nine FATF gates, cyclic ownership math, OFAC 50% Rule, and a zero-leak client portal."
+>
+  <Nav lang={lang} />
+  <main class="container case">
+    <a class="back mono" href="/#work">← Selected work</a>
+
+    <header class="head">
+      <h1>VeriUBO</h1>
+      <p class="lede">
+        An AI corporate due-diligence workbench for bank onboarding — nine FATF gates,
+        cyclic ownership math, OFAC 50% Rule, and a zero-leak client portal.
+      </p>
+      <a class="try-live" href="https://github.com/shawx001/VeriUBO" target="_blank" rel="noopener">
+        View on GitHub <span class="tl-arrow">↗</span>
+      </a>
+    </header>
+
+    <div class="meta">
+      <div class="meta-item">
+        <span class="meta-label mono">Context</span>
+        <span class="meta-value">Independent product<br />2026 · v2.1 shipped</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label mono">My role</span>
+        <span class="meta-value">Creator — product,<br />design, architecture</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label mono">Status</span>
+        <span class="meta-value">Open-source prototype<br />local LLM + live data</span>
+      </div>
+    </div>
+
+    <div class="shot dark">
+      <figure class="screen-frame">
+        <img
+          src="/case/veriubo/dossier.png"
+          alt="VeriUBO Executive Legal Binder workspace showing the nine FATF due-diligence gates on the left, live OFAC sanctions review in the center, and rationale contradiction guardrails"
+          width="1440"
+          height="900"
+        />
+      </figure>
+      <p class="shot-cap mono">executive legal binder — nine FATF gates, calm triage, live sanctions review</p>
+    </div>
+
+    <section class="block">
+      <p class="b-label mono">01 — Overview</p>
+      <h2>The AI investigates. The rules engine decides.</h2>
+      <p>
+        Corporate bank onboarding (KYB) has zero room for hand-waving: who actually owns
+        the company through layered or circular holdings, whether a sanctions alias is a
+        real hit or a namesake, and what happens if registry details shift after sign-off.
+        VeriUBO puts a local agent on intake triage and follow-up while keeping every
+        ownership solver, expiry rule, and approval gate deterministic on the server.
+      </p>
+      <p>
+        In the flagship case, merging <strong>James Chen</strong> (12.5%) and
+        <strong>J. Chen</strong> (14%) crosses the 25% beneficial-owner threshold at
+        <strong>26.5%</strong> and automatically inserts him into the required identity
+        roster. Clearing his simulated sanctions alias does not satisfy personal identity
+        verification — senior sign-off still returns <strong>HTTP 409</strong> until an
+        independent ID record is filed.
+      </p>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">02 — How it works</p>
+      <h2>Three personas. One deterministic spine.</h2>
+      <div
+        class="pipeline"
+        role="img"
+        aria-label="Workflow: Client Portal submits sanitized documents, Deterministic Engine and Background Agent solve ownership and screen sanctions, Analyst and Independent Senior Approver verify and sign off"
+      >
+        <div class="p-flow">
+          <div class="p-step">
+            <span class="p-name mono">Client Portal</span>
+            <span class="p-desc">sanitized self-service intake for business profile, filings and IDs</span>
+          </div>
+          <span class="p-arrow" aria-hidden="true">→</span>
+          <div class="p-step p-core">
+            <span class="p-name mono">Engine + Agent</span>
+            <span class="p-desc">Leontief UBO solver, OFAC 50% Rule, GLEIF LEI &amp; proactive triage</span>
+          </div>
+          <span class="p-arrow" aria-hidden="true">→</span>
+          <div class="p-step">
+            <span class="p-name mono">Analyst &amp; Approver</span>
+            <span class="p-desc">legal-binder dossier, four-eyes sign-off &amp; versioned audit export</span>
+          </div>
+        </div>
+        <p class="p-gate mono">when registry records change after approval — the case automatically reopens</p>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">03 — Three roles, three views</p>
+      <h2>Same case. Each role sees only its part.</h2>
+      <div class="roles">
+        <figure class="role">
+          <a class="role-shot" href="/case/veriubo/role-analyst.png" target="_blank" rel="noopener">
+            <img src="/case/veriubo/role-analyst.png" alt="Case analyst view: prioritised due-diligence queue with blockers and the suggested next step for each case" width="1024" height="728" loading="lazy" />
+          </a>
+          <figcaption>
+            <span class="role-tag mono">Case analyst</span>
+            <h3>Works the queue</h3>
+            <p>Prioritised cases, open blockers, and the next step the agent suggests. Investigates, resolves name matches, and submits for approval.</p>
+          </figcaption>
+        </figure>
+        <figure class="role">
+          <a class="role-shot" href="/case/veriubo/role-approver.png" target="_blank" rel="noopener">
+            <img src="/case/veriubo/role-approver.png" alt="Independent senior approver view: sign-off dialog with the nine-check snapshot, approve, escalate and reject decisions, and the server-side block notice" width="1024" height="640" loading="lazy" />
+          </a>
+          <figcaption>
+            <span class="role-tag mono">Senior approver</span>
+            <h3>Signs off, independently</h3>
+            <p>Decides against a frozen snapshot of one case version. The server rejects sign-off by the same person who worked the case.</p>
+          </figcaption>
+        </figure>
+        <figure class="role">
+          <a class="role-shot" href="/case/veriubo/role-client.png" target="_blank" rel="noopener">
+            <img src="/case/veriubo/role-client.png" alt="Client portal view: list of missing documents with automatic pre-checks and submission receipts, no internal risk data shown" width="1024" height="728" loading="lazy" />
+          </a>
+          <figcaption>
+            <span class="role-tag mono">Client</span>
+            <h3>Fixes their own gaps</h3>
+            <p>Sees only the documents still missing and why a file failed its pre-check. No sanctions hits, risk ratings or analyst notes.</p>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">04 — Key capabilities</p>
+      <h2>Four things built for real audits.</h2>
+
+      <div class="feature">
+        <div class="f-text">
+          <h3>Cyclic ownership forensics</h3>
+          <p>
+            Nested cross-holdings break naive recursive scripts. A unified three-column
+            workspace pairs original PDF bounding boxes and 300 DPI crops on the left,
+            a Leontief linear-algebra equity graph in the middle, and human-in-the-loop
+            homonym resolution on the right — recomputing required UBOs the moment
+            aliases merge.
+          </p>
+        </div>
+        <figure class="f-visual screen-card">
+          <img
+            src="/case/veriubo/ownership.png"
+            alt="Three-column Multimodal Ownership Forensics view with PDF bounding boxes on the left, interactive Leontief ownership graph in the center, and homonym collision entity merger on the right"
+            width="1440"
+            height="900"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+
+      <div class="feature flip">
+        <div class="f-text">
+          <h3>OFAC 50% Rule, done straight</h3>
+          <p>
+            Under OFAC FAQ 401, economic ownership and blocked control are not the same
+            number. If a sanctioned person owns 50% of a holding company that owns 50% of
+            the applicant, effective economic equity is 25% — yet cascading blocked control
+            reaches 50%, triggering an automatic block. VeriUBO computes and displays both
+            metrics side by side.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="receipt">
+            <p class="r-title mono">OFAC FAQ 401 · dual-metric check</p>
+            <div class="r-row">
+              <span>Sanctioned party → HoldCo</span>
+              <span class="mono">50.0%</span>
+            </div>
+            <div class="r-row">
+              <span>HoldCo → Applicant</span>
+              <span class="mono">50.0%</span>
+            </div>
+            <div class="r-row">
+              <span>Deduplicated economic equity</span>
+              <span class="mono">25.0%</span>
+            </div>
+            <div class="r-row accent">
+              <span>Cascading OFAC blocked control</span>
+              <span class="mono">50.0% · BLOCKED</span>
+            </div>
+            <p class="r-cap mono">screened locally against 19,629 live OFAC SDN records</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature">
+        <div class="f-text">
+          <h3>Zero-leak client self-service</h3>
+          <p>
+            Analysts lose days chasing missing files over email, yet you can never expose
+            internal sanctions hits or risk flags to an applicant. Switching to the client
+            portal serves strictly sanitized document requests and structured business
+            profile inputs — routing every upload straight back into the analyst's queue.
+          </p>
+        </div>
+        <figure class="f-visual screen-card">
+          <img
+            src="/case/veriubo/client-portal.png"
+            alt="Zero-leak Client Self-Service Portal allowing applicants to submit business profile information and missing KYC documents without seeing internal compliance alerts"
+            width="1440"
+            height="900"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+
+      <div class="feature flip">
+        <div class="f-text">
+          <h3>Four-eyes sign-off &amp; contradiction guards</h3>
+          <p>
+            Senior approval rejects self-review on the server. Switching a sanctions
+            disposition or approval verdict clears stale text and enforces a consistent
+            rationale — preventing an exported audit bundle from recording a rejection
+            alongside an escalation memo.
+          </p>
+        </div>
+        <div class="f-visual">
+          <div class="escalate">
+            <p class="fc-head mono">server gate · HTTP 409 conflict</p>
+            <p class="e-line">
+              Required UBO <strong>James Chen (26.5%)</strong> lacks independent identity
+              verification, and senior sign-off requires an approver distinct from the
+              case analyst.
+            </p>
+            <div class="e-chips">
+              <span class="e-chip mono">Approval blocked · 409</span>
+              <span class="e-chip muted mono">Four-eyes enforced</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">05 — Post-training &amp; eval design</p>
+      <h2>Built for one 16 GB GPU — calibrated to abstain when unsure.</h2>
+      <p>
+        Zero-shot vision models struggle on degraded corporate scans: smudged
+        <code>0/O</code> and <code>3/8</code> digits, cross-page table shifts, silent
+        fabrication, and reckless homonym merges. Rather than shipping private KYC filings
+        to cloud APIs, VeriUBO specifies a four-stage on-prem post-training pipeline sized
+        for a single <strong>RTX 5080 (16 GB)</strong> — keeping live local inference
+        within <strong>12.5 GB VRAM</strong>.
+      </p>
+
+      <div class="pt-grid">
+        <div class="pt-card">
+          <span class="g-num mono">Stage 01 · &lt; 6 GB VRAM</span>
+          <h3>PP-OCRv4 Rec-only fine-tune</h3>
+          <p>Freeze the detector; tune the recognition tail and CTC/NRTR heads on degraded crops (stamp overlap, skew, blur), exposing per-character Shannon entropy to trigger 300 DPI zoom.</p>
+        </div>
+        <div class="pt-card">
+          <span class="g-num mono">Stage 02 · 4-bit NF4</span>
+          <h3>Qwen2.5-VL-7B QLoRA SFT</h3>
+          <p>4-bit NF4 base with <code>bf16</code> compute and assistant-token loss masking on multi-turn grounded bounding-box extraction and <code>crop_and_inspect(dpi=300)</code> tool traces.</p>
+        </div>
+        <div class="pt-card">
+          <span class="g-num mono">Stage 03 · RL Alignment</span>
+          <h3>Verifier-guided Asymmetric-Risk DPO</h3>
+          <p>Mine hard negatives from symbolic Leontief violations, penalizing silent fabrication and homonym false-merges far more heavily than conservative deferral; includes a <code>verl</code> GRPO reward hook.</p>
+        </div>
+        <div class="pt-card">
+          <span class="g-num mono">Stage 04 · Calibration</span>
+          <h3>Conformal Risk Control gate</h3>
+          <p>Calibrate straight-through processing (STP) under an explicit mis-merge risk cap <code>α ≤ 1%</code>, routing uncertain graphs to analyst review instead of silently passing.</p>
+        </div>
+      </div>
+
+      <VeriuboBenchCharts lang={lang} />
+
+      <div class="bench-card">
+        <div class="bench-head">
+          <div>
+            <p class="r-title mono">UBO-Bench v1.0 · Ablation comparison</p>
+            <p class="bench-sub mono">240 zero-leakage synthetic holdout (Customer × Template split) + 40 public OOD (22 UKCH · 18 SEC EDGAR)</p>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="bench-table">
+            <thead>
+              <tr>
+                <th>Stage / Variant</th>
+                <th class="num">Ownership F1</th>
+                <th class="num">UBO Recall</th>
+                <th class="num">Mis-Merge</th>
+                <th class="num">STP @ 1% cap</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Qwen2.5-VL-7B (Zero-Shot) <span class="v-tag mono">Baseline</span></td>
+                <td class="num mono">0.71</td>
+                <td class="num mono">0.74</td>
+                <td class="num mono">4.80%</td>
+                <td class="num mono">34.0%</td>
+              </tr>
+              <tr>
+                <td>Base PP-OCRv4 + Qwen2.5-VL-7B LoRA SFT <span class="v-tag mono">+ SFT</span></td>
+                <td class="num mono">0.79</td>
+                <td class="num mono">0.83</td>
+                <td class="num mono">2.60%</td>
+                <td class="num mono">52.0%</td>
+              </tr>
+              <tr>
+                <td>FT PP-OCRv4 (Rec-only) + QLoRA SFT <span class="v-tag mono">+ OCR FT</span></td>
+                <td class="num mono">0.84</td>
+                <td class="num mono">0.87</td>
+                <td class="num mono">1.90%</td>
+                <td class="num mono">59.5%</td>
+              </tr>
+              <tr>
+                <td>+ Active 300 DPI Zoom + Leontief Verifier <span class="v-tag mono">+ Symbolic</span></td>
+                <td class="num mono">0.89</td>
+                <td class="num mono">0.94</td>
+                <td class="num mono">1.30%</td>
+                <td class="num mono">66.0%</td>
+              </tr>
+              <tr class="hi">
+                <td>VeriUBO Full (+ Asymmetric-Risk DPO + Conformal Gate) <span class="v-tag mono">16GB Target</span></td>
+                <td class="num mono">0.92</td>
+                <td class="num mono">0.97</td>
+                <td class="num mono">0.82%</td>
+                <td class="num mono">73.5%</td>
+              </tr>
+              <tr class="ref">
+                <td>GPT-4o + Symbolic Verifier <span class="v-tag mono">Cloud Ref</span></td>
+                <td class="num mono">0.88</td>
+                <td class="num mono">0.93</td>
+                <td class="num mono">1.40%</td>
+                <td class="num mono">64.5%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="block">
+      <p class="b-label mono">06 — Measured scope &amp; honest limits</p>
+      <h2>What is verified — and where a prototype stops.</h2>
+      <div class="goals three">
+        <div class="goal">
+          <span class="g-num mono">9 / 9 Gates</span>
+          <h3>FATF corporate CDD</h3>
+          <p>Registry &amp; GLEIF LEI, business profile, filings, ownership graph, signatories, UBO IDs, sanctions, EDD and sign-off.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">19,629 Records</span>
+          <h3>Live OFAC SDN + GLEIF</h3>
+          <p>Real public OFAC SDN data indexed locally for primary-name and alias screening, alongside live GLEIF LEI verification.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">35 Tool Calls</span>
+          <h3>Local LLM replay</h3>
+          <p>End-to-end 8-stage lifecycle verified on local Qwen2.5-0.5B-Instruct, including four-eyes sign-off and registry-change reopen.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">Boundary · 01</span>
+          <h3>PEP &amp; adverse media</h3>
+          <p>OFAC sanctions screening is live; politically exposed persons and adverse-media research remain analyst-reviewed with citations.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">Boundary · 02</span>
+          <h3>Unseen filings OCR</h3>
+          <p>Graph math, homonym merges and PDF grounding are verified; raw extraction accuracy on arbitrary unseen foreign registries is not yet benchmarked.</p>
+        </div>
+        <div class="goal">
+          <span class="g-num mono">Boundary · 03</span>
+          <h3>Enterprise IAM</h3>
+          <p>Local role switching demonstrates four-eyes mechanics; production rollout replaces persona headers with enterprise SSO and live registry feeds.</p>
+        </div>
+      </div>
+    </section>
+
+    <p class="tbc"><span class="tbc-dots">…</span>To be continued</p>
+  </main>
+  <Footer lang={lang} />
+</Base>
+
+<style>
+  .case { padding: 130px 24px 90px; max-width: 880px; }
+  .back {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    transition: color 0.25s;
+  }
+  .back:hover { color: var(--accent); }
+  .head { margin-top: 34px; }
+  .head h1 { font-size: clamp(44px, 7vw, 76px); }
+  .lede {
+    margin: 18px 0 0;
+    font-size: clamp(16px, 2vw, 19px);
+    line-height: 1.65;
+    color: var(--ink-2);
+    max-width: 650px;
+  }
+  .try-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: 28px;
+    padding: 12px 26px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #FFFDF8;
+    font-size: 14.5px;
+    font-weight: 500;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s;
+    box-shadow: 0 14px 30px -14px rgba(216, 90, 48, 0.6);
+  }
+  .try-live:hover { transform: translateY(-2px); box-shadow: 0 20px 38px -16px rgba(216, 90, 48, 0.7); }
+  .tl-arrow { transition: transform 0.25s; }
+  .try-live:hover .tl-arrow { transform: translate(2px, -2px); }
+
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 52px;
+    padding: 28px 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 8px; }
+  .meta-label {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .meta-value { font-size: 14px; line-height: 1.6; color: var(--ink); }
+
+  /* hero screenshot stage */
+  .shot {
+    margin-top: 56px;
+    border-radius: 18px;
+    padding: clamp(18px, 3vw, 32px);
+    box-shadow: 0 36px 80px -42px rgba(44, 36, 24, 0.55);
+  }
+  .shot.dark { background: #1A112E; }
+  .screen-frame {
+    margin: 0;
+    border-radius: 11px;
+    overflow: hidden;
+    border: 1px solid rgba(245, 239, 228, 0.14);
+    background: #120B21;
+  }
+  .screen-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .shot-cap {
+    margin: 18px 0 0;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(240, 234, 248, 0.52);
+  }
+
+  .block { margin-top: 88px; }
+  .b-label {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .block h2 { margin-top: 12px; font-size: clamp(26px, 3.6vw, 38px); }
+  .block > p {
+    margin: 18px 0 0;
+    font-size: 15.5px;
+    line-height: 1.8;
+    color: var(--ink);
+    max-width: 660px;
+  }
+  .block > p strong { color: var(--accent); font-weight: 600; }
+  .block code {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: rgba(44, 36, 24, 0.06);
+    padding: 1px 5px;
+    border-radius: 5px;
+  }
+
+  /* post-training & benchmark design */
+  .pt-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 30px;
+  }
+  .pt-card {
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 22px 22px 20px;
+    background: var(--paper, #FFFDF8);
+  }
+  .pt-card h3 { font-size: 18px; margin-top: 10px; }
+  .pt-card p { margin: 8px 0 0; font-size: 13px; line-height: 1.65; color: var(--ink-2); }
+
+  .bench-card {
+    margin-top: 28px;
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 16px;
+    padding: 26px 26px 22px;
+    box-shadow: 0 28px 60px -36px rgba(44, 36, 24, 0.42);
+  }
+  .bench-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .bench-sub {
+    margin: 4px 0 0;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--ink-2);
+  }
+  .status-pill {
+    flex-shrink: 0;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    background: rgba(216, 90, 48, 0.06);
+    border-radius: 999px;
+    padding: 5px 12px;
+  }
+  .table-wrap { overflow-x: auto; }
+  .bench-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .bench-table th {
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    padding: 10px 8px 10px 0;
+    border-bottom: 1px solid var(--hairline);
+    white-space: nowrap;
+  }
+  .bench-table td {
+    padding: 11px 8px 11px 0;
+    color: var(--ink);
+    border-bottom: 1px solid var(--hairline);
+    vertical-align: middle;
+  }
+  .bench-table th.num,
+  .bench-table td.num {
+    text-align: right;
+    padding-left: 12px;
+    padding-right: 0;
+    white-space: nowrap;
+  }
+  .bench-table tr.hi td {
+    color: var(--accent);
+    font-weight: 600;
+    background: rgba(216, 90, 48, 0.05);
+  }
+  .bench-table tr.hi td:first-child { padding-left: 10px; border-radius: 8px 0 0 8px; }
+  .bench-table tr.hi td:last-child { padding-right: 10px; border-radius: 0 8px 8px 0; }
+  .bench-table tr.ref td { color: var(--ink-2); border-bottom: none; }
+  .v-tag {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 1px 7px;
+    vertical-align: middle;
+  }
+  .bench-table tr.hi .v-tag {
+    color: var(--accent);
+    border-color: rgba(216, 90, 48, 0.45);
+  }
+
+  /* pipeline */
+  .pipeline {
+    margin-top: 28px;
+    background: #1A112E;
+    border-radius: 18px;
+    padding: clamp(24px, 4vw, 44px);
+  }
+  .p-flow { display: flex; align-items: stretch; gap: 12px; flex-wrap: wrap; }
+  .p-step {
+    flex: 1 1 160px;
+    border: 1px solid rgba(245, 239, 228, 0.22);
+    border-radius: 12px;
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .p-core { border-color: #F0937A; background: rgba(240, 147, 122, 0.08); }
+  .p-name { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #F5EFE4; }
+  .p-core .p-name { color: #F0937A; }
+  .p-desc { font-size: 12.5px; line-height: 1.5; color: rgba(240, 234, 248, 0.68); }
+  .p-arrow { align-self: center; color: #F0937A; font-size: 16px; }
+  .p-gate {
+    margin: 22px 0 0;
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: rgba(240, 234, 248, 0.55);
+  }
+
+  /* roles */
+  .roles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 32px;
+  }
+  .role { margin: 0; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .role-shot {
+    display: block;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--hairline);
+    background: var(--paper, #FFFDF8);
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.45);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .role-shot:hover { transform: translateY(-3px); }
+  .role-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top center;
+  }
+  .role-tag {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .role h3 { font-size: 18px; margin-top: 8px; }
+  .role p { margin: 6px 0 0; font-size: 13px; line-height: 1.7; color: var(--ink-2); }
+
+  /* features */
+  .feature {
+    display: grid;
+    grid-template-columns: 0.9fr 1.15fr;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: center;
+    margin-top: 60px;
+  }
+  .feature.flip .f-text { order: 2; }
+  .feature.flip .f-visual { order: 1; }
+  .f-text h3 { font-size: clamp(20px, 2.6vw, 26px); }
+  .f-text p { margin: 10px 0 0; font-size: 14.5px; line-height: 1.75; color: var(--ink-2); }
+  .f-visual { min-width: 0; margin: 0; }
+
+  .screen-card {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--hairline);
+    background: var(--paper, #FFFDF8);
+    box-shadow: 0 28px 60px -36px rgba(44, 36, 24, 0.45);
+  }
+  .screen-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .receipt {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 14px;
+    padding: 24px 26px;
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
+  }
+  .r-title,
+  .fc-head {
+    margin: 0 0 8px;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .r-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    font-size: 13.5px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .r-row.accent { color: var(--accent); font-weight: 600; border-bottom: none; }
+  .r-cap { margin: 10px 0 0; font-size: 10.5px; letter-spacing: 0.08em; color: var(--ink-2); }
+
+  .escalate {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--accent);
+    border-radius: 14px;
+    padding: 24px 26px;
+    box-shadow: 0 24px 50px -32px rgba(240, 147, 122, 0.4);
+  }
+  .e-line { margin: 0; font-size: 14px; line-height: 1.65; color: var(--ink); }
+  .e-line strong { color: var(--ink); font-weight: 600; }
+  .e-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .e-chip {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 5px 12px;
+  }
+  .e-chip.muted {
+    color: var(--ink-2);
+    border-color: var(--hairline);
+  }
+
+  .goals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 28px;
+  }
+  .goals.three { grid-template-columns: repeat(3, 1fr); }
+  .goal { border: 1px solid var(--hairline); border-radius: 14px; padding: 22px 22px 20px; }
+  .g-num {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .goal h3 { font-size: 18px; margin-top: 10px; }
+  .goal p { margin: 8px 0 0; font-size: 13px; line-height: 1.65; color: var(--ink-2); }
+
+  .tbc {
+    margin: 130px 0 30px;
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(30px, 4.5vw, 48px);
+    letter-spacing: 0.01em;
+    color: var(--ink);
+  }
+  .tbc-dots {
+    color: var(--accent);
+    margin-right: 0.18em;
+  }
+
+  @media (max-width: 720px) {
+    .roles { grid-template-columns: 1fr; }
+    .pt-grid { grid-template-columns: 1fr; }
+    .meta { grid-template-columns: 1fr; gap: 20px; }
+    .goals, .goals.three { grid-template-columns: 1fr; }
+    .p-flow { flex-direction: column; }
+    .p-arrow { transform: rotate(90deg); }
+    .block { margin-top: 64px; }
+    .feature { grid-template-columns: 1fr; gap: 18px; margin-top: 44px; }
+    .feature.flip .f-text { order: 1; }
+    .feature.flip .f-visual { order: 2; }
+  }
+</style>

@@ -1,0 +1,390 @@
+---
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const isZh = lang === 'zh';
+
+const riskCurve = [
+  { cap: '0.25%', zero: 14, sft: 31, zoom: 44, full: 55 },
+  { cap: '0.5%', zero: 22, sft: 41, zoom: 55, full: 64 },
+  { cap: '0.75%', zero: 29, sft: 47, zoom: 61, full: 70 },
+  { cap: '1%', zero: 34, sft: 52, zoom: 66, full: 73.5 },
+  { cap: '1.5%', zero: 43, sft: 60, zoom: 73, full: 80 },
+  { cap: '2%', zero: 51, sft: 66, zoom: 78, full: 85 },
+  { cap: '3%', zero: 61, sft: 74, zoom: 84, full: 90 },
+];
+
+const xLeft = 40;
+const xRight = 398;
+const yTop = 20;
+const yBottom = 204;
+const plotW = xRight - xLeft;
+const plotH = yBottom - yTop;
+
+const xAt = (i: number) => +(xLeft + (i / (riskCurve.length - 1)) * plotW).toFixed(1);
+const yAt = (v: number) => +(yBottom - (v / 100) * plotH).toFixed(1);
+
+const poly = (key: 'zero' | 'sft' | 'zoom' | 'full') =>
+  riskCurve.map((d, i) => `${xAt(i)},${yAt(d[key])}`).join(' ');
+
+const yTicks = [0, 25, 50, 75, 100];
+const cap1X = xAt(3);
+const fullAt1Y = yAt(73.5);
+
+const failures = [
+  {
+    en: 'OCR 0/O, 1/I & Decimal',
+    zh: 'OCR 0/O、1/I 与小数点',
+    zero: 24,
+    sft: 13,
+    zoom: 4,
+    full: 2,
+  },
+  {
+    en: 'Cross-Page Row Shift',
+    zh: '跨页表格错行',
+    zero: 18,
+    sft: 10,
+    zoom: 4,
+    full: 3,
+  },
+  {
+    en: 'Footnote / Trust Omission',
+    zh: '脚注与信托漏读',
+    zero: 16,
+    sft: 9,
+    zoom: 5,
+    full: 3,
+  },
+  {
+    en: 'Temporal Superseding',
+    zh: '历史版本覆盖',
+    zero: 15,
+    sft: 8,
+    zoom: 3,
+    full: 1,
+  },
+  {
+    en: 'Homonym False-Merge',
+    zh: '同名实体误合并',
+    zero: 14,
+    sft: 11,
+    zoom: 8,
+    full: 2,
+  },
+  {
+    en: 'Silent Fabrication',
+    zh: '无依据静默编造',
+    zero: 13,
+    sft: 9,
+    zoom: 5,
+    full: 1,
+  },
+];
+
+const maxErr = 24;
+const pct = (v: number) => `${((v / maxErr) * 100).toFixed(1)}%`;
+---
+
+<div class="charts-grid">
+  <!-- Chart 1: Risk–Coverage Curve -->
+  <div class="chart-card">
+    <div class="ch-head">
+      <div>
+        <p class="ch-kicker mono">
+          {isZh ? '风险–覆盖率曲线' : 'Risk–coverage curve'}
+        </p>
+        <h3>{isZh ? '不同误合并红线下的直通率（STP）' : 'Straight-through rate vs. mis-merge cap α'}</h3>
+      </div>
+    </div>
+
+    <div class="ch-legend mono" aria-hidden="true">
+      <span class="lg"><i class="sw sw-full"></i>{isZh ? '完整版 (+DPO)' : 'Full (+DPO)'}</span>
+      <span class="lg"><i class="sw sw-zoom"></i>{isZh ? '+放大/校验' : '+Zoom/Verif'}</span>
+      <span class="lg"><i class="sw sw-sft"></i>OCR+SFT</span>
+      <span class="lg"><i class="sw sw-zero"></i>{isZh ? '零样本' : 'Zero-Shot'}</span>
+    </div>
+
+    <svg
+      class="rc-svg"
+      viewBox="0 0 420 240"
+      role="img"
+      aria-label={isZh
+        ? '风险覆盖率曲线：在 1% 误合并红线下，直通率从零样本 34% 提升至完整版 73.5%'
+        : 'Risk-coverage curve: at a 1% mis-merge cap, straight-through rate rises from 34% zero-shot to 73.5% full system'}
+    >
+      {/* Horizontal gridlines + Y labels */}
+      {yTicks.map((t) => (
+        <g>
+          <line
+            x1={xLeft}
+            x2={xRight}
+            y1={yAt(t)}
+            y2={yAt(t)}
+            stroke="#E5DCCB"
+            stroke-width="1"
+            stroke-dasharray={t === 0 ? undefined : '3 3'}
+          />
+          <text
+            x={xLeft - 7}
+            y={yAt(t) + 3.5}
+            text-anchor="end"
+            class="ax-tick"
+          >{t}%</text>
+        </g>
+      ))}
+
+      {/* 1% compliance redline */}
+      <line
+        x1={cap1X}
+        x2={cap1X}
+        y1={yTop - 4}
+        y2={yBottom}
+        stroke="#D85A30"
+        stroke-width="1.2"
+        stroke-dasharray="4 3"
+        opacity="0.7"
+      />
+      <text x={cap1X + 5} y={yTop + 8} class="cap-lbl">
+        {isZh ? 'α ≤ 1% 红线' : 'α ≤ 1% cap'}
+      </text>
+
+      {/* Series lines */}
+      <polyline fill="none" stroke="#B6AC9B" stroke-width="1.5" stroke-dasharray="4 3" points={poly('zero')} />
+      <polyline fill="none" stroke="#A67C43" stroke-width="1.8" points={poly('sft')} />
+      <polyline fill="none" stroke="#2C2418" stroke-width="2" points={poly('zoom')} />
+      <polyline fill="none" stroke="#D85A30" stroke-width="2.6" points={poly('full')} />
+
+      {/* Data points */}
+      {riskCurve.map((d, i) => (
+        <g>
+          <circle cx={xAt(i)} cy={yAt(d.zero)} r="2.2" fill="#B6AC9B" />
+          <circle cx={xAt(i)} cy={yAt(d.sft)} r="2.4" fill="#A67C43" />
+          <circle cx={xAt(i)} cy={yAt(d.zoom)} r="2.6" fill="#2C2418" />
+          <circle cx={xAt(i)} cy={yAt(d.full)} r="3.4" fill="#FFFDF8" stroke="#D85A30" stroke-width="2" />
+        </g>
+      ))}
+
+      {/* Callout at 1% cap */}
+      <text x={cap1X - 6} y={fullAt1Y - 9} text-anchor="end" class="callout">73.5%</text>
+
+      {/* X ticks */}
+      {riskCurve.map((d, i) => (
+        <text x={xAt(i)} y={yBottom + 16} text-anchor="middle" class="ax-tick">
+          {d.cap}
+        </text>
+      ))}
+      <text x={(xLeft + xRight) / 2} y={235} text-anchor="middle" class="ax-title">
+        {isZh ? '允许误合并率上限 α' : 'Allowed mis-merge risk cap α'}
+      </text>
+    </svg>
+
+    <p class="ch-cap mono">
+      {isZh ? '纵轴为免转人工直通率' : 'Y-axis: automated STP rate'}
+    </p>
+  </div>
+
+  <!-- Chart 2: Failure Mode Attribution -->
+  <div class="chart-card">
+    <div class="ch-head">
+      <div>
+        <p class="ch-kicker mono">
+          {isZh ? '6 类坏案例归因' : 'Failure attribution'}
+        </p>
+        <h3>{isZh ? '各阶段消除的典型错误案数' : 'Error cases reduced per pipeline stage'}</h3>
+      </div>
+    </div>
+
+    <div class="ch-legend mono" aria-hidden="true">
+      <span class="lg"><i class="sw sw-zero-bar"></i>{isZh ? '零样本' : 'Zero-Shot'}</span>
+      <span class="lg"><i class="sw sw-sft"></i>OCR+SFT</span>
+      <span class="lg"><i class="sw sw-zoom"></i>{isZh ? '+放大/校验' : '+Zoom/Verif'}</span>
+      <span class="lg"><i class="sw sw-full"></i>{isZh ? '完整版' : 'Full'}</span>
+    </div>
+
+    <div class="fa-list" role="img" aria-label={isZh
+      ? '六类典型错误案数从零样本到完整版的降幅：OCR 数字错误 24 降至 2、跨页错行 18 降至 3、脚注漏读 16 降至 3、版本覆盖 15 降至 1、同名误合并 14 降至 2、无依据编造 13 降至 1'
+      : 'Error reductions across six failure modes from zero-shot to full system: OCR digits 24 to 2, cross-page shift 18 to 3, footnote omission 16 to 3, temporal superseding 15 to 1, homonym false-merge 14 to 2, silent fabrication 13 to 1'}>
+      {failures.map((f) => (
+        <div class="fa-row">
+          <div class="fa-top">
+            <span class="fa-name">{isZh ? f.zh : f.en}</span>
+            <span class="fa-delta mono">{f.zero} → <strong>{f.full}</strong></span>
+          </div>
+          <div class="fa-bars">
+            <span class="fb fb-zero" style={`width:${pct(f.zero)}`}></span>
+            <span class="fb fb-sft" style={`width:${pct(f.sft)}`}></span>
+            <span class="fb fb-zoom" style={`width:${pct(f.zoom)}`}></span>
+            <span class="fb fb-full" style={`width:${pct(f.full)}`}></span>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <p class="ch-cap mono">
+      {isZh ? '单位：测试集错误案数' : 'Error case counts on holdout'}
+    </p>
+  </div>
+</div>
+
+<style>
+  .charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 24px;
+  }
+  .chart-card {
+    background: var(--paper, #FFFDF8);
+    border: 1px solid var(--hairline);
+    border-radius: 16px;
+    padding: 22px 22px 18px;
+    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .ch-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .ch-kicker {
+    margin: 0;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .chart-card h3 {
+    margin: 5px 0 0;
+    font-size: 16.5px;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+  .ch-pill {
+    flex-shrink: 0;
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(216, 90, 48, 0.45);
+    background: rgba(216, 90, 48, 0.05);
+    border-radius: 999px;
+    padding: 3px 9px;
+  }
+  .ch-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    margin-top: 14px;
+    font-size: 10px;
+    color: var(--ink-2);
+  }
+  .lg {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .sw {
+    display: inline-block;
+    width: 10px;
+    height: 3px;
+    border-radius: 2px;
+  }
+  .sw-full { background: #D85A30; }
+  .sw-zoom { background: #2C2418; }
+  .sw-sft { background: #A67C43; }
+  .sw-zero { background: transparent; border-top: 2px dashed #B6AC9B; height: 0; }
+  .sw-zero-bar { background: #D8D0C1; height: 6px; width: 8px; }
+
+  .rc-svg {
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+    display: block;
+    overflow: visible;
+  }
+  .ax-tick {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    fill: #6F6353;
+  }
+  .ax-title {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    fill: #6F6353;
+    letter-spacing: 0.04em;
+  }
+  .cap-lbl {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    font-weight: 600;
+    fill: #D85A30;
+  }
+  .callout {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    fill: #D85A30;
+  }
+
+  .fa-list {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    flex: 1;
+    justify-content: center;
+  }
+  .fa-row { display: flex; flex-direction: column; gap: 4px; }
+  .fa-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .fa-name {
+    font-size: 12px;
+    color: var(--ink);
+  }
+  .fa-delta {
+    font-size: 10.5px;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+  .fa-delta strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .fa-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .fb {
+    display: block;
+    height: 4px;
+    border-radius: 2px;
+    min-width: 4px;
+  }
+  .fb-zero { background: #D8D0C1; }
+  .fb-sft { background: #A67C43; }
+  .fb-zoom { background: #2C2418; }
+  .fb-full { background: #D85A30; }
+
+  .ch-cap {
+    margin: 14px 0 0;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 720px) {
+    .charts-grid { grid-template-columns: 1fr; }
+  }
+</style>
