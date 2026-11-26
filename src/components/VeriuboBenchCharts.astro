@@ -24,7 +24,8 @@ const yBottom = 204;
 const plotW = xRight - xLeft;
 const plotH = yBottom - yTop;
 
-const xAt = (i: number) => +(xLeft + (i / (riskCurve.length - 1)) * plotW).toFixed(1);
+const caps = riskCurve.map((row) => parseFloat(row.cap));
+const xAt = (i: number) => xLeft + ((caps[i] - caps[0]) / (caps[caps.length - 1] - caps[0])) * plotW;
 const yAt = (v: number) => +(yBottom - (v / 100) * plotH).toFixed(1);
 
 const poly = (key: 'zero' | 'sft' | 'zoom' | 'full') =>
@@ -89,9 +90,9 @@ const maxErr = 24;
 const pct = (v: number) => `${((v / maxErr) * 100).toFixed(1)}%`;
 ---
 
-<div class="charts-grid">
+<div class="charts-grid" id="benchmark-charts">
   <!-- Chart 1: Risk–Coverage Curve -->
-  <div class="chart-card">
+  <div class="chart-card risk-card">
     <div class="ch-head">
       <div>
         <p class="ch-kicker mono">
@@ -124,7 +125,7 @@ const pct = (v: number) => `${((v / maxErr) * 100).toFixed(1)}%`;
             x2={xRight}
             y1={yAt(t)}
             y2={yAt(t)}
-            stroke="#E5DCCB"
+            stroke="var(--grid)"
             stroke-width="1"
             stroke-dasharray={t === 0 ? undefined : '3 3'}
           />
@@ -137,39 +138,51 @@ const pct = (v: number) => `${((v / maxErr) * 100).toFixed(1)}%`;
         </g>
       ))}
 
+      <polygon points={`${xLeft},${yBottom} ${poly('full')} ${xRight},${yBottom}`} fill="url(#risk-wash)" />
+      <defs>
+        <linearGradient id="risk-wash" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="var(--full)" stop-opacity=".13" />
+          <stop offset="1" stop-color="var(--full)" stop-opacity="0" />
+        </linearGradient>
+      </defs>
       {/* 1% compliance redline */}
       <line
         x1={cap1X}
         x2={cap1X}
         y1={yTop - 4}
         y2={yBottom}
-        stroke="#D85A30"
+        stroke="var(--full)"
         stroke-width="1.2"
         stroke-dasharray="4 3"
         opacity="0.7"
       />
-      <text x={cap1X + 5} y={yTop + 8} class="cap-lbl">
+      <text x={cap1X + 5} y={yTop - 5} class="cap-lbl">
         {isZh ? 'α ≤ 1% 红线' : 'α ≤ 1% cap'}
       </text>
 
       {/* Series lines */}
-      <polyline fill="none" stroke="#B6AC9B" stroke-width="1.5" stroke-dasharray="4 3" points={poly('zero')} />
-      <polyline fill="none" stroke="#A67C43" stroke-width="1.8" points={poly('sft')} />
-      <polyline fill="none" stroke="#2C2418" stroke-width="2" points={poly('zoom')} />
-      <polyline fill="none" stroke="#D85A30" stroke-width="2.6" points={poly('full')} />
+      <polyline fill="none" stroke="var(--zero)" stroke-width="1.5" stroke-dasharray="4 3" points={poly('zero')} />
+      <polyline fill="none" stroke="var(--sft)" stroke-width="1.8" points={poly('sft')} />
+      <polyline fill="none" stroke="var(--zoom)" stroke-width="2" points={poly('zoom')} />
+      <polyline fill="none" stroke="var(--full)" stroke-width="3" points={poly('full')} />
 
       {/* Data points */}
       {riskCurve.map((d, i) => (
         <g>
-          <circle cx={xAt(i)} cy={yAt(d.zero)} r="2.2" fill="#B6AC9B" />
-          <circle cx={xAt(i)} cy={yAt(d.sft)} r="2.4" fill="#A67C43" />
-          <circle cx={xAt(i)} cy={yAt(d.zoom)} r="2.6" fill="#2C2418" />
-          <circle cx={xAt(i)} cy={yAt(d.full)} r="3.4" fill="#FFFDF8" stroke="#D85A30" stroke-width="2" />
+          <circle cx={xAt(i)} cy={yAt(d.zero)} r="2.2" fill="var(--zero)" />
+          <circle cx={xAt(i)} cy={yAt(d.sft)} r="2.4" fill="var(--sft)" />
+          <circle cx={xAt(i)} cy={yAt(d.zoom)} r="2.6" fill="var(--zoom)" />
+          <circle cx={xAt(i)} cy={yAt(d.full)} r="3.4" fill="var(--plot-bg)" stroke="var(--full)" stroke-width="2" />
         </g>
       ))}
 
       {/* Callout at 1% cap */}
-      <text x={cap1X - 6} y={fullAt1Y - 9} text-anchor="end" class="callout">73.5%</text>
+      <circle cx={cap1X} cy={fullAt1Y} r="7" fill="var(--full)" fill-opacity=".25" />
+      <circle cx={cap1X} cy={fullAt1Y} r="4" fill="var(--full)" stroke="var(--plot-bg)" stroke-width="1.5" />
+      <g transform={`translate(${cap1X - 55} ${fullAt1Y - 26})`}>
+        <rect width="50" height="20" rx="5" fill="var(--full)" />
+        <text x="25" y="14" text-anchor="middle" class="callout">73.5%</text>
+      </g>
 
       {/* X ticks */}
       {riskCurve.map((d, i) => (
@@ -188,7 +201,7 @@ const pct = (v: number) => `${((v / maxErr) * 100).toFixed(1)}%`;
   </div>
 
   <!-- Chart 2: Failure Mode Attribution -->
-  <div class="chart-card">
+  <div class="chart-card failure-card">
     <div class="ch-head">
       <div>
         <p class="ch-kicker mono">
@@ -233,158 +246,110 @@ const pct = (v: number) => `${((v / maxErr) * 100).toFixed(1)}%`;
 <style>
   .charts-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
     gap: 18px;
-    margin-top: 24px;
+    margin-top: 28px;
   }
   .chart-card {
-    background: var(--paper, #FFFDF8);
-    border: 1px solid var(--hairline);
-    border-radius: 16px;
-    padding: 22px 22px 18px;
-    box-shadow: 0 24px 50px -32px rgba(44, 36, 24, 0.35);
-    display: flex;
-    flex-direction: column;
+    --full: #af442a;
+    --zoom: #35776e;
+    --sft: #9b742e;
+    --zero: #81786a;
     min-width: 0;
+    padding: clamp(18px, 3.4vw, 30px);
+    border: 1px solid var(--hairline);
+    border-radius: 18px;
+    background: #fffcf6;
+    color: var(--ink);
   }
-  .ch-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
+  .risk-card {
+    --plot-bg: #242020;
+    --full: #ff9c76;
+    --zoom: #91c4b8;
+    --sft: #d7b673;
+    --zero: #a8a3a1;
+    --grid: #554a46;
+    display: grid;
+    grid-template-columns: minmax(145px, 0.8fr) minmax(0, 2fr);
+    grid-template-areas: "title plot" "legend plot" "caption plot";
+    grid-template-rows: auto 1fr auto;
+    gap: 16px 26px;
+    background: radial-gradient(ellipse at 90% 0%, #372b29, transparent 66%), var(--plot-bg);
+    border-color: var(--plot-bg);
+    color: #fff5e8;
   }
   .ch-kicker {
     margin: 0;
-    font-size: 10.5px;
-    letter-spacing: 0.12em;
+    color: var(--full);
+    font-size: 11px;
+    letter-spacing: .08em;
     text-transform: uppercase;
-    color: var(--accent);
   }
   .chart-card h3 {
-    margin: 5px 0 0;
-    font-size: 16.5px;
-    line-height: 1.35;
-    color: var(--ink);
-  }
-  .ch-pill {
-    flex-shrink: 0;
-    font-size: 9.5px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    border: 1px solid rgba(216, 90, 48, 0.45);
-    background: rgba(216, 90, 48, 0.05);
-    border-radius: 999px;
-    padding: 3px 9px;
+    margin: 7px 0 0;
+    font-size: clamp(20px, 2.4vw, 25px);
+    line-height: 1.25;
+    text-wrap: balance;
   }
   .ch-legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 12px;
-    margin-top: 14px;
-    font-size: 10px;
-    color: var(--ink-2);
+    gap: 5px 16px;
+    font-size: 11px;
+    line-height: 1.65;
   }
-  .lg {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+  .risk-card .ch-head { grid-area: title; }
+  .risk-card .ch-legend {
+    grid-area: legend;
+    align-self: start;
+    flex-direction: column;
+    color: #dfd6cd;
   }
-  .sw {
-    display: inline-block;
-    width: 10px;
-    height: 3px;
-    border-radius: 2px;
-  }
-  .sw-full { background: #D85A30; }
-  .sw-zoom { background: #2C2418; }
-  .sw-sft { background: #A67C43; }
-  .sw-zero { background: transparent; border-top: 2px dashed #B6AC9B; height: 0; }
-  .sw-zero-bar { background: #D8D0C1; height: 6px; width: 8px; }
-
-  .rc-svg {
-    width: 100%;
-    height: auto;
-    margin-top: 10px;
-    display: block;
-    overflow: visible;
-  }
-  .ax-tick {
-    font-family: var(--mono);
-    font-size: 9.5px;
-    fill: #6F6353;
-  }
-  .ax-title {
-    font-family: var(--mono);
-    font-size: 9.5px;
-    fill: #6F6353;
-    letter-spacing: 0.04em;
-  }
-  .cap-lbl {
-    font-family: var(--mono);
-    font-size: 9.5px;
-    font-weight: 600;
-    fill: #D85A30;
-  }
-  .callout {
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 700;
-    fill: #D85A30;
-  }
-
+  .lg { display: inline-flex; align-items: center; gap: 7px; }
+  .sw { width: 15px; height: 3px; border-radius: 3px; }
+  .sw-full, .fb-full { background: var(--full); }
+  .sw-zoom, .fb-zoom { background: var(--zoom); }
+  .sw-sft, .fb-sft { background: var(--sft); }
+  .sw-zero-bar, .fb-zero { background: var(--zero); }
+  .sw-zero { height: 0; border-top: 2px dashed var(--zero); border-radius: 0; }
+  .rc-svg { grid-area: plot; width: 100%; height: auto; align-self: center; display: block; }
+  .ax-tick, .ax-title, .cap-lbl, .callout { font-family: var(--mono); }
+  .ax-tick, .ax-title { fill: #d5ccc2; font-size: 10px; }
+  .cap-lbl { fill: var(--full); font-size: 10px; }
+  .callout { fill: var(--plot-bg); font-size: 12px; font-weight: 700; }
+  .failure-card .ch-legend { margin: 14px 0 20px; color: var(--ink-2); }
   .fa-list {
-    margin-top: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
-    flex: 1;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px 22px;
   }
-  .fa-row { display: flex; flex-direction: column; gap: 4px; }
-  .fa-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 8px;
-  }
-  .fa-name {
-    font-size: 12px;
-    color: var(--ink);
-  }
-  .fa-delta {
-    font-size: 10.5px;
-    color: var(--ink-2);
-    white-space: nowrap;
-  }
-  .fa-delta strong {
-    color: var(--accent);
-    font-weight: 600;
-  }
+  .fa-row { min-width: 0; padding-top: 10px; border-top: 1px solid var(--hairline); }
+  .fa-top { display: flex; flex-direction: column; gap: 3px; }
+  .fa-name { font-size: 13px; line-height: 1.5; }
+  .fa-delta { font-size: 19px; line-height: 1.5; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .fa-delta strong { color: var(--full); font-weight: 650; }
   .fa-bars {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+    display: grid;
+    gap: 3px;
+    margin-top: 6px;
+    background: repeating-linear-gradient(to right, #eae3d8 0 1px, transparent 1px 25%);
   }
-  .fb {
-    display: block;
-    height: 4px;
-    border-radius: 2px;
-    min-width: 4px;
+  .fb { display: block; height: 4px; border-radius: 0 3px 3px 0; }
+  .ch-cap { margin: 18px 0 0; color: var(--ink-2); font-size: 11px; }
+  .risk-card .ch-cap { grid-area: caption; margin: 0; color: #c5bab4; }
+  @media (max-width: 700px) {
+    .risk-card {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "title" "legend" "plot" "caption";
+      grid-template-rows: auto;
+      gap: 12px;
+    }
+    .risk-card .ch-legend { flex-direction: row; }
+    .fa-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  .fb-zero { background: #D8D0C1; }
-  .fb-sft { background: #A67C43; }
-  .fb-zoom { background: #2C2418; }
-  .fb-full { background: #D85A30; }
-
-  .ch-cap {
-    margin: 14px 0 0;
-    font-size: 10px;
-    letter-spacing: 0.06em;
-    color: var(--ink-2);
-  }
-
-  @media (max-width: 720px) {
-    .charts-grid { grid-template-columns: 1fr; }
+  @media (max-width: 440px) {
+    .fa-list { grid-template-columns: minmax(0, 1fr); gap: 9px; }
+    .fa-row { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 12px; }
+    .fa-bars { margin: 0; }
+    .ax-tick, .ax-title, .cap-lbl { font-size: 12px; }
   }
 </style>
