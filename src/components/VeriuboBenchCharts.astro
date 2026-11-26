@@ -111,7 +111,7 @@ const pct = (v: number) => `${((v / maxErr) * 100).toFixed(1)}%`;
 
     <svg
       class="rc-svg"
-      viewBox="0 0 420 240"
+      viewBox="0 0 420 252"
       role="img"
       aria-label={isZh
         ? '风险覆盖率曲线：在 1% 误合并红线下，直通率从零样本 34% 提升至完整版 73.5%'
@@ -186,11 +186,11 @@ const pct = (v: number) => `${((v / maxErr) * 100).toFixed(1)}%`;
 
       {/* X ticks */}
       {riskCurve.map((d, i) => (
-        <text x={xAt(i)} y={yBottom + 16} text-anchor="middle" class="ax-tick">
+        <text x={xAt(i)} y={yBottom + 16} text-anchor="middle" class:list={['ax-tick', { 'tick-stagger': i === 1 || i === 3 }]}>
           {d.cap}
         </text>
       ))}
-      <text x={(xLeft + xRight) / 2} y={235} text-anchor="middle" class="ax-title">
+      <text x={(xLeft + xRight) / 2} y={247} text-anchor="middle" class="ax-title">
         {isZh ? '允许误合并率上限 α' : 'Allowed mis-merge risk cap α'}
       </text>
     </svg>
@@ -351,5 +351,6 @@ const pct = (v: number) => `${((v / maxErr) * 100).toFixed(1)}%`;
     .fa-row { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 12px; }
     .fa-bars { margin: 0; }
     .ax-tick, .ax-title, .cap-lbl { font-size: 12px; }
+    .tick-stagger { transform: translateY(9px); }
   }
 </style>
