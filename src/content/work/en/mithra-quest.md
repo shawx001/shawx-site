@@ -1,6 +1,6 @@
-﻿---
+---
 title: Mithra CRM Quest
-summary: "World #2 on a timed AI build challenge 鈥?deterministic numbers, gated LLM narrative, validator-feedback retries."
+summary: "World #2 on a timed AI build challenge — deterministic numbers, gated LLM narrative, validator-feedback retries."
 role: Solo builder
 stack: [LLM orchestration, Incremental cache, Validators]
 year: 2026
