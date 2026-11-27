@@ -5,7 +5,7 @@ role: Founder — product, design, architecture
 stack: [Computer vision, LLM, Camera control, Drone SDK]
 year: 2026
 casePath: /work/camera-copilot
-order: 2
+order: 4
 ---
 
 ## Problem

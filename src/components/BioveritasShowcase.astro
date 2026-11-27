@@ -1,0 +1,434 @@
+---
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const isZh = lang === 'zh';
+
+const views = [
+  {
+    id: 'impact-card',
+    tabEn: '01 · WX-712 Impact Card',
+    tabZh: '01 · 跨阶段影响决策卡',
+    stageEn: 'Demo 03 · WX-712 ADC',
+    stageZh: 'Demo 03 · WX-712 跨阶段联动',
+    titleEn: 'Three-layer change impact — links found, never over-claimed',
+    titleZh: '三层跨阶段影响分析：精准查依赖，缺实测明确报证据不足',
+    bodyEn:
+      'When an ADC DAR target shifts from 4.0 to 3.5, the engine separates deterministic dependency mapping (L1) from evaluative 5-state assessment (L2) and authorized QA approval (L3). Because WX-712 lacks post-change SEC and stress stability data, aggregation is explicitly marked "Insufficient Evidence — Study Required" instead of claiming scientific causality.',
+    bodyZh:
+      '当 WX-712 的 ADC DAR 目标从 4.0 调到 3.5，系统严格拆成三层：先确定性扫描受影响的配方、方法和批次（L1），再按 5 态证据枚举做评估（L2），最后交由 QA 人工审批（L3）。因为缺少目标 DAR 3.5 的 SEC 与加速稳定性实测，系统直接标出“证据不足，需补充研究”，绝不拿关联冒充因果。',
+    metricsEn: [
+      { k: 'Snapshot lock', v: 'WX-712 v4 · MR-WX-712-S88 v3.2 → v3.3-draft' },
+      { k: '5-state enum', v: 'Aggregation flagged Insufficient Evidence' },
+      { k: 'Provenance tags', v: 'Clickable Measured / Computed / Predicted / Simulated' },
+    ],
+    metricsZh: [
+      { k: '绑定源数据快照', v: 'WX-712 v4 · MR-WX-712-S88 v3.2 → v3.3-draft' },
+      { k: '5 态证据边界', v: '聚集与稳定性明确标“证据不足，需补充研究”' },
+      { k: '四类数据标签', v: '点击可查来源、版本、时间与计算方式' },
+    ],
+    img: '/case/bioveritas/impact-decision-card.png',
+    altEn: 'BioVeritas WX-712 Cross-Stage Impact Assessment Decision Card showing L1/L2/L3 governance strip, 6 impact cards, Insufficient Evidence tag, and provenance pills',
+    altZh: 'BioVeritas WX-712 跨阶段影响分析决策卡：展示 L1/L2/L3 三层边界、6 维影响卡片、证据不足提示与四类来源标签',
+  },
+  {
+    id: 'impact-trace',
+    tabEn: '02 · Trace & QA Approval',
+    tabZh: '02 · 可读追溯与 QA 立案',
+    stageEn: 'Demo 03 · Governance & Idempotency',
+    stageZh: 'Demo 03 · 追溯与防重审批',
+    titleEn: 'Business-readable trace by default; idempotent QA sign-off underneath',
+    titleZh: '默认给业务人员看懂的执行记录，底层带防重幂等与原子回滚',
+    bodyEn:
+      'Reviewers see which dossier, recipe version, QC methods, and historical lots were checked — while engineers can expand the 5-tool technical trace below. Formal Change Control initiation is restricted to QA, protected by Idempotency-Key double-click guards, source-snapshot staleness checks (409 on BIOVIA drift), and single-transaction audit rollback.',
+    bodyZh:
+      '默认展示业务人员一眼看懂的核查记录（查了哪份卷宗、哪个配方版本、哪些检测方法和历史批次），点开则可看 5 个工具的技术 Trace。正式立案仅开放给 QA 角色，带 Idempotency-Key 防连点重复提交、BIOVIA 升版快照失效 409 拦截与审计写失败全事务回滚。',
+    metricsEn: [
+      { k: 'Execution trace', v: '5 tools · 22 linked objects · 2 evidence gaps' },
+      { k: 'Safety guards', v: 'QA-only 403 · Stale snapshot 409 · Idempotent replay' },
+      { k: 'Failure tests', v: '7 dedicated failure-path tests passing (78 total)' },
+    ],
+    metricsZh: [
+      { k: '执行核查记录', v: '5 个工具 · 22 个关联对象 · 2 项证据缺口' },
+      { k: '工程防错机制', v: '非 QA 403 · 快照过期 409 · 幂等键防重' },
+      { k: '失败路径单测', v: '7 项异常/防重/回滚用例全通（共 78 项单测）' },
+    ],
+    img: '/case/bioveritas/impact-trace-approval.png',
+    altEn: 'BioVeritas WX-712 Decision Card execution trace showing business-readable summary, collapsible 5-tool technical trace, and QA idempotent approval bar',
+    altZh: 'BioVeritas WX-712 决策卡下半部：业务可读执行摘要、展开后的 5 个技术工具 Trace 与 QA 幂等立案栏',
+  },
+  {
+    id: 'copilot',
+    tabEn: '03 · WX-409 Copilot',
+    tabZh: '03 · WX-409 问答与拦停',
+    stageEn: 'Demo 02 · Quality Risk Control',
+    stageZh: 'Demo 02 · WX-409 质量风控',
+    titleEn: 'Context-aware Gemini grounded in deterministic server facts',
+    titleZh: '接真实 Gemini 问答，但关键判断全部压在确定性规则和后端上',
+    bodyEn:
+      'For pre-populated deviation case DEV-2026-019 (Protein A elution pH 3.55 linked to 2.8% HMW), QA asks Gemini to trace root causes across stages and propose next actions. Ask it to skip CAPA or audit review and it refuses with regulatory rationale while FastAPI enforces HTTP 409 business state blocking.',
+    bodyZh:
+      '围绕预置偏差案例 DEV-2026-019（洗脱 pH 3.55 关联聚体 HMW 2.8%），QA 可用真实 Gemini 顺着卷宗追查根因与卡点。如果尝试让它跳过 CAPA 或审计审阅直接放行，助手会直接引法规拒绝，FastAPI 后端也会强制返回 HTTP 409 状态阻断。',
+    metricsEn: [
+      { k: 'Live LLM + Rules', v: 'Gemini explains · Backend computes all 10 gates' },
+      { k: 'Enforcement', v: 'Server HTTP 409 state block (not physical PLC)' },
+      { k: 'Demo provenance', v: 'Pre-populated deviation case DEV-2026-019' },
+    ],
+    metricsZh: [
+      { k: '人机分工原则', v: 'Gemini 负责解释规划 · 后端确定性算十门禁' },
+      { k: '阻断边界', v: '服务端 HTTP 409 状态阻断（非现场 PLC 联锁）' },
+      { k: '数据口径', v: '预置偏差演示案例 DEV-2026-019' },
+    ],
+    img: '/case/bioveritas/agent-copilot-qa.png',
+    altEn: 'BioVeritas Gemini Copilot tracing WX-409 pre-populated deviation DEV-2026-019 across BIOVIA recipe, OOS, and 10 QA release gates',
+    altZh: 'BioVeritas 问答助手面板：顺着 WX-409 预置偏差案例从序列查到配方、OOS 和十门禁卡点',
+  },
+  {
+    id: 'gmp',
+    tabEn: '04 · BIOVIA & GMP',
+    tabZh: '04 · 配方与车间执行',
+    stageEn: 'Stages 02–03 · CMC & Mfg',
+    stageZh: '阶段 02–03 · 配方与车间',
+    titleEn: 'ISA-88 recipes wired straight to shop-floor EBR checks',
+    titleZh: '受控配方直连电子批记录、称量复核与耗材寿命',
+    bodyEn:
+      'Changes in upstream sequence or formulation flow into BIOVIA ISA-88 recipe versions (MR-WX-409-S88 v3.2 → v3.3-draft) and GMP floor controls: ±1% weighing, Protein A resin cycles (94/100), dual-probe low-pH viral inactivation, and UF/DF concentration math reusing Stage 01 E0.1%.',
+    bodyZh:
+      '上游序列与处方改动顺着 BIOVIA ISA-88 四层配方同步到车间批记录：覆盖 ±1% 称量复核、Protein A 填料循环次数（94/100）、双探头低 pH 病毒灭活计时，以及直接复用阶段 01 消光系数 E0.1% 的蛋白浓度换算。',
+    metricsEn: [
+      { k: 'Controlled recipe', v: 'MR-WX-409-S88 v3.2 → v3.3-draft (SHA-256)' },
+      { k: 'Upstream link', v: 'Stage 01 E0.1% = 1.488 drives A280 math' },
+      { k: 'Floor controls', v: 'Resin 94/100 · BOM ±1% · Yield 99.5%' },
+    ],
+    metricsZh: [
+      { k: '受控主配方', v: 'MR-WX-409-S88 v3.2 → v3.3-draft（SHA-256）' },
+      { k: '上游参数联动', v: '直接沿用阶段 01 消光系数 E0.1% = 1.488' },
+      { k: '生产硬约束', v: '填料 94/100 · 称量 ±1% · 物料平衡 99.5%' },
+    ],
+    img: '/case/bioveritas/stage03-gmp.png',
+    altEn: 'BioVeritas Stage 03 GMP Manufacturing page showing EBR steps, pH 3.55 pause, low-pH viral inactivation, and UF/DF controls',
+    altZh: 'BioVeritas 阶段 03 车间生产页面：电子批记录、洗脱 pH 3.55 停机报警与除菌过滤检查',
+  },
+  {
+    id: 'tradeoff',
+    tabEn: '05 · R&D Trade-Offs',
+    tabZh: '05 · 候选权衡与回传',
+    stageEn: 'Stage 01 · Discovery Loop',
+    stageZh: '阶段 01 · 权衡与湿实验回灌',
+    titleEn: 'Weigh competing antibody metrics and calibrate with wet-lab CSVs',
+    titleZh: '四维滑块权衡候选分子，明确区分预测值与湿实验实测',
+    bodyEn:
+      'Four weight sliders let scientists balance affinity, CHO titer, CMC stability, and MHC-II risk on a live Pareto plot, inspect eliminated-sequence dropout causes, compare Fc subtypes (IgG1 LALA-PG / S228P), and upload real LIMS wet-lab rows — with separate clickable badges for Computed, Predicted, and Measured values.',
+    bodyZh:
+      '四个权重滑块支持在亲和力、CHO 表达量、成药性和免疫原性之间做 Pareto 取舍，同时拆解淘汰序列的死因分布、对比 Fc 亚型（如 IgG1 LALA-PG）并导入 LIMS 湿实验实测表——界面上把“计算结果 / 模型预测 / 实测数据”拆得清清楚楚。',
+    metricsEn: [
+      { k: 'Weight sliders', v: 'Affinity · CHO titer · CMC · MHC-II' },
+      { k: 'Provenance split', v: 'Computed (pI) · Predicted (proxy) · Measured (LIMS)' },
+      { k: 'Downstream preview', v: 'ProA pH 3.41 · 12 cP at 150 mg/mL' },
+    ],
+    metricsZh: [
+      { k: '四维取舍滑块', v: '亲和力 · CHO 表达量 · 成药性 · 免疫原性' },
+      { k: '来源清晰拆分', v: '计算结果（pI）· 模型预测（代理）· 实测（LIMS）' },
+      { k: '提前预演工艺', v: '预估洗脱 pH 3.41 · 150mg/mL 黏度 12 cP' },
+    ],
+    img: '/case/bioveritas/stage01-tradeoff.png',
+    altEn: 'BioVeritas Stage 01 multi-objective weight sliders, Pareto plot, Fc subtype comparison, and downstream process preview',
+    altZh: 'BioVeritas 阶段 01 多目标权重滑块、Pareto 散点图、Fc 亚型对比与下游工艺预演',
+  },
+  {
+    id: 'sponsor',
+    tabEn: '06 · WX-208 Sponsor CoA',
+    tabZh: '06 · WX-208 客户交付与撤证',
+    stageEn: 'Demo 01 · Quality & Client Trust',
+    stageZh: 'Demo 01 · 质量与客户信任',
+    titleEn: 'Zero-leak client CoA — auto-revoked if 6M stability drifts',
+    titleZh: '申办方零泄露查收 CoA，批后 6M 稳定性异常自动撤证',
+    bodyEn:
+      'Nordic Biopharma logs in to inspect WX-208 milestones and download its SHA-256 Electronic CoA while the server strips all internal OOS, deviation, and CAPA fields before any page or Gemini call. Triggering a 6-month (6M) long-term stability OOT reopens QA review and pulls the live client CoA automatically.',
+    bodyZh:
+      '外部申办方（Nordic Biopharma）登录后只能查看 WX-208 公开里程碑和带 SHA-256 的电子 CoA，所有内部 OOS、偏差单和整改备注在服务端白名单层就被截断，连大模型上下文都拿不到。一旦批后 6 个月（6M）长期稳定性节点触发异常，QA 重开复审的同时对外证书自动撤下。',
+    metricsEn: [
+      { k: 'Lifecycle flow', v: 'Release → 6M Stability Reopen → Auto-Revoke' },
+      { k: 'Zero-leak check', v: 'HTTP 403 cross-tenant · 0 internal IDs exposed' },
+      { k: 'Audit anchor', v: 'Append-only SQLite / PostgreSQL SHA-256 ledger' },
+    ],
+    metricsZh: [
+      { k: '正向与反向链路', v: '放行 → 6M 长期稳定性重开 → 对外自动撤证' },
+      { k: '零泄露实测', v: '跨客户返回 403 · 内部编号 0 外泄' },
+      { k: '防篡改账本', v: 'SQLite / PostgreSQL 防改删 SHA-256 链' },
+    ],
+    img: '/case/bioveritas/role-sponsor.png',
+    altEn: 'BioVeritas Sponsor Portal showing WX-208 completed milestones and SHA-256 Electronic Certificate of Analysis',
+    altZh: 'BioVeritas 外部申办方门户：展示 WX-208 进度与带 SHA-256 的电子检验放行报告',
+  },
+];
+---
+
+<section class="cinema" aria-label={isZh ? '六个核心实景切换' : 'Six live workbench views'}>
+  <div class="cinema-head">
+    <div class="ch-left">
+      <p class="eyebrow mono">{isZh ? '系统实景 · 按三条故事与决策卡切换' : 'Inside the app · switch across stories & decision cards'}</p>
+      <h2>{isZh ? '从跨阶段决策卡、409 拦停，一路看到客户零泄露签收。' : 'Six live views — from three-layer impact decisions and 409 stops to zero-leak client CoAs.'}</h2>
+    </div>
+    <div class="tab-rail" role="tablist" aria-label={isZh ? '页面切换' : 'Screen switcher'}>
+      {views.map((v, i) => (
+        <button
+          type="button"
+          class:list={['tab-btn mono', { active: i === 0 }]}
+          role="tab"
+          aria-selected={i === 0 ? 'true' : 'false'}
+          aria-controls={`bv-panel-${v.id}`}
+          id={`bv-tab-${v.id}`}
+          data-bv-tab={v.id}
+        >
+          {isZh ? v.tabZh : v.tabEn}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <div class="cinema-stage">
+    {views.map((v, i) => (
+      <div
+        class:list={['stage-panel', { active: i === 0 }]}
+        role="tabpanel"
+        id={`bv-panel-${v.id}`}
+        aria-labelledby={`bv-tab-${v.id}`}
+        hidden={i !== 0}
+        data-bv-panel={v.id}
+      >
+        <div class="stage-visual">
+          <div class="chrome-bar mono" aria-hidden="true">
+            <span class="dots"><i></i><i></i><i></i></span>
+            <span class="chrome-url">127.0.0.1:5174 · {isZh ? v.stageZh : v.stageEn}</span>
+            <a class="zoom-link" href={v.img} target="_blank" rel="noopener">
+              {isZh ? '看大图 ↗' : 'Full size ↗'}
+            </a>
+          </div>
+          <img
+            src={v.img}
+            alt={isZh ? v.altZh : v.altEn}
+            width="1440"
+            height="900"
+            loading={i === 0 ? 'eager' : 'lazy'}
+          />
+        </div>
+
+        <aside class="stage-note">
+          <span class="note-stage mono">{isZh ? v.stageZh : v.stageEn}</span>
+          <h3>{isZh ? v.titleZh : v.titleEn}</h3>
+          <p>{isZh ? v.bodyZh : v.bodyEn}</p>
+          <dl class="note-kv">
+            {(isZh ? v.metricsZh : v.metricsEn).map((m) => (
+              <div class="kv-row">
+                <dt class="mono">{m.k}</dt>
+                <dd class="mono">{m.v}</dd>
+              </div>
+            ))}
+          </dl>
+        </aside>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const root = document.currentScript?.previousElementSibling;
+    if (!root) return;
+    const tabs = Array.from(root.querySelectorAll('[data-bv-tab]'));
+    const panels = Array.from(root.querySelectorAll('[data-bv-panel]'));
+    const activate = (id) => {
+      tabs.forEach((btn) => {
+        const on = btn.getAttribute('data-bv-tab') === id;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      panels.forEach((panel) => {
+        const on = panel.getAttribute('data-bv-panel') === id;
+        panel.classList.toggle('active', on);
+        panel.hidden = !on;
+      });
+    };
+    tabs.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-bv-tab');
+        if (id) activate(id);
+      });
+    });
+  })();
+</script>
+
+<style>
+  .cinema {
+    margin-top: 108px;
+  }
+  .cinema-head {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .eyebrow {
+    margin: 0;
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bv-emerald);
+  }
+  .ch-left h2 {
+    margin: 10px 0 0;
+    font-size: clamp(26px, 3.4vw, 38px);
+    max-width: 820px;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  .tab-rail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 14px;
+  }
+  .tab-btn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+  }
+  .tab-btn:hover {
+    border-color: var(--bv-emerald);
+    color: var(--bv-emerald);
+  }
+  .tab-btn.active {
+    background: var(--bv-ink-dark);
+    border-color: var(--bv-ink-dark);
+    color: #ECFDF5;
+  }
+
+  .cinema-stage {
+    margin-top: 26px;
+  }
+  .stage-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.72fr);
+    gap: clamp(22px, 3vw, 36px);
+    align-items: start;
+  }
+  .stage-panel[hidden] {
+    display: none;
+  }
+
+  .stage-visual {
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--bv-ink-dark);
+    border: 1px solid rgba(15, 58, 50, 0.18);
+    box-shadow: 0 34px 72px -40px rgba(10, 28, 25, 0.55);
+  }
+  .chrome-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 16px;
+    background: #0D231F;
+    border-bottom: 1px solid rgba(124, 227, 195, 0.14);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    color: rgba(226, 244, 237, 0.72);
+  }
+  .dots {
+    display: inline-flex;
+    gap: 6px;
+  }
+  .dots i {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(226, 244, 237, 0.22);
+  }
+  .dots i:first-child { background: #E0705A; }
+  .dots i:nth-child(2) { background: #E3B664; }
+  .dots i:last-child { background: #4AC29B; }
+  .chrome-url {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .zoom-link {
+    flex-shrink: 0;
+    color: #7CE3C3;
+    transition: opacity 0.2s;
+  }
+  .zoom-link:hover { opacity: 0.78; }
+  .stage-visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .stage-note {
+    padding: 6px 0 0;
+  }
+  .note-stage {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bv-emerald);
+  }
+  .stage-note h3 {
+    margin: 10px 0 0;
+    font-size: clamp(21px, 2.2vw, 26px);
+    line-height: 1.25;
+  }
+  .stage-note p {
+    margin: 14px 0 0;
+    font-size: 14.5px;
+    line-height: 1.82;
+    color: var(--ink-2);
+  }
+  .note-kv {
+    margin: 24px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .kv-row {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .kv-row dt {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .kv-row dd {
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  @media (max-width: 860px) {
+    .cinema { margin-top: 76px; }
+    .stage-panel {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+    .chrome-url { display: none; }
+  }
+</style>

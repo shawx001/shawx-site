@@ -1,0 +1,940 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import BioveritasShowcase from '../../components/BioveritasShowcase.astro';
+import BioveritasBenchCharts from '../../components/BioveritasBenchCharts.astro';
+
+const lang = 'en' as const;
+
+const buyers = [
+  {
+    tier: 'Decision Layer',
+    persona: 'R&D / Program Lead',
+    buys: 'Cross-team visibility and faster trade-off decisions',
+    modules: 'Portfolio queue, candidate trade-offs, cross-stage impact cards',
+  },
+  {
+    tier: 'Execution Layer',
+    persona: 'CMC · Mfg · QC · QA · Validation',
+    buys: 'Quality risk control and faster exception closure',
+    modules: 'BIOVIA recipes, EBR checks, FDA OOS, 10-gate 409 blocking, CAPA & change control',
+  },
+  {
+    tier: 'External Layer',
+    persona: 'External Sponsor Client',
+    buys: 'Delivery transparency with zero-leak isolation',
+    modules: 'Dedicated Sponsor Portal, SHA-256 Electronic CoA, sanitized Q&A',
+  },
+];
+
+const stories = [
+  {
+    code: 'Demo 01 · WX-208',
+    title: 'Quality & Client Trust',
+    flow: 'Release → 6M Reopen → Revoke',
+    value: 'Keeps internal quality state and external client CoAs strictly in sync.',
+    detail:
+      'Commercial lot released with a SHA-256 CoA on the zero-leak Sponsor Portal. Triggering a 6-month (6M) long-term stability drift reopens QA review and auto-revokes the external certificate.',
+  },
+  {
+    code: 'Demo 02 · WX-409',
+    title: 'Quality Risk Control',
+    flow: 'Detect → Investigate → Block → CAPA',
+    value: 'Cuts missed handoffs and blocks unauthorized batch release.',
+    detail:
+      'Built on pre-populated deviation case DEV-2026-019 (elution pH 3.55 → 2.8% HMW). QA uses tool-grounded Gemini to trace root causes, refuses bypass requests, enforces HTTP 409 state blocking, and closes CAPA.',
+  },
+  {
+    code: 'Demo 03 · WX-712',
+    title: 'R&D–CMC–QA Alignment',
+    flow: 'Design → Evaluate → Impact → Approve',
+    value: 'Translates upstream molecular changes into auditable downstream tasks.',
+    detail:
+      'Shifting ADC DAR target (4.0 → 3.5) triggers a 3-layer Cross-Stage Impact Decision Card across 6 domains, explicitly marks missing stability data as Insufficient Evidence, and routes to QA-only idempotent approval.',
+  },
+];
+
+const thread = [
+  {
+    code: 'R',
+    name: 'Drug Discovery & Trade-Offs',
+    detail:
+      'Slide weights across affinity, CHO titer, CMC stability, and MHC-II risk; inspect why eliminated sequences failed, import wet-lab LIMS CSVs, and separate Computed, Predicted, and Measured values.',
+    tag: 'E0.1% & pI carry downstream',
+  },
+  {
+    code: 'D',
+    name: 'CMC & BIOVIA ISA-88 Recipe',
+    detail:
+      'Links General Recipe, 200L/2000L scale-up, SHA-256 Master Recipe, and Control Recipe alongside formulation viscosity math and QbD windows. Recipe updates auto-invalidate stale impact cards.',
+    tag: 'BIOVIA drift invalidates snapshots',
+  },
+  {
+    code: 'M',
+    name: 'GMP Manufacturing EBR',
+    detail:
+      'Tracks DeltaV/UNICORN readbacks, ±1% weighing, Protein A resin cycles (94/100), hold times, and cold-chain excursions. Software enforces business state blocks; physical interlocks remain with site DCS/PLC.',
+    tag: 'Server state hold · DCS/PLC boundary',
+  },
+  {
+    code: 'QC',
+    name: 'QC, Empower CDS & FDA OOS',
+    detail:
+      'Monitors Empower manual re-integrations, 4PL potency, compendial 14-day sterility culture (USP <71> / ChP 1101, non-RMM), 2× reserve vials, and FDA OOS Guidance (2006; Revised May 2022) Phase I/II.',
+    tag: 'FDA OOS (2006 / May 2022 rev)',
+  },
+  {
+    code: 'QA',
+    name: '10 Release Gates & QA / EU QP Sign-Off',
+    detail:
+      'Ten deterministic backend checks cover LMS training, CAPA (RPN 48), and Audit Trail Review under a 21 CFR Part 11 control prototype distinguishing US Quality Unit (21 CFR 211.22) from EU QP (Annex 16).',
+    tag: 'HTTP 409 server state blocking',
+  },
+  {
+    code: 'V',
+    name: 'ISPE GAMP 5 / FDA CSA & 6M Reopen',
+    detail:
+      'Distinguishes ISPE GAMP 5 industry lifecycle methodology from FDA CSA guidance; runs drift regression, 3-batch PPQ Cpk, cleaning MACO, and WX-208 6M post-release stability reopening.',
+    tag: 'WX-208 6M reopen verified',
+  },
+];
+
+const parity = [
+  { label: '150 mg/mL viscosity (+Arg-HCl · TC-21)', value: '18.8 → 7.2 cP' },
+  { label: 'Formulation osmolality (TC-21)', value: '262 → 371 mOsm/kg' },
+  { label: 'Bispecific KiH right pairing (TC-19)', value: '12.5% → 90.7%' },
+  { label: 'ADC DAR ≥ 6 aggregation risk (TC-19)', value: '31.3% → 3.6%' },
+  { label: 'Cross-stage impact failure-path suite', value: '7/7 failure paths passed' },
+  { label: 'Total backend suite (SQLite + PostgreSQL 16.2)', value: '78 tests + 12 subtests' },
+];
+---
+
+<Base
+  lang={lang}
+  title="BioVeritas — Shaw X"
+  description="Biopharma Development & Quality Intelligence — entering through Quality Intelligence with three-layer Cross-Stage Impact Analysis, HTTP 409 state blocking, zero-leak sponsor CoAs, and RTX 5080 evals."
+>
+  <Nav lang={lang} />
+
+  <main class="bv-page">
+    <!-- ACT I: COVER -->
+    <section class="wrap cover">
+      <div class="top-strip mono">
+        <a class="back-link" href="/#work">← Selected work</a>
+        <span class="strip-meta">
+          <i class="live-dot" aria-hidden="true"></i>
+          DEVELOPMENT &amp; QUALITY INTELLIGENCE · RTX 5080 TESTED
+        </span>
+      </div>
+
+      <div class="cover-grid">
+        <div class="cover-main">
+          <p class="eyebrow mono">Digital Record → AI Copilot → Agentic Decision &amp; Execution</p>
+          <h1>BioVeritas</h1>
+          <p class="subtitle">
+            A biopharma development and quality decision platform built with
+            <strong>Quality Intelligence</strong> as its sharpest entry point. Instead of handing
+            judgments to a chatbot, BioVeritas keeps critical checks deterministic in FastAPI,
+            uses Gemini to explain and draft across six connected stages, and routes cross-stage
+            molecular or recipe changes into auditable QA Decision Cards.
+          </p>
+
+          <dl class="spec-ledger">
+            <div>
+              <dt class="mono">Wedge</dt>
+              <dd>Quality Intelligence — deviation triage, 10-gate HTTP 409 blocking, zero-leak sponsor CoAs</dd>
+            </div>
+            <div>
+              <dt class="mono">Agent boundary</dt>
+              <dd>Deterministic dependency scan + 5-state evidence enum + QA-only idempotent approval</dd>
+            </div>
+            <div>
+              <dt class="mono">Data rigor</dt>
+              <dd>4-tier provenance badges (Measured / Computed / Predicted / Simulated) + regulatory glossary</dd>
+            </div>
+          </dl>
+
+          <div class="cover-actions">
+            <a class="cta-primary" href="#workbench">Inspect Decision Card &amp; 6 screens ↓</a>
+            <a class="cta-ghost mono" href="#rtx5080-lab">Jump to RTX 5080 results</a>
+          </div>
+        </div>
+
+        <aside class="signal-rail" aria-label="Headline numbers">
+          <div class="sig">
+            <span class="sig-num">78<small>+12</small></span>
+            <p class="sig-lbl">Backend tests &amp; subtests passing — including <strong>7 failure-path checks</strong> (stale BIOVIA 409, non-QA 403, idempotency, rollback)</p>
+          </div>
+          <div class="sig">
+            <span class="sig-num">120<small>/120</small></span>
+            <p class="sig-lbl">Fine-tuned Qwen2.5-7B exact gate checks, plus <strong>80/80</strong> zero-leak sponsor isolation</p>
+          </div>
+          <div class="sig sig-warn">
+            <span class="sig-num">0.584</span>
+            <p class="sig-lbl">Top clinical mAb AUROC (n=137) — every 95% CI crossed 0.50, so weights stayed offline</p>
+          </div>
+        </aside>
+      </div>
+
+      <figure class="hero-plate">
+        <div class="plate-bar mono">
+          <span>3 Core Business Stories (WX-208 · WX-409 · WX-712) + 3 Buyer Layers + 4-Tier Data Provenance</span>
+          <span>Live FastAPI :8001 · Gemini Copilot · Regulatory Dictionary</span>
+        </div>
+        <img
+          src="/case/bioveritas/queue-3stories.png"
+          alt="BioVeritas Queue overview displaying the three business story cards (WX-208, WX-409, WX-712), three buyer layers, and clickable data provenance badges"
+          width="1440"
+          height="900"
+        />
+      </figure>
+    </section>
+
+    <!-- PRODUCT STRATEGY: 3 STORIES + 3 BUYERS -->
+    <section class="wrap strategy-band" aria-label="Product value and user layers">
+      <div class="strat-head">
+        <p class="eyebrow mono">Product focus · why people buy it</p>
+        <h2>Three business stories and three buyer layers — not a six-menu feature dump.</h2>
+      </div>
+
+      <div class="story-grid">
+        {stories.map((s) => (
+          <article class="story-card">
+            <span class="st-code mono">{s.code}</span>
+            <h3>{s.title}</h3>
+            <p class="st-flow mono">{s.flow}</p>
+            <p class="st-val">{s.value}</p>
+            <p class="st-desc">{s.detail}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="buyer-strip">
+        {buyers.map((b) => (
+          <div class="buyer-cell">
+            <div class="buyer-top">
+              <strong>{b.persona}</strong>
+              <span class="mono">{b.tier}</span>
+            </div>
+            <p class="buyer-buys">{b.buys}</p>
+            <p class="buyer-mods">{b.modules}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ACT II: INTERACTIVE 6-VIEW TOUR -->
+    <div class="wrap" id="workbench">
+      <BioveritasShowcase lang={lang} />
+    </div>
+
+    <!-- ACT III: STICKY-LEFT FLOW -->
+    <section class="wrap spread">
+      <aside class="spread-sticky">
+        <p class="eyebrow mono">Engineering &amp; regulatory boundary</p>
+        <h2>Rules compute facts.<br />Gemini explains.<br />Humans sign.</h2>
+        <p class="sticky-copy">
+          Adding an LLM does not mean delegating GMP decisions to probabilistic text. Every pI,
+          mass balance, release gate, and dependency link runs deterministically in Python/SQLite.
+          Every UI metric carries a clickable provenance badge separating
+          <code>Measured</code>, <code>Computed</code>, <code>Predicted</code>, and
+          <code>Simulated</code> data.
+        </p>
+
+        <div class="hard-stop-note">
+          <span class="hs-kicker mono">Regulatory precision (unified glossary)</span>
+          <p>
+            All copy, API responses, and Copilot prompts share one terminology dictionary:
+            <code>FDA OOS (2006 / May 2022 rev)</code>, US <code>QA Unit</code> vs EU
+            <code>QP</code>, <code>Part 11 control prototype</code>, and server-side
+            <code>HTTP 409</code> blocking (never conflated with physical plant PLC interlocks).
+          </p>
+          <a class="hs-proof mono" href="/case/bioveritas/agent-refusal.png" target="_blank" rel="noopener">
+            See live 409 refusal capture ↗
+          </a>
+        </div>
+      </aside>
+
+      <div class="spread-flow">
+        <ol class="thread-list">
+          {thread.map((step) => (
+            <li class="thread-item">
+              <span class="t-code mono">{step.code}</span>
+              <div class="t-body">
+                <div class="t-head">
+                  <h3>{step.name}</h3>
+                  <span class="t-tag mono">{step.tag}</span>
+                </div>
+                <p>{step.detail}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <div class="parity-ledger">
+          <p class="eyebrow mono">Verified math parity &amp; backend test coverage</p>
+          <dl>
+            {parity.map((row) => (
+              <div class="p-row">
+                <dt>{row.label}</dt>
+                <dd class="mono">{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT IV: DARK LAB BAND -->
+    <section class="lab-band" id="rtx5080-lab">
+      <div class="wrap">
+        <div class="lab-intro">
+          <div>
+            <p class="lab-kicker mono">Local RTX 5080 runs · raw outputs &amp; SHA-256 archived</p>
+            <h2>Every chart came off one 16 GB GPU — wins and failures alike.</h2>
+          </div>
+          <p class="lab-desc">
+            All three benchmarks ran locally on <code>PyTorch 2.7.1+cu128</code> and
+            <code>PEFT 0.14.0</code>. Good product judgment means keeping models offline when
+            they fail statistical bars — and showing the trade-off transparently when DPO safety
+            gains hurt routine task handling.
+          </p>
+        </div>
+
+        <BioveritasBenchCharts lang={lang} />
+      </div>
+    </section>
+
+    <!-- ACT V: BUILT TODAY / BOUNDARIES & ROADMAP -->
+    <section class="wrap closing">
+      <div class="closing-head">
+        <p class="eyebrow mono">Scope &amp; honest boundaries</p>
+        <h2>What is verified today, and what is intentionally out of scope.</h2>
+      </div>
+
+      <div class="ledger-cols">
+        <div class="ledger-col">
+          <h3 class="col-title ok mono">Verified today (P0 + P1)</h3>
+          <ul class="ledger-list">
+            <li>
+              <span class="li-num mono">01</span>
+              <div>
+                <strong>Three-layer Cross-Stage Impact Analysis &amp; 7 failure tests</strong>
+                <p>Persisted snapshots detect BIOVIA/dossier drift (<code>409</code>), block non-QA formal approval (<code>403</code>), deduplicate double-clicks via <code>Idempotency-Key</code>, and roll back atomically if audit persistence fails.</p>
+              </div>
+            </li>
+            <li>
+              <span class="li-num mono">02</span>
+              <div>
+                <strong>End-to-end state machine &amp; append-only triggers</strong>
+                <p><strong>78 tests + 12 subtests</strong> pass across SQLite locking and PostgreSQL 16.2 triggers blocking edits/deletes on audit logs and CoAs; <code>WX-208</code> verifies <code>6M</code> stability reopen &amp; auto-revocation.</p>
+              </div>
+            </li>
+            <li>
+              <span class="li-num mono">03</span>
+              <div>
+                <strong>Role-scoped Gemini Copilot &amp; reproducible RTX 5080 evals</strong>
+                <p>Server-side zero-leak sponsor scrubbing before LLM calls, 21 CFR Part 11 prototype refusal, plus SHA-256 archived out-of-fold predictions and Track C adapters.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="ledger-col">
+          <h3 class="col-title limit mono">Known limits &amp; deferred roadmap (P2/P3)</h3>
+          <ul class="ledger-list">
+            <li>
+              <span class="li-num mono">01</span>
+              <div>
+                <strong>Track A kept offline &amp; Track C clean-lot eval planned</strong>
+                <p>Clinical mAb CIs crossed <code>0.50</code> (kept out of prod). Next Track C round adds clean passing lots alongside fault/boundary/adversarial lots to measure <strong>FAR</strong> and <strong>FRR</strong>.</p>
+              </div>
+            </li>
+            <li>
+              <span class="li-num mono">02</span>
+              <div>
+                <strong>Control prototype vs full commercial Part 11 compliance</strong>
+                <p>Local actor headers stand in for enterprise IAM/SSO; full regulatory Part 11 compliance additionally requires site SOP governance and full computer system validation (CSV).</p>
+              </div>
+            </li>
+            <li>
+              <span class="li-num mono">03</span>
+              <div>
+                <strong>Deliberately deferred P2 / P3 expansion</strong>
+                <p>Small-molecule/target-ID discovery (P2) and clinical/post-market modules (P3) are intentionally deferred so the current product stays focused on Quality Intelligence and cross-stage change governance.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <nav class="case-foot" aria-label="Case navigation">
+        <a class="cf-link" href="/work/veriubo">
+          <span class="mono">Sibling compliance project</span>
+          <strong>← VeriUBO (Corporate KYB &amp; AML)</strong>
+        </a>
+        <span class="cf-hash mono">78 tests + 12 subtests · SHA-256 audit ledger</span>
+        <a class="cf-link right" href="/#work">
+          <span class="mono">Index</span>
+          <strong>All work →</strong>
+        </a>
+      </nav>
+    </section>
+  </main>
+
+  <Footer lang={lang} />
+</Base>
+
+<style>
+  .bv-page {
+    --bv-emerald: #115E54;
+    --bv-ink-dark: #0A1B18;
+    --bv-mint: #6EE7C8;
+    padding-top: 96px;
+  }
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 3vw, 36px);
+  }
+  .bv-page code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: rgba(17, 94, 84, 0.08);
+    color: var(--bv-emerald);
+    padding: 1px 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  .bv-page h2 { text-wrap: balance; }
+
+  /* ACT I */
+  .top-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--hairline);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .back-link:hover { color: var(--bv-emerald); }
+  .strip-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bv-emerald);
+  }
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10B981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+  }
+
+  .cover-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+    gap: clamp(32px, 5vw, 68px);
+    align-items: end;
+    margin-top: 40px;
+  }
+  .cover-main h1 {
+    margin-top: 10px;
+    font-size: clamp(50px, 7.2vw, 88px);
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+    color: var(--ink);
+  }
+  .subtitle {
+    margin: 20px 0 0;
+    font-size: clamp(16.5px, 1.9vw, 19.5px);
+    line-height: 1.68;
+    color: var(--ink-2);
+    max-width: 610px;
+  }
+  .subtitle strong { color: var(--ink); font-weight: 600; }
+
+  .spec-ledger {
+    margin: 28px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .spec-ledger > div {
+    display: grid;
+    grid-template-columns: 124px minmax(0, 1fr);
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--hairline);
+    align-items: baseline;
+  }
+  .spec-ledger dt {
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bv-emerald);
+  }
+  .spec-ledger dd {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--ink);
+  }
+
+  .cover-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 28px;
+  }
+  .cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: var(--bv-ink-dark);
+    color: #ECFDF5;
+    font-size: 14px;
+    font-weight: 500;
+    transition: transform 0.25s, background 0.25s;
+  }
+  .cta-primary:hover { transform: translateY(-2px); background: var(--bv-emerald); }
+  .cta-ghost {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bv-emerald);
+    padding: 8px 4px;
+    border-bottom: 1px solid rgba(17, 94, 84, 0.35);
+    transition: border-color 0.2s;
+  }
+  .cta-ghost:hover { border-color: var(--bv-emerald); }
+
+  .signal-rail {
+    display: flex;
+    flex-direction: column;
+    border-top: 2px solid var(--bv-ink-dark);
+  }
+  .sig {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .sig-num {
+    display: block;
+    font-family: var(--serif);
+    font-size: clamp(34px, 4vw, 48px);
+    line-height: 1;
+    color: var(--bv-emerald);
+    font-variant-numeric: tabular-nums;
+  }
+  .sig-num small {
+    font-size: 0.52em;
+    color: var(--ink-2);
+    margin-left: 2px;
+  }
+  .sig-warn .sig-num { color: var(--accent); }
+  .sig-lbl {
+    margin: 8px 0 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .sig-lbl strong { color: var(--ink); font-weight: 600; }
+
+  .hero-plate {
+    margin: 52px 0 0;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--bv-ink-dark);
+    border: 1px solid rgba(10, 27, 24, 0.2);
+    box-shadow: 0 40px 88px -44px rgba(10, 27, 24, 0.6);
+  }
+  .plate-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 12px 20px;
+    background: #0D231F;
+    border-bottom: 1px solid rgba(110, 231, 200, 0.16);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: #9EE9D2;
+  }
+  .plate-bar span:first-child { color: rgba(236, 253, 245, 0.85); }
+  .hero-plate img { width: 100%; height: auto; display: block; }
+
+  /* STRATEGY BAND */
+  .strategy-band {
+    margin-top: 96px;
+  }
+  .strat-head h2 {
+    margin: 10px 0 0;
+    font-size: clamp(24px, 3.2vw, 36px);
+    max-width: 780px;
+    line-height: 1.22;
+  }
+  .story-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 28px;
+  }
+  .story-card {
+    border: 1px solid var(--hairline);
+    border-top: 2px solid var(--bv-emerald);
+    border-radius: 12px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.65);
+  }
+  .st-code {
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bv-emerald);
+  }
+  .story-card h3 {
+    margin: 8px 0 0;
+    font-size: 20px;
+    line-height: 1.25;
+  }
+  .st-flow {
+    margin: 10px 0 0;
+    font-size: 11px;
+    color: var(--bv-emerald);
+    background: rgba(17, 94, 84, 0.07);
+    padding: 5px 9px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+  .st-val {
+    margin: 12px 0 0;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .st-desc {
+    margin: 8px 0 0;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-2);
+  }
+  .buyer-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 14px;
+    background: var(--bv-ink-dark);
+    color: #ECF7F3;
+  }
+  .buyer-cell {
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(110, 231, 200, 0.14);
+  }
+  .buyer-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .buyer-top strong { font-size: 14px; color: #F4FBF8; }
+  .buyer-top span { font-size: 10px; color: #6EE7C8; letter-spacing: 0.08em; text-transform: uppercase; }
+  .buyer-buys { margin: 8px 0 0; font-size: 13px; color: #D1F2E6; line-height: 1.5; }
+  .buyer-mods { margin: 6px 0 0; font-size: 11.5px; color: #8BAEA5; line-height: 1.55; }
+
+  /* ACT III */
+  .spread {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.42fr) minmax(0, 0.58fr);
+    gap: clamp(32px, 5vw, 72px);
+    margin-top: 116px;
+    align-items: start;
+  }
+  .spread-sticky {
+    position: sticky;
+    top: 86px;
+  }
+  .eyebrow {
+    margin: 0;
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bv-emerald);
+  }
+  .spread-sticky h2 {
+    margin: 12px 0 0;
+    font-size: clamp(26px, 3.2vw, 36px);
+    line-height: 1.18;
+  }
+  .sticky-copy {
+    margin: 18px 0 0;
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--ink-2);
+  }
+  .hard-stop-note {
+    margin-top: 26px;
+    padding: 18px 20px;
+    border-left: 3px solid var(--accent);
+    background: rgba(216, 90, 48, 0.05);
+    border-radius: 0 12px 12px 0;
+  }
+  .hs-kicker {
+    display: block;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .hard-stop-note p {
+    margin: 8px 0 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+  .hs-proof {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    border-bottom: 1px solid rgba(216, 90, 48, 0.35);
+  }
+  .hs-proof:hover { border-color: var(--accent); }
+
+  .thread-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .thread-item {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 18px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .t-code {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(17, 94, 84, 0.09);
+    color: var(--bv-emerald);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .t-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .t-head h3 { font-size: 19px; }
+  .t-tag {
+    font-size: 10.5px;
+    color: var(--bv-emerald);
+    letter-spacing: 0.04em;
+  }
+  .t-body p {
+    margin: 7px 0 0;
+    font-size: 14px;
+    line-height: 1.72;
+    color: var(--ink-2);
+  }
+
+  .parity-ledger {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 2px solid var(--bv-ink-dark);
+  }
+  .parity-ledger dl { margin: 14px 0 0; }
+  .p-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .p-row dt { font-size: 13.5px; color: var(--ink); }
+  .p-row dd {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--bv-emerald);
+    white-space: nowrap;
+  }
+
+  /* ACT IV */
+  .lab-band {
+    margin-top: 120px;
+    padding: clamp(64px, 8vw, 108px) 0;
+    background:
+      radial-gradient(900px 540px at 85% 0%, rgba(17, 94, 84, 0.34), transparent 65%),
+      radial-gradient(760px 520px at 10% 100%, rgba(216, 90, 48, 0.14), transparent 62%),
+      #091715;
+    color: #ECF7F3;
+  }
+  .lab-band code {
+    background: rgba(110, 231, 200, 0.12);
+    color: #8CF0D5;
+  }
+  .lab-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: end;
+  }
+  .lab-kicker {
+    margin: 0;
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #6EE7C8;
+  }
+  .lab-intro h2 {
+    margin: 12px 0 0;
+    font-size: clamp(28px, 3.8vw, 44px);
+    line-height: 1.15;
+    color: #F4FBF8;
+  }
+  .lab-desc {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: #A8C6BE;
+  }
+
+  /* ACT V */
+  .closing {
+    margin-top: 108px;
+    padding-bottom: 56px;
+  }
+  .closing-head h2 {
+    margin: 12px 0 0;
+    font-size: clamp(26px, 3.4vw, 38px);
+    max-width: 680px;
+  }
+  .ledger-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(28px, 5vw, 64px);
+    margin-top: 40px;
+  }
+  .col-title {
+    margin: 0;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--bv-emerald);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bv-emerald);
+  }
+  .col-title.limit {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .ledger-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .ledger-list li {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 14px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .li-num {
+    font-size: 11.5px;
+    color: var(--ink-2);
+    padding-top: 2px;
+  }
+  .ledger-list li > div > strong {
+    display: block;
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .ledger-list p strong {
+    display: inline;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .ledger-list p {
+    margin: 6px 0 0;
+    font-size: 13.5px;
+    line-height: 1.72;
+    color: var(--ink-2);
+  }
+
+  .case-foot {
+    margin-top: 76px;
+    padding-top: 28px;
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .cf-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: color 0.2s;
+  }
+  .cf-link span {
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .cf-link strong {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .cf-link:hover strong { color: var(--bv-emerald); }
+  .cf-link.right { text-align: right; }
+  .cf-hash {
+    font-size: 11px;
+    color: var(--ink-2);
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 860px) {
+    .cover-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+    .story-grid, .buyer-strip { grid-template-columns: minmax(0, 1fr); }
+    .spread { grid-template-columns: minmax(0, 1fr); margin-top: 84px; }
+    .spread-sticky { position: static; }
+    .lab-intro { grid-template-columns: minmax(0, 1fr); }
+    .ledger-cols { grid-template-columns: minmax(0, 1fr); }
+    .spec-ledger > div { grid-template-columns: minmax(0, 1fr); gap: 3px; }
+    .p-row { flex-direction: column; gap: 4px; }
+    .cf-link.right { text-align: left; }
+  }
+</style>

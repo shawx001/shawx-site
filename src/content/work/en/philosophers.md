@@ -6,7 +6,7 @@ stack: [DeepSeek, FastAPI, WebSocket, Persona distillation]
 year: 2026
 casePath: /work/philosophers
 link: https://philosophers.tail0820a5.ts.net/
-order: 3
+order: 5
 ---
 
 ## Problem

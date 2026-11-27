@@ -1,0 +1,926 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+import BioveritasShowcase from '../../../components/BioveritasShowcase.astro';
+import BioveritasBenchCharts from '../../../components/BioveritasBenchCharts.astro';
+
+const lang = 'zh' as const;
+
+const buyers = [
+  {
+    tier: '决策层',
+    persona: '研发 / 项目负责人',
+    buys: '买项目全局可见性与跨部门决策效率',
+    modules: '全队列进度、候选分子权衡、跨阶段影响评估单',
+  },
+  {
+    tier: '业务执行层',
+    persona: 'CMC · 生产 · QC · QA · 验证',
+    buys: '买质量风险控制能力与异常排障效率',
+    modules: 'BIOVIA 配方、EBR 检查、FDA OOS、10 门禁 409 拦截、CAPA 与变更审批',
+  },
+  {
+    tier: '外部协作层',
+    persona: '外部申办方客户（Sponsor）',
+    buys: '买交付透明度与零泄露信任',
+    modules: '独立 Sponsor Portal、SHA-256 电子 CoA、脱敏受控问答',
+  },
+];
+
+const stories = [
+  {
+    code: 'Demo 01 · WX-208',
+    title: '质量与客户信任',
+    flow: 'Release → 6M Reopen → Revoke',
+    value: '让质量状态在企业内部和外部客户之间实时保持一致。',
+    detail:
+      '抗 IL-17A 商业化批次放行后，外部申办方可零泄露查收 SHA-256 电子 CoA；若批后 6 个月（6M）长期稳定性节点触发趋势异常，QA 重开审核后对外证书自动撤销。',
+  },
+  {
+    code: 'Demo 02 · WX-409',
+    title: '质量风险控制',
+    flow: 'Detect → Investigate → Block → CAPA',
+    value: '降低异常处理过程中的信息遗漏和越权放行风险。',
+    detail:
+      '围绕预置偏差案例 DEV-2026-019（洗脱 pH 3.55 → HMW 2.8%），QA 用接了实时数据的 Gemini 查根因、拦截越权放行请求（后端返回 HTTP 409），再走完 CAPA 整改复核。',
+  },
+  {
+    code: 'Demo 03 · WX-712',
+    title: '研发与生产协同',
+    flow: 'Design → Evaluate → Impact → Approve',
+    value: '让上游研发决策能被下游工艺和质量体系准确理解并受控审批。',
+    detail:
+      '调整 ADC DAR 目标（4.0 → 3.5）后，生成三层跨阶段影响决策卡，精准查出 6 维关联对象，对缺少实测的稳定性直接标“证据不足”，最后交由 QA 带幂等防重审批立案。',
+  },
+];
+
+const thread = [
+  {
+    code: 'R',
+    name: '新药发现与候选权衡',
+    detail:
+      '四维权重滑块在亲和力、CHO 表达量、成药性和免疫原性间做取舍；拆解淘汰死因并导入 LIMS 湿实验表，用四类标签把「计算结果 / 模型预测 / 实测数据」彻底分开。',
+    tag: 'E0.1% 与 pI 自动带到后面',
+  },
+  {
+    code: 'D',
+    name: 'CMC 与 BIOVIA ISA-88 配方',
+    detail:
+      '串起通用配方、200L/2000L 基地放大、带 SHA-256 的主配方与车间控制配方，顺带算高浓度黏度和 QbD 窗口；一旦主配方升版，既有未审批的影响评估快照自动失效。',
+    tag: '配方升版触发旧评估快照失效',
+  },
+  {
+    code: 'M',
+    name: 'GMP 车间电子批记录',
+    detail:
+      '核对 DeltaV / UNICORN 参数回读、±1% 称量、Protein A 填料循环上限（94/100）和冷链波动。系统负责软件层业务状态阻断，现场物理设备联锁归属独立 DCS/PLC。',
+    tag: '服务端状态阻断 · 区分现场 PLC',
+  },
+  {
+    code: 'QC',
+    name: 'QC、Empower 与 FDA OOS',
+    detail:
+      '紧盯色谱手动重积分与删峰异常，覆盖 4PL 效价、药典传统 14 天培养法无菌检查（USP <71> / ChP 1101，非快速法 RMM）、2×留样及 FDA OOS 指南（2006 / 2022 修订版）两阶段调查。',
+    tag: 'FDA OOS（2006 / 2022 修订版）',
+  },
+  {
+    code: 'QA',
+    name: '十道放行门禁与 QA / EU QP 签批',
+    detail:
+      '十项放行检查全跑在 FastAPI 确定性后端，覆盖培训过期、CAPA（RPN 48）验效和 ATR 审阅；在 21 CFR Part 11 控制原型下明确区分美国 QA Unit（21 CFR 211.22）与欧盟 QP（Annex 16）。',
+    tag: '缺一项即返回 HTTP 409',
+  },
+  {
+    code: 'V',
+    name: 'ISPE GAMP 5 / FDA CSA 与 6M 重开',
+    detail:
+      '清晰区分 ISPE GAMP 5（行业实践方法论）与 FDA CSA（监管指南）；执行环境漂移回归、三批 PPQ Cpk、清洁 MACO 与 WX-208 批后 6M 稳定性异常重开撤证。',
+    tag: 'WX-208 6M 重开已实测',
+  },
+];
+
+const parity = [
+  { label: '150 mg/mL 制剂黏度（加精氨酸后 · TC-21）', value: '18.8 → 7.2 cP' },
+  { label: '处方渗透压变化（TC-21）', value: '262 → 371 mOsm/kg' },
+  { label: '双抗 KiH 正确配对率（TC-19）', value: '12.5% → 90.7%' },
+  { label: 'ADC 高 DAR ≥ 6 聚集风险（TC-19）', value: '31.3% → 3.6%' },
+  { label: '跨阶段影响分析失败路径单测', value: '7/7 异常与防重路径通过' },
+  { label: '后端全量测试（SQLite + PostgreSQL 16.2）', value: '78 项测试 + 12 子测试' },
+];
+---
+
+<Base
+  lang={lang}
+  title="BioVeritas — Shaw X"
+  description="面向生物制药的研发与质量智能决策平台：以质量风控与放行（Quality Intelligence）切入，串联三层跨阶段影响决策卡、十门禁 409 拦截、申办方零泄露 CoA 与 RTX 5080 实测。"
+>
+  <Nav lang={lang} />
+
+  <main class="bv-page">
+    <!-- ACT I: 封面 -->
+    <section class="wrap cover">
+      <div class="top-strip mono">
+        <a class="back-link" href="/zh/#work">← 精选作品</a>
+        <span class="strip-meta">
+          <i class="live-dot" aria-hidden="true"></i>
+          DEVELOPMENT &amp; QUALITY INTELLIGENCE · RTX 5080 实测
+        </span>
+      </div>
+
+      <div class="cover-grid">
+        <div class="cover-main">
+          <p class="eyebrow mono">Digital Record → AI Copilot → Agentic Decision &amp; Execution</p>
+          <h1>BioVeritas</h1>
+          <p class="zh-kicker mono">生物制药研发与质量智能决策平台（以 Quality Intelligence 切入）</p>
+          <p class="subtitle">
+            从质量风控、异常闭环与受控放行这个最刚性的痛点切入，把上游分子优化、受控配方、车间生产、QC/QA 审批和外部客户交付串进同一份带版本快照的卷宗。接入真实 Gemini 负责理解与解释，但所有关键业务裁决始终压在确定性规则、真实数据和授权专业人员手上。
+          </p>
+
+          <dl class="spec-ledger">
+            <div>
+              <dt class="mono">核心切入点</dt>
+              <dd>Quality Intelligence —— 偏差溯源、十门禁 HTTP 409 拦截、申办方零泄露 CoA</dd>
+            </div>
+            <div>
+              <dt class="mono">Agent 边界</dt>
+              <dd>确定性查依赖 + 5 态证据评估（缺实测报证据不足）+ 仅 QA 幂等审批立案</dd>
+            </div>
+            <div>
+              <dt class="mono">数据与术语</dt>
+              <dd>四类可点击来源标签（实测 / 计算 / 预测 / 模拟）+ 统一监管术语词典</dd>
+            </div>
+          </dl>
+
+          <div class="cover-actions">
+            <a class="cta-primary" href="#workbench">看跨阶段决策卡与 6 个实景 ↓</a>
+            <a class="cta-ghost mono" href="#rtx5080-lab">直接看 5080 实测成绩</a>
+          </div>
+        </div>
+
+        <aside class="signal-rail" aria-label="关键实测数字">
+          <div class="sig">
+            <span class="sig-num">78<small>+12</small></span>
+            <p class="sig-lbl">项后端测试与子测试通过，含 <strong>7 项跨阶段影响失败路径</strong>（配方过期 409、非 QA 403、幂等防重、审计回滚）</p>
+          </div>
+          <div class="sig">
+            <span class="sig-num">120<small>/120</small></span>
+            <p class="sig-lbl">微调 Qwen2.5-7B 十道检查全判对，客户视角 <strong>80/80</strong> 零泄密</p>
+          </div>
+          <div class="sig sig-warn">
+            <span class="sig-num">0.584</span>
+            <p class="sig-lbl">137 个临床抗体里最高分——四组区间全跨过 0.50，所以没放上线</p>
+          </div>
+        </aside>
+      </div>
+
+      <figure class="hero-plate">
+        <div class="plate-bar mono">
+          <span>三条核心业务故事（WX-208 · WX-409 · WX-712）+ 三类买方价值 + 四类数据来源标签</span>
+          <span>FastAPI :8001 实连 · Gemini 问答 · 统一监管口径</span>
+        </div>
+        <img
+          src="/case/bioveritas/queue-3stories.png"
+          alt="BioVeritas 总控队列界面：展示 WX-208、WX-409、WX-712 三条核心业务故事导览、三类用户买单价值和四类数据来源标签"
+          width="1440"
+          height="900"
+        />
+      </figure>
+    </section>
+
+    <!-- 产品聚焦：三条故事 + 三类买方 -->
+    <section class="wrap strategy-band" aria-label="产品价值与用户画像">
+      <div class="strat-head">
+        <p class="eyebrow mono">产品聚焦 · 为谁解决什么问题</p>
+        <h2>不是点六个菜单的功能清单，而是三条故事和三类买单的人。</h2>
+      </div>
+
+      <div class="story-grid">
+        {stories.map((s) => (
+          <article class="story-card">
+            <span class="st-code mono">{s.code}</span>
+            <h3>{s.title}</h3>
+            <p class="st-flow mono">{s.flow}</p>
+            <p class="st-val">{s.value}</p>
+            <p class="st-desc">{s.detail}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="buyer-strip">
+        {buyers.map((b) => (
+          <div class="buyer-cell">
+            <div class="buyer-top">
+              <strong>{b.persona}</strong>
+              <span class="mono">{b.tier}</span>
+            </div>
+            <p class="buyer-buys">{b.buys}</p>
+            <p class="buyer-mods">{b.modules}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ACT II: 六个实景切换 -->
+    <div class="wrap" id="workbench">
+      <BioveritasShowcase lang={lang} />
+    </div>
+
+    <!-- ACT III: 左固定右滚动 -->
+    <section class="wrap spread">
+      <aside class="spread-sticky">
+        <p class="eyebrow mono">人机边界与监管口径</p>
+        <h2>规则算事实，<br />模型做解释，<br />人类签字拍板。</h2>
+        <p class="sticky-copy">
+          接入 Gemini 并不意味着把 GMP 裁决交给大模型。每一项 pI、质量平衡、十道放行门禁和 6 维依赖映射都由后端确定性代码算出；界面上每个指标都挂了可点击的四类来源标签（<code>实测数据</code> / <code>计算结果</code> / <code>模型预测</code> / <code>模拟数据</code>），一眼分清真实验值和预置案例。
+        </p>
+
+        <div class="hard-stop-note">
+          <span class="hs-kicker mono">统一监管术语词典（前后端与 AI 问答同源）</span>
+          <p>
+            全站统一维护 7 项监管边界：标注 <code>FDA OOS 指南（2006 / 2022 修订版）</code>、区分美国 <code>QA Unit</code> 与欧盟 <code>QP</code>、明示 <code>21 CFR Part 11 控制原型</code>，并把 <code>HTTP 409</code> 严格界定为服务端业务状态阻断（不混同于现场 PLC 物理联锁）。
+          </p>
+          <a class="hs-proof mono" href="/case/bioveritas/agent-refusal.png" target="_blank" rel="noopener">
+            看实测拒答截屏 ↗
+          </a>
+        </div>
+      </aside>
+
+      <div class="spread-flow">
+        <ol class="thread-list">
+          {thread.map((step) => (
+            <li class="thread-item">
+              <span class="t-code mono">{step.code}</span>
+              <div class="t-body">
+                <div class="t-head">
+                  <h3>{step.name}</h3>
+                  <span class="t-tag mono">{step.tag}</span>
+                </div>
+                <p>{step.detail}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <div class="parity-ledger">
+          <p class="eyebrow mono">前后端公式对账与全量自动化测试</p>
+          <dl>
+            {parity.map((row) => (
+              <div class="p-row">
+                <dt>{row.label}</dt>
+                <dd class="mono">{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT IV: 通栏深色实验记录 -->
+    <section class="lab-band" id="rtx5080-lab">
+      <div class="wrap">
+        <div class="lab-intro">
+          <div>
+            <p class="lab-kicker mono">RTX 5080 本机实测 · 原始预测与 SHA-256 均留档</p>
+            <h2>每一组数字都是本地跑出来的，<br />没跑好的也没藏着。</h2>
+          </div>
+          <p class="lab-desc">
+            三组实验全在一张 16 GB 显存的 5080 上跑完（<code>PyTorch 2.7.1+cu128</code>、<code>PEFT 0.14.0</code>）。效果不好就不强行上线，DPO 提安全却伤了正常请求处理率也原样摊开——这才是垂直行业 AI 产品该有的准入态度。
+          </p>
+        </div>
+
+        <BioveritasBenchCharts lang={lang} />
+      </div>
+    </section>
+
+    <!-- ACT V: 现有能力 / 边界与未来规划 -->
+    <section class="wrap closing">
+      <div class="closing-head">
+        <p class="eyebrow mono">实话实说 · 范围与边界</p>
+        <h2>哪些已经做透，哪些刻意先不做。</h2>
+      </div>
+
+      <div class="ledger-cols">
+        <div class="ledger-col">
+          <h3 class="col-title ok mono">已完成并实测（P0 + P1）</h3>
+          <ul class="ledger-list">
+            <li>
+              <span class="li-num mono">01</span>
+              <div>
+                <strong>三层跨阶段影响分析与 7 项失败路径保护</strong>
+                <p>绑定源卷宗和 BIOVIA 配方快照：底层版本变了直接报过期返回 <code>409</code>，非 QA 审批返回 <code>403</code>，连点靠 <code>Idempotency-Key</code> 防重，审计写失败整笔事务自动回滚。</p>
+              </div>
+            </li>
+            <li>
+              <span class="li-num mono">02</span>
+              <div>
+                <strong>全栈状态机与防改删数据库触发器</strong>
+                <p><strong>78 项测试 + 12 个子测试</strong>通过；SQLite 乐观锁与 PostgreSQL 16.2 防改删触发器实测生效，<code>WX-208</code> 跑通了批后 <code>6M</code> 稳定性重开并自动撤下客户 CoA。</p>
+              </div>
+            </li>
+            <li>
+              <span class="li-num mono">03</span>
+              <div>
+                <strong>角色隔离 Gemini 问答与可复现 5080 记录</strong>
+                <p>申办方问答在送进大模型前已做服务端零泄露脱敏；所有五折原始预测、审核微调权重和 <code>3I40</code> 折叠文件均带 SHA-256 留档。</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="ledger-col">
+          <h3 class="col-title limit mono">已知局限与刻意延后（P2 / P3）</h3>
+          <ul class="ledger-list">
+            <li>
+              <span class="li-num mono">01</span>
+              <div>
+                <strong>Track A 未上线 &amp; Track C 下一轮补测 FAR / FRR</strong>
+                <p>137 个临床抗体上模型区间全跨过 <code>0.50</code>，未接进线上筛选；审核模型目前只在含异常卷宗上测过，下一轮将加入完全合格正向卷宗测量误放行率（FAR）和误拦截率（FRR）。</p>
+              </div>
+            </li>
+            <li>
+              <span class="li-num mono">02</span>
+              <div>
+                <strong>控制原型与完整商业化 Part 11 合规的差距</strong>
+                <p>本机用请求头模拟角色切换；完整 Part 11 合规上线另需企业级 IAM/SSO、现场 SOP 治理以及完整的计算机系统验证（CSV）。</p>
+              </div>
+            </li>
+            <li>
+              <span class="li-num mono">03</span>
+              <div>
+                <strong>主动克制，先不扩 P2 / P3 模块</strong>
+                <p>靶点发现/小分子（P2）与临床/上市后监测（P3）刻意留在远期路线图，不把原型做成一个什么都沾一点的大而全壳子，先把质量风控与跨阶段变更治理打穿。</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <nav class="case-foot" aria-label="案例导航">
+        <a class="cf-link" href="/zh/work/veriubo">
+          <span class="mono">另一个合规系统案例</span>
+          <strong>← VeriUBO（银行企业开户尽调）</strong>
+        </a>
+        <span class="cf-hash mono">78 项测试 + 12 子测试 · SHA-256 审计账本</span>
+        <a class="cf-link right" href="/zh/#work">
+          <span class="mono">目录</span>
+          <strong>回全部作品 →</strong>
+        </a>
+      </nav>
+    </section>
+  </main>
+
+  <Footer lang={lang} />
+</Base>
+
+<style>
+  .bv-page {
+    --bv-emerald: #115E54;
+    --bv-ink-dark: #0A1B18;
+    --bv-mint: #6EE7C8;
+    padding-top: 96px;
+  }
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 3vw, 36px);
+  }
+  .bv-page code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: rgba(17, 94, 84, 0.08);
+    color: var(--bv-emerald);
+    padding: 1px 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  .bv-page h2 { text-wrap: balance; }
+
+  /* ACT I */
+  .top-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--hairline);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .back-link:hover { color: var(--bv-emerald); }
+  .strip-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bv-emerald);
+  }
+  .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10B981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+  }
+
+  .cover-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+    gap: clamp(32px, 5vw, 68px);
+    align-items: end;
+    margin-top: 40px;
+  }
+  .cover-main h1 {
+    margin-top: 10px;
+    font-size: clamp(50px, 7.2vw, 88px);
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+    color: var(--ink);
+  }
+  .zh-kicker {
+    margin: 10px 0 0;
+    font-size: 12.5px;
+    letter-spacing: 0.12em;
+    color: var(--bv-emerald);
+  }
+  .subtitle {
+    margin: 18px 0 0;
+    font-size: clamp(16px, 1.9vw, 18.5px);
+    line-height: 1.82;
+    color: var(--ink-2);
+    max-width: 610px;
+  }
+
+  .spec-ledger {
+    margin: 28px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .spec-ledger > div {
+    display: grid;
+    grid-template-columns: 98px minmax(0, 1fr);
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--hairline);
+    align-items: baseline;
+  }
+  .spec-ledger dt {
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--bv-emerald);
+  }
+  .spec-ledger dd {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+
+  .cover-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 28px;
+  }
+  .cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: var(--bv-ink-dark);
+    color: #ECFDF5;
+    font-size: 14px;
+    font-weight: 500;
+    transition: transform 0.25s, background 0.25s;
+  }
+  .cta-primary:hover { transform: translateY(-2px); background: var(--bv-emerald); }
+  .cta-ghost {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--bv-emerald);
+    padding: 8px 4px;
+    border-bottom: 1px solid rgba(17, 94, 84, 0.35);
+    transition: border-color 0.2s;
+  }
+  .cta-ghost:hover { border-color: var(--bv-emerald); }
+
+  .signal-rail {
+    display: flex;
+    flex-direction: column;
+    border-top: 2px solid var(--bv-ink-dark);
+  }
+  .sig {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .sig-num {
+    display: block;
+    font-family: var(--serif);
+    font-size: clamp(34px, 4vw, 48px);
+    line-height: 1;
+    color: var(--bv-emerald);
+    font-variant-numeric: tabular-nums;
+  }
+  .sig-num small {
+    font-size: 0.52em;
+    color: var(--ink-2);
+    margin-left: 2px;
+  }
+  .sig-warn .sig-num { color: var(--accent); }
+  .sig-lbl {
+    margin: 8px 0 0;
+    font-size: 13px;
+    line-height: 1.72;
+    color: var(--ink-2);
+  }
+  .sig-lbl strong { color: var(--ink); font-weight: 600; }
+
+  .hero-plate {
+    margin: 52px 0 0;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--bv-ink-dark);
+    border: 1px solid rgba(10, 27, 24, 0.2);
+    box-shadow: 0 40px 88px -44px rgba(10, 27, 24, 0.6);
+  }
+  .plate-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 12px 20px;
+    background: #0D231F;
+    border-bottom: 1px solid rgba(110, 231, 200, 0.16);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: #9EE9D2;
+  }
+  .plate-bar span:first-child { color: rgba(236, 253, 245, 0.85); }
+  .hero-plate img { width: 100%; height: auto; display: block; }
+
+  /* STRATEGY BAND */
+  .strategy-band {
+    margin-top: 96px;
+  }
+  .strat-head h2 {
+    margin: 10px 0 0;
+    font-size: clamp(24px, 3.1vw, 35px);
+    max-width: 780px;
+    line-height: 1.25;
+  }
+  .story-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-top: 28px;
+  }
+  .story-card {
+    border: 1px solid var(--hairline);
+    border-top: 2px solid var(--bv-emerald);
+    border-radius: 12px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.65);
+  }
+  .st-code {
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--bv-emerald);
+  }
+  .story-card h3 {
+    margin: 8px 0 0;
+    font-size: 19.5px;
+    line-height: 1.28;
+  }
+  .st-flow {
+    margin: 10px 0 0;
+    font-size: 11px;
+    color: var(--bv-emerald);
+    background: rgba(17, 94, 84, 0.07);
+    padding: 5px 9px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+  .st-val {
+    margin: 12px 0 0;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  .st-desc {
+    margin: 8px 0 0;
+    font-size: 13px;
+    line-height: 1.78;
+    color: var(--ink-2);
+  }
+  .buyer-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 14px;
+    background: var(--bv-ink-dark);
+    color: #ECF7F3;
+  }
+  .buyer-cell {
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(110, 231, 200, 0.14);
+  }
+  .buyer-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .buyer-top strong { font-size: 14px; color: #F4FBF8; }
+  .buyer-top span { font-size: 10px; color: #6EE7C8; letter-spacing: 0.06em; }
+  .buyer-buys { margin: 8px 0 0; font-size: 13px; color: #D1F2E6; line-height: 1.6; }
+  .buyer-mods { margin: 6px 0 0; font-size: 11.5px; color: #8BAEA5; line-height: 1.6; }
+
+  /* ACT III */
+  .spread {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.42fr) minmax(0, 0.58fr);
+    gap: clamp(32px, 5vw, 72px);
+    margin-top: 116px;
+    align-items: start;
+  }
+  .spread-sticky {
+    position: sticky;
+    top: 86px;
+  }
+  .eyebrow {
+    margin: 0;
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bv-emerald);
+  }
+  .spread-sticky h2 {
+    margin: 12px 0 0;
+    font-size: clamp(26px, 3.1vw, 35px);
+    line-height: 1.25;
+  }
+  .sticky-copy {
+    margin: 18px 0 0;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--ink-2);
+  }
+  .hard-stop-note {
+    margin-top: 26px;
+    padding: 18px 20px;
+    border-left: 3px solid var(--accent);
+    background: rgba(216, 90, 48, 0.05);
+    border-radius: 0 12px 12px 0;
+  }
+  .hs-kicker {
+    display: block;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+  }
+  .hard-stop-note p {
+    margin: 8px 0 0;
+    font-size: 13.5px;
+    line-height: 1.8;
+    color: var(--ink);
+  }
+  .hs-proof {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    border-bottom: 1px solid rgba(216, 90, 48, 0.35);
+  }
+  .hs-proof:hover { border-color: var(--accent); }
+
+  .thread-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .thread-item {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 18px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--hairline);
+    align-items: start;
+  }
+  .t-code {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(17, 94, 84, 0.09);
+    color: var(--bv-emerald);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .t-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .t-head h3 { font-size: 18.5px; }
+  .t-tag {
+    font-size: 10.5px;
+    color: var(--bv-emerald);
+    letter-spacing: 0.04em;
+  }
+  .t-body p {
+    margin: 7px 0 0;
+    font-size: 14px;
+    line-height: 1.82;
+    color: var(--ink-2);
+  }
+
+  .parity-ledger {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 2px solid var(--bv-ink-dark);
+  }
+  .parity-ledger dl { margin: 14px 0 0; }
+  .p-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .p-row dt { font-size: 13.5px; color: var(--ink); }
+  .p-row dd {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--bv-emerald);
+    white-space: nowrap;
+  }
+
+  /* ACT IV: DARK LAB BAND */
+  .lab-band {
+    margin-top: 120px;
+    padding: clamp(64px, 8vw, 108px) 0;
+    background:
+      radial-gradient(900px 540px at 85% 0%, rgba(17, 94, 84, 0.34), transparent 65%),
+      radial-gradient(760px 520px at 10% 100%, rgba(216, 90, 48, 0.14), transparent 62%),
+      #091715;
+    color: #ECF7F3;
+  }
+  .lab-band code {
+    background: rgba(110, 231, 200, 0.12);
+    color: #8CF0D5;
+  }
+  .lab-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: end;
+  }
+  .lab-kicker {
+    margin: 0;
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    color: #6EE7C8;
+  }
+  .lab-intro h2 {
+    margin: 12px 0 0;
+    font-size: clamp(26px, 3.6vw, 42px);
+    line-height: 1.24;
+    color: #F4FBF8;
+  }
+  .lab-desc {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.88;
+    color: #A8C6BE;
+  }
+
+  /* ACT V */
+  .closing {
+    margin-top: 108px;
+    padding-bottom: 56px;
+  }
+  .closing-head h2 {
+    margin: 12px 0 0;
+    font-size: clamp(26px, 3.4vw, 38px);
+    max-width: 680px;
+  }
+  .ledger-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(28px, 5vw, 64px);
+    margin-top: 40px;
+  }
+  .col-title {
+    margin: 0;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--bv-emerald);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    color: var(--bv-emerald);
+  }
+  .col-title.limit {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .ledger-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .ledger-list li {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 14px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .li-num {
+    font-size: 11.5px;
+    color: var(--ink-2);
+    padding-top: 2px;
+  }
+  .ledger-list li > div > strong {
+    display: block;
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .ledger-list p strong {
+    display: inline;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .ledger-list p {
+    margin: 6px 0 0;
+    font-size: 13.5px;
+    line-height: 1.82;
+    color: var(--ink-2);
+  }
+
+  .case-foot {
+    margin-top: 76px;
+    padding-top: 28px;
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .cf-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: color 0.2s;
+  }
+  .cf-link span {
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    color: var(--ink-2);
+  }
+  .cf-link strong {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .cf-link:hover strong { color: var(--bv-emerald); }
+  .cf-link.right { text-align: right; }
+  .cf-hash {
+    font-size: 11px;
+    color: var(--ink-2);
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 860px) {
+    .cover-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+    .story-grid, .buyer-strip { grid-template-columns: minmax(0, 1fr); }
+    .spread { grid-template-columns: minmax(0, 1fr); margin-top: 84px; }
+    .spread-sticky { position: static; }
+    .lab-intro { grid-template-columns: minmax(0, 1fr); }
+    .ledger-cols { grid-template-columns: minmax(0, 1fr); }
+    .spec-ledger > div { grid-template-columns: minmax(0, 1fr); gap: 3px; }
+    .p-row { flex-direction: column; gap: 4px; }
+    .cf-link.right { text-align: left; }
+  }
+</style>

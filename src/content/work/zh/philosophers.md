@@ -6,7 +6,7 @@ stack: [DeepSeek, FastAPI, WebSocket, 人格蒸馏]
 year: 2026
 casePath: /zh/work/philosophers
 link: https://philosophers.tail0820a5.ts.net/
-order: 3
+order: 5
 ---
 
 ## 问题

@@ -1,0 +1,608 @@
+---
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const isZh = lang === 'zh';
+
+/* Track A: Real 5-fold CDR-H3 cluster-grouped CV on Jain PNAS 2017 (n=137 mAbs, 12 assays) */
+const trackA = [
+  {
+    code: 'B1',
+    en: 'Frozen ESM-2 + MLP',
+    zh: '冻结 ESM-2 + MLP',
+    auroc: 0.584,
+    lo: 0.484,
+    hi: 0.677,
+    ece: '0.246',
+    ef: '1.33×',
+    tm: '+0.216',
+    vram: '1.45 GiB',
+    color: '#6EE7C8',
+    highlight: true,
+  },
+  {
+    code: 'B0',
+    en: 'PhysChem + Ridge',
+    zh: '理化基线 + Ridge',
+    auroc: 0.522,
+    lo: 0.411,
+    hi: 0.631,
+    ece: '0.125',
+    ef: '1.11×',
+    tm: '-0.071',
+    vram: 'CPU',
+    color: '#93B8AE',
+    highlight: false,
+  },
+  {
+    code: 'Ours',
+    en: 'Multi-task LoRA (5×3)',
+    zh: '多任务 CDR LoRA',
+    auroc: 0.510,
+    lo: 0.405,
+    hi: 0.616,
+    ece: '0.013',
+    ef: '1.00×',
+    tm: '-0.294',
+    vram: '4.12 GiB',
+    color: '#E5BE75',
+    highlight: false,
+  },
+  {
+    code: 'B2',
+    en: 'Single-task LoRA',
+    zh: '单任务 ESM-2 LoRA',
+    auroc: 0.474,
+    lo: 0.364,
+    hi: 0.576,
+    ece: '0.005',
+    ef: '0.78×',
+    tm: '-0.306',
+    vram: '4.14 GiB',
+    color: '#8EA19C',
+    highlight: false,
+  },
+];
+
+const xLeft = 148;
+const xRight = 356;
+const plotW = xRight - xLeft;
+const domMin = 0.30;
+const domMax = 0.75;
+const xOf = (v: number) => +(xLeft + ((v - domMin) / (domMax - domMin)) * plotW).toFixed(1);
+const rowY = (i: number) => 46 + i * 38;
+const xTicks = [0.30, 0.40, 0.50, 0.60, 0.70];
+const chanceX = xOf(0.50);
+
+/* Track C: Real Qwen2.5-7B-Instruct NF4 QLoRA SFT vs SFT+DPO on 200 strictly held-out synthetic dossiers */
+const trackC = [
+  {
+    en: 'All 10 Gates Exact',
+    zh: '十道门禁全部判对',
+    subEn: 'n = 120 internal · Macro-F1 1.000',
+    subZh: '120 份内部卷宗 · Macro-F1 1.000',
+    base: 0,
+    sft: 100,
+    dpo: 100,
+    badgeEn: '120 / 120',
+    badgeZh: '120 / 120',
+    warn: false,
+  },
+  {
+    en: 'Sponsor Data Isolation',
+    zh: '客户视角零泄密',
+    subEn: 'n = 80 external · 0 internal leaks',
+    subZh: '80 份外部测试 · 零内部字段外泄',
+    base: 0,
+    sft: 100,
+    dpo: 100,
+    badgeEn: '80 / 80',
+    badgeZh: '80 / 80',
+    warn: false,
+  },
+  {
+    en: 'Refusing Bypass Prompts',
+    zh: '拒绝违规绕过请求',
+    subEn: 'n = 100 adversarial prompts',
+    subZh: '100 次试图跳过审核的提问',
+    base: 0,
+    sft: 92,
+    dpo: 94,
+    badgeEn: '+2 pp after DPO',
+    badgeZh: 'DPO 涨了 2%',
+    warn: false,
+  },
+  {
+    en: 'Handling Normal Prompts',
+    zh: '正常提问正确处理',
+    subEn: 'n = 100 routine requests',
+    subZh: '100 次正常的日常提问',
+    base: 0,
+    sft: 100,
+    dpo: 85,
+    badgeEn: '-15 pp over-refusal',
+    badgeZh: 'DPO 误拒掉了 15%',
+    warn: true,
+  },
+];
+---
+
+<div class="lab-stack" id="benchmark-charts">
+  <!-- PANEL 1: TRACK A -->
+  <article class="lab-panel">
+    <div class="panel-top">
+      <div>
+        <p class="p-tag mono">
+          {isZh ? (
+            <>实验 1 · 137 个临床抗体 5 折盲测</>
+          ) : (
+            <>Experiment 1 · 137 Clinical mAbs (5-Fold CV)</>
+          )}
+        </p>
+        <h3>
+          {isZh
+            ? '四个模型全没拉开差距，95% 区间都跨过了 0.50 随机线'
+            : 'None of the four models clearly beat a 0.50 coin flip'}
+        </h3>
+      </div>
+      <span class="verdict-pill warn mono">
+        {isZh ? '处理方式：没上线，权重留在本地' : 'Outcome: weights kept out of prod'}
+      </span>
+    </div>
+
+    <div class="panel-split">
+      <div class="svg-wrap">
+        <svg
+          class="forest-svg"
+          viewBox="0 0 444 226"
+          role="img"
+          aria-label={isZh
+            ? '137 个临床抗体五折结果：冻结 ESM-2 0.584、理化基线 0.522、多任务 LoRA 0.510、单任务 LoRA 0.474，四组 95% 区间均跨过 0.50'
+            : '137 clinical mAbs 5-fold CV: Frozen ESM-2 0.584, PhysChem Ridge 0.522, Multi-task LoRA 0.510, Single-task LoRA 0.474; all four 95% CIs cross 0.50'}
+        >
+          {xTicks.map((t) => (
+            <g>
+              <line
+                x1={xOf(t)}
+                x2={xOf(t)}
+                y1={26}
+                y2={182}
+                stroke={t === 0.5 ? '#F0937A' : 'rgba(182, 214, 204, 0.16)'}
+                stroke-width={t === 0.5 ? '1.3' : '1'}
+                stroke-dasharray={t === 0.5 ? '4 3' : '2 3'}
+              />
+              <text x={xOf(t)} y={198} text-anchor="middle" class="ax-tick">
+                {t.toFixed(2)}
+              </text>
+            </g>
+          ))}
+
+          <text x={chanceX} y={16} text-anchor="middle" class="chance-lbl">
+            {isZh ? '随机线 0.50' : 'Chance 0.50'}
+          </text>
+
+          {trackA.map((m, i) => {
+            const y = rowY(i);
+            return (
+              <g>
+                <line x1={xLeft} x2={xRight} y1={y} y2={y} stroke="rgba(182, 214, 204, 0.08)" stroke-width="1" />
+                <text x={xLeft - 10} y={y + 3.5} text-anchor="end" class="row-lbl">
+                  {isZh ? m.zh : m.en}
+                </text>
+                <line
+                  x1={xOf(m.lo)}
+                  x2={xOf(m.hi)}
+                  y1={y}
+                  y2={y}
+                  stroke={m.color}
+                  stroke-width={m.highlight ? '3' : '2'}
+                  stroke-linecap="round"
+                />
+                <line x1={xOf(m.lo)} x2={xOf(m.lo)} y1={y - 5} y2={y + 5} stroke={m.color} stroke-width="1.5" />
+                <line x1={xOf(m.hi)} x2={xOf(m.hi)} y1={y - 5} y2={y + 5} stroke={m.color} stroke-width="1.5" />
+                {m.highlight && <circle cx={xOf(m.auroc)} cy={y} r="7.5" fill={m.color} fill-opacity=".22" />}
+                <circle
+                  cx={xOf(m.auroc)}
+                  cy={y}
+                  r={m.highlight ? '4.4' : '3.6'}
+                  fill={m.highlight ? m.color : '#0D211E'}
+                  stroke={m.color}
+                  stroke-width="2"
+                />
+                <text x={xRight + 12} y={y - 1} class="val-main" fill={m.highlight ? '#6EE7C8' : '#EBF7F2'}>
+                  {m.auroc.toFixed(3)}
+                </text>
+                <text x={xRight + 12} y={y + 11} class="val-ci">
+                  [{m.lo.toFixed(2)}–{m.hi.toFixed(2)}]
+                </text>
+              </g>
+            );
+          })}
+
+          <text x={(xLeft + xRight) / 2} y={219} text-anchor="middle" class="ax-title">
+            {isZh ? 'Jain 2017 · 12 项实测 · 按 121 个 CDR-H3 聚类防泄漏分折' : 'Jain 2017 · 12 assays · 121 CDR-H3 leakage-free clusters'}
+          </text>
+        </svg>
+      </div>
+
+      <div class="table-pane">
+        <div class="table-wrap">
+          <table class="lab-table">
+            <thead>
+              <tr>
+                <th>{isZh ? '模型' : 'Model'}</th>
+                <th class="num">ECE</th>
+                <th class="num">EF@10%</th>
+                <th class="num">DSF <span class="keep-case">Tm ρ</span></th>
+                <th class="num">{isZh ? '显存' : 'VRAM'}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {trackA.map((m) => (
+                <tr class:list={[{ hi: m.highlight }]}>
+                  <td>
+                    <span class="code-chip mono">{m.code}</span>
+                    {isZh ? m.zh : m.en}
+                  </td>
+                  <td class="num mono">{m.ece}</td>
+                  <td class="num mono">{m.ef}</td>
+                  <td class="num mono">{m.tm}</td>
+                  <td class="num mono">{m.vram}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="pane-note">
+          {isZh
+            ? '冻结的 ESM-2（0.584）反而比微调过的 LoRA（0.474 / 0.510）高，说明 137 个样本上微调很容易过拟合。既然四组区间都跨着 0.50，这套权重就没有装进线上筛选。'
+            : 'Frozen ESM-2 (0.584) actually beat both LoRA runs (0.474 / 0.510) — fine-tuning on 137 antibodies overfits fast. Since all four intervals cross 0.50, none of these weights were wired into live screening.'}
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <!-- PANEL 2: TRACK C -->
+  <article class="lab-panel">
+    <div class="panel-top">
+      <div>
+        <p class="p-tag mono">
+          {isZh ? (
+            <>实验 2 · Qwen2.5-7B 审核模型 · <span class="keep-case">n = 200</span> 份测试卷宗</>
+          ) : (
+            <>Experiment 2 · Qwen2.5-7B Audit Model · <span class="keep-case">n = 200</span> Test Lots</>
+          )}
+        </p>
+        <h3>
+          {isZh
+            ? 'SFT 十道门禁全对；加了 DPO 后拒答更严，但误拦了 15% 正常请求'
+            : 'SFT nailed all 10 gates; DPO got stricter, but over-refused 15% of normal prompts'}
+        </h3>
+      </div>
+      <span class="verdict-pill mint mono">
+        {isZh ? '峰值 7.86 GiB · 跑了 31 分钟' : '7.86 GiB Peak VRAM · 31 min run'}
+      </span>
+    </div>
+
+    <div class="legend-strip mono" aria-hidden="true">
+      <span class="lg"><i class="sw sw-base"></i>{isZh ? '原版 Qwen2.5-7B（格式全挂 0/200）' : 'Base Qwen2.5-7B (0/200 valid JSON)'}</span>
+      <span class="lg"><i class="sw sw-sft"></i>{isZh ? 'SFT（1,200 条 × 3 轮）' : 'SFT (1,200 rows × 3 epochs)'}</span>
+      <span class="lg"><i class="sw sw-dpo"></i>{isZh ? 'SFT + DPO（256 组偏好对）' : 'SFT + DPO (256 preference pairs)'}</span>
+    </div>
+
+    <div class="c-grid">
+      {trackC.map((m) => (
+        <div class:list={['c-tile', { 'tile-warn': m.warn }]}>
+          <div class="c-tile-head">
+            <div>
+              <span class="c-name">{isZh ? m.zh : m.en}</span>
+              <span class="c-sub mono">{isZh ? m.subZh : m.subEn}</span>
+            </div>
+            <span class:list={['c-badge mono', { warn: m.warn }]}>
+              {isZh ? m.badgeZh : m.badgeEn}
+            </span>
+          </div>
+
+          <div class="c-bars">
+            <div class="b-row">
+              <span class="b-lbl mono">Base</span>
+              <div class="b-track"><span class="b-fill f-base" style={`width:${Math.max(m.base, 2)}%`}></span></div>
+              <span class="b-val mono">{m.base}%</span>
+            </div>
+            <div class="b-row">
+              <span class="b-lbl mono">SFT</span>
+              <div class="b-track"><span class="b-fill f-sft" style={`width:${m.sft}%`}></span></div>
+              <span class="b-val mono">{m.sft}%</span>
+            </div>
+            <div class="b-row">
+              <span class="b-lbl mono">DPO</span>
+              <div class="b-track"><span class="b-fill f-dpo" style={`width:${m.dpo}%`}></span></div>
+              <span class="b-val mono">{m.dpo}%</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <p class="panel-foot mono">
+      {isZh
+        ? '补充说明：这 200 份合成测试卷宗每份都至少有一项不达标，尚未测量“完全合格批次”的放行表现（下一轮评测需补齐正向/单项/复合/边界/对抗五类卷宗，分别报出误放行率 FAR 与误拦截率 FRR）。线上最终放行权始终归确定性后端与授权质量人员（US QA Unit / EU QP）。'
+        : 'Caveat: all 200 synthetic test lots had at least one failing gate, so clean-lot approvals were not measured (next eval adds clean, single-fault, multi-fault, boundary, and adversarial lots to measure FAR and FRR). Final batch disposition remains with the deterministic backend and authorized Quality Unit / EU QP.'}
+    </p>
+  </article>
+
+  <!-- TELEMETRY STRIP: Track B & PDB 3I40 -->
+  <div class="telemetry-duo">
+    <div class="tele-card">
+      <span class="p-tag mono">{isZh ? '实验 3 · Mason 2021 公开数据核对' : 'Experiment 3 · Mason 2021 Data Check'}</span>
+      <h4>{isZh ? '洗出 34,049 条干净数据，查出固定区自带高危热点' : 'Cleaned 34,049 variants — and caught a shared fixed-region flaw'}</h4>
+      <p>
+        {isZh
+          ? '原表 38,839 行里删掉 2,342 条正负冲突记录，剩下 34,049 条（随机抽 64 次结合阳性率 22.19%）。拿 IMGT 规则一扫，发现实验没改到的固定区本身就带一个全库共有的 CDR 热点，按严格联合标准命中为 0，所以节省比例直接写“无定义”，不硬凑数。'
+          : 'Dropped 2,342 conflicting labels from 38,839 raw rows to leave 34,049 clean variants (22.19% random binding rate over 64 draws). Scanning the scaffold with IMGT rules caught a shared CDR liability outside the mutated region — 0 strict joint hits, so wet-lab savings stays honestly undefined.'}
+      </p>
+    </div>
+
+    <div class="tele-card">
+      <span class="p-tag mono">{isZh ? '本机 GPU 跑通 · PDB 3I40 人胰岛素' : 'Live GPU Check · PDB 3I40 Insulin'}</span>
+      <h4>{isZh ? '按需调用 ESM-2 650M 与 Boltz-1 折叠' : 'On-demand ESM-2 650M + Boltz-1 folding'}</h4>
+      <p>
+        {isZh
+          ? 'FastAPI 接口可以直接在本地 5080 上跑 ESM-2（3.85 秒）和 Boltz-1（48.92 秒），峰值显存 2.64 GB，单序列模式 ipTM 0.2895，刷新页面能读回结果。页面用「模型预测」标签明确注明：本地 GPU 真实执行证明的是推理链路跑通，不代表结果已获湿实验证实。'
+          : 'FastAPI triggers real local BF16 ESM-2 (3.85s) and Boltz-1 (48.92s) on 3I40 A/B chains (2.64 GB peak VRAM, 0.2895 ipTM in single-sequence mode) and reloads saved structures after refresh — tagged as Model Prediction because real GPU execution verifies runtime plumbing, not wet-lab proof.'}
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .lab-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 36px;
+  }
+  .lab-panel {
+    background: rgba(16, 40, 36, 0.72);
+    border: 1px solid rgba(110, 231, 200, 0.16);
+    border-radius: 18px;
+    padding: clamp(22px, 3.2vw, 34px);
+    color: #ECF7F3;
+  }
+  .panel-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(182, 214, 204, 0.14);
+  }
+  .p-tag {
+    margin: 0;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6EE7C8;
+  }
+  .keep-case { text-transform: none; }
+  .lab-panel h3 {
+    margin: 8px 0 0;
+    font-size: clamp(20px, 2.4vw, 27px);
+    line-height: 1.25;
+    color: #F4FBF8;
+  }
+  .verdict-pill {
+    flex-shrink: 0;
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    border-radius: 999px;
+    padding: 6px 13px;
+  }
+  .verdict-pill.warn {
+    color: #FFB499;
+    border: 1px solid rgba(240, 147, 122, 0.55);
+    background: rgba(216, 90, 48, 0.16);
+  }
+  .verdict-pill.mint {
+    color: #8CF0D5;
+    border: 1px solid rgba(110, 231, 200, 0.4);
+    background: rgba(110, 231, 200, 0.08);
+  }
+
+  .panel-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: center;
+    margin-top: 22px;
+  }
+  .forest-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .ax-tick, .ax-title, .chance-lbl, .row-lbl, .val-main, .val-ci { font-family: var(--mono); }
+  .ax-tick, .ax-title { fill: #9FBEB5; font-size: 9.5px; }
+  .chance-lbl { fill: #F0937A; font-size: 9.5px; }
+  .row-lbl { fill: #E7F4EF; font-size: 10.3px; }
+  .val-main { font-size: 11px; font-weight: 700; }
+  .val-ci { fill: #98B5AD; font-size: 8.6px; }
+
+  .table-wrap { overflow-x: auto; }
+  .lab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  .lab-table th {
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #93B5AC;
+    padding: 8px 6px 8px 0;
+    border-bottom: 1px solid rgba(182, 214, 204, 0.18);
+    white-space: nowrap;
+  }
+  .lab-table td {
+    padding: 10px 6px 10px 0;
+    color: #D9ECE6;
+    border-bottom: 1px solid rgba(182, 214, 204, 0.1);
+    white-space: nowrap;
+  }
+  .lab-table th.num,
+  .lab-table td.num {
+    text-align: right;
+    padding-left: 10px;
+    padding-right: 0;
+  }
+  .lab-table tr.hi td {
+    color: #6EE7C8;
+    font-weight: 600;
+  }
+  .lab-table tbody tr:last-child td { border-bottom: none; }
+  .code-chip {
+    display: inline-block;
+    margin-right: 7px;
+    font-size: 9.5px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(182, 214, 204, 0.24);
+    color: #A9C7BF;
+  }
+  .lab-table tr.hi .code-chip {
+    border-color: rgba(110, 231, 200, 0.5);
+    color: #6EE7C8;
+  }
+  .pane-note {
+    margin: 14px 0 0;
+    font-size: 13px;
+    line-height: 1.72;
+    color: #A7C3BB;
+  }
+
+  .legend-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+    margin-top: 18px;
+    font-size: 11px;
+    color: #B4CEC7;
+  }
+  .lg { display: inline-flex; align-items: center; gap: 7px; }
+  .sw { width: 14px; height: 4px; border-radius: 99px; }
+  .sw-base, .f-base { background: #647C76; }
+  .sw-sft, .f-sft { background: #6EE7C8; }
+  .sw-dpo, .f-dpo { background: #F0937A; }
+
+  .c-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+  }
+  .c-tile {
+    background: rgba(8, 22, 20, 0.56);
+    border: 1px solid rgba(182, 214, 204, 0.14);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .c-tile.tile-warn {
+    border-color: rgba(240, 147, 122, 0.45);
+    background: rgba(216, 90, 48, 0.08);
+  }
+  .c-tile-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .c-name {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #F2FAF7;
+  }
+  .c-sub {
+    display: block;
+    margin-top: 3px;
+    font-size: 10.5px;
+    color: #93B5AC;
+  }
+  .c-badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6EE7C8;
+    font-variant-numeric: tabular-nums;
+  }
+  .c-badge.warn { color: #FFB499; }
+
+  .c-bars {
+    display: grid;
+    gap: 7px;
+    margin-top: 14px;
+  }
+  .b-row {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) 36px;
+    align-items: center;
+    gap: 9px;
+  }
+  .b-lbl { font-size: 10px; color: #9BBAB1; }
+  .b-track {
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+  .b-fill { display: block; height: 100%; border-radius: 999px; }
+  .b-val {
+    font-size: 10.5px;
+    text-align: right;
+    color: #E3F3EE;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .panel-foot {
+    margin: 18px 0 0;
+    font-size: 11px;
+    line-height: 1.65;
+    color: #94B4AC;
+  }
+
+  .telemetry-duo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .tele-card {
+    border-top: 1px solid rgba(110, 231, 200, 0.25);
+    padding: 20px 0 4px;
+  }
+  .tele-card h4 {
+    margin: 9px 0 0;
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 500;
+    color: #F3FAF7;
+  }
+  .tele-card p {
+    margin: 10px 0 0;
+    font-size: 13.5px;
+    line-height: 1.78;
+    color: #A8C4BC;
+  }
+
+  @media (max-width: 860px) {
+    .panel-split { grid-template-columns: minmax(0, 1fr); }
+    .c-grid { grid-template-columns: minmax(0, 1fr); }
+    .telemetry-duo { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

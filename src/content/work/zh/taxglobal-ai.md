@@ -6,7 +6,7 @@ stack: [Python, FastAPI, LangChain, 规则引擎]
 year: 2026
 cover: /covers/taxglobal.svg
 casePath: /zh/work/taxglobal-ai
-order: 1
+order: 3
 ---
 
 ## 问题

@@ -5,7 +5,7 @@ role: 创始人 —— 产品、设计、架构
 stack: [计算机视觉, LLM, 相机控制, 无人机 SDK]
 year: 2026
 casePath: /zh/work/camera-copilot
-order: 2
+order: 4
 ---
 
 ## 问题
